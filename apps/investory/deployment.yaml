@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: investory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: investory
+  template:
+    metadata:
+      labels:
+        app: investory
+    spec:
+      containers:
+        - name: investory
+          image: nginx:stable
+          ports:
+            - containerPort: 80

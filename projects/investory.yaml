@@ -6,9 +6,11 @@ metadata:
 spec:
   sourceRepos:
     - https://github.com/spider-su/ops-autopilot.git
+
   destinations:
-    - namespace: "*"
-      server: https://kubernetes.default.svc
+    - server: https://kubernetes.default.svc
+      namespace: investory
+
   clusterResourceWhitelist:
     - group: "*"
       kind: "*"
