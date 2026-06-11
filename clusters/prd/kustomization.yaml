@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # Platform — order matters: metallb CRDs must exist before infra applies metallb-config
+  - base-app-project.yaml
+  - metallb.yaml
+  - infrastructure.yaml
+  - ingress-nginx.yaml
+  - cert-manager.yaml
+  - metrics-server.yaml
+  # Applications
+  - ../../applications/investory/app-prd.yaml
+  - ../../applications/smartapp/app-prd.yaml
+  # Add new app app-prd.yaml references here to deploy to prd

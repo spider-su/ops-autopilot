@@ -1,0 +1,26 @@
+﻿apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: smartapp-prd
+  namespace: argocd
+spec:
+  project: base-app
+  source:
+    repoURL: https://github.com/spider-su/ops-autopilot.git
+    targetRevision: main
+    path: applications/smartapp
+    helm:
+      releaseName: smartapp
+      valueFiles:
+        - values.yaml
+        - values-prd.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: smartapp-prd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

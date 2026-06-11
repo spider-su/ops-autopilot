@@ -1,0 +1,4 @@
+# Dev overrides for smartapp — latest image for active development
+image:
+  tag: latest
+  pullPolicy: Always

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: platform-storage
+  namespace: infrastructure
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: proxmox-ceph-rbd
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 5Gi

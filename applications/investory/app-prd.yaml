@@ -1,0 +1,26 @@
+﻿apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: investory-prd
+  namespace: argocd
+spec:
+  project: base-app
+  source:
+    repoURL: https://github.com/spider-su/ops-autopilot.git
+    targetRevision: main
+    path: applications/investory
+    helm:
+      releaseName: investory
+      valueFiles:
+        - values.yaml
+        - values-prd.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: investory-prd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

@@ -1,0 +1,7 @@
+# Production overrides for investory
+replicaCount: 2
+
+ingress:
+  enabled: true
+  host: investory.example.com
+

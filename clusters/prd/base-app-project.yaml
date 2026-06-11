@@ -1,16 +1,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: investory
+  name: base-app
   namespace: argocd
 spec:
   sourceRepos:
     - https://github.com/spider-su/ops-autopilot.git
-
   destinations:
     - server: https://kubernetes.default.svc
-      namespace: investory
-
+      namespace: "*"
   clusterResourceWhitelist:
     - group: "*"
       kind: "*"
+
