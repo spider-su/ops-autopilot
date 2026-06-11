@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: apps
+  name: investory
   namespace: argocd
 spec:
   project: default
@@ -11,7 +11,7 @@ spec:
     path: apps/investory
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: investory
   syncPolicy:
     automated:
       prune: true
