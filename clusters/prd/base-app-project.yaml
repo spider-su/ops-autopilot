@@ -6,6 +6,10 @@ metadata:
 spec:
   sourceRepos:
     - https://github.com/spider-su/ops-autopilot.git
+    - https://kubernetes.github.io/ingress-nginx
+    - https://charts.jetstack.io
+    - https://metallb.github.io/metallb
+    - https://kubernetes-sigs.github.io/metrics-server/
   destinations:
     - server: https://kubernetes.default.svc
       namespace: "*"
