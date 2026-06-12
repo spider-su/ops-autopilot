@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgres-prd
+  name: postgres
   namespace: argocd
 spec:
   project: base-app
@@ -16,7 +16,7 @@ spec:
         - values-prd.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: postgres-prd
+    namespace: postgres
   syncPolicy:
     automated:
       prune: true
@@ -28,7 +28,6 @@ spec:
     - group: ""
       kind: Secret
       name: postgres-credentials
-      namespace: postgres-prd
+      namespace: postgres
       jsonPointers:
         - /data
-

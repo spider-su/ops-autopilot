@@ -20,7 +20,9 @@ clusters/{env}/kustomization.yaml   # bootstrap (kubectl apply once)
 | Cluster | Git Branch | App namespace |
 |---------|-----------|---------------|
 | `clusters/dev` | `dev` | `{app}-dev` |
-| `clusters/prd` | `main` | `{app}-prd` |
+| `clusters/prd` | `main` | `{app}-prod` |
+
+Shared services (no env suffix): `postgres`, etc.
 
 **Never deploy dev work on `main`.** Each Application CR in `clusters/dev/` uses `targetRevision: dev`.  
 **`prd` must be bootstrapped before `dev`** â€” infra (namespaces, ceph-csi-secret) lives in prd.
@@ -49,15 +51,15 @@ Namespaces are created automatically via `syncOptions: [CreateNamespace=true]` o
 A single `postgres-prd` instance serves all environments. **Do not create a `postgres-dev` deployment.**  
 Dev and prd apps are separated by **PostgreSQL schemas**, not by separate instances.
 
-- **Internal DNS:** `postgres.postgres-prd.svc.cluster.local:5432`
+- **Internal DNS:** `postgres.postgres.svc.cluster.local:5432`
 - **External access:** `192.168.1.221:5432` (TCP via ingress-nginx)
-- **Credentials:** stored in `postgres-credentials` secret in `postgres-prd` namespace — never in git. Apply once:
+- **Credentials:** stored in `postgres-credentials` secret in `postgres` namespace — never in git. Apply once:
   ```bash
   kubectl create secret generic postgres-credentials \
     --from-literal=POSTGRES_USER=postgres \
     --from-literal=POSTGRES_PASSWORD=<password> \
     --from-literal=POSTGRES_DB=postgres \
-    --namespace=postgres-prd --dry-run=client -o yaml | kubectl apply -f -
+    --namespace=postgres --dry-run=client -o yaml | kubectl apply -f -
   ```
 - **Storage:** 10Gi Ceph RBD via `proxmox-ceph-rbd` StorageClass
 - **TCP port** 5432 is mapped in `clusters/prd/ingress-nginx.yaml` under `tcp:` — update there if postgres namespace/port ever changes.

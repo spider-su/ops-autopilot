@@ -31,3 +31,17 @@ ingress:
   host: ""
   path: /
   pathType: Prefix
+
+resourceQuota:
+  enabled: true
+  hard:
+    requests.cpu: "500m"
+    requests.memory: "256Mi"
+    limits.cpu: "2"
+    limits.memory: "512Mi"
+    pods: "10"
+
+networkPolicy:
+  enabled: true
+  # Extra namespaces allowed to reach this app (in addition to ingress-nginx + monitoring)
+  extraIngressNamespaces: []

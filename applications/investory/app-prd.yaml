@@ -1,7 +1,7 @@
 ﻿apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: investory-prd
+  name: investory-prod
   namespace: argocd
 spec:
   project: base-app
@@ -16,11 +16,10 @@ spec:
         - values-prd.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: investory-prd
+    namespace: investory-prod
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-

@@ -1,7 +1,7 @@
 ﻿apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: smartapp-prd
+  name: smartapp-prod
   namespace: argocd
 spec:
   project: base-app
@@ -16,11 +16,10 @@ spec:
         - values-prd.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: smartapp-prd
+    namespace: smartapp-prod
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-

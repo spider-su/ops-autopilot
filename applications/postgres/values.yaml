@@ -24,3 +24,14 @@ service:
 credentials:
   secretName: postgres-credentials
 
+resourceQuota:
+  enabled: true
+  hard:
+    requests.cpu: "500m"
+    requests.memory: "512Mi"
+    limits.cpu: "2"
+    limits.memory: "1Gi"
+    pods: "5"
+
+networkPolicy:
+  enabled: true
