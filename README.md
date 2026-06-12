@@ -1,192 +1,170 @@
-﻿# ðŸ“˜ GitOps Argo CD Platform
+﻿# GitOps Argo CD Platform
 
-Argo CD GitOps repo for Kubernetes. All changes are declarative YAML committed to Git â€” no manual `kubectl` deployments.
-
----
-
-# ðŸ§  Architecture Overview
-
-```
-clusters/{env}/kustomization.yaml        â† bootstrap (kubectl apply once)
-  â”œâ”€â”€ clusters/prd/base-app-project.yaml             â† AppProject (prd only)
-  â”œâ”€â”€ clusters/prd/infrastructure.yaml            â† Application â†’ infrastructure/ (prd only)
-  â””â”€â”€ applications/{app}/app-{env}.yaml  â† Application â†’ applications/{app}/ (Helm)
-```
-
-- `clusters/` â€” all env-specific wiring (branch, namespace, value files)
-- `applications/` â€” Helm charts + Application CRs, one folder per app
-- `infrastructure/` â€” cluster-wide platform resources (Ceph secret, shared PVC)
+Argo CD GitOps repo for a homelab Kubernetes cluster (k3s, 3 nodes, Proxmox/Ceph). All changes are declarative YAML committed to Git — no manual `kubectl` deployments after bootstrap.
 
 ---
 
-# ðŸ§± Repository Structure
+## Architecture
+
+```
+clusters/prd/parent-app.yaml      ← bootstrap (kubectl apply once)
+  └── clusters-prd Application    ← watches clusters/prd/kustomization.yaml
+        ├── Platform Applications  ← metallb, ingress-nginx, cert-manager, ...
+        └── App Applications       ← investory-prod, smartapp-prod, postgres, ...
+```
+
+- `clusters/` — env-specific wiring (branch, namespace, value files, parent apps)
+- `applications/` — Helm charts + Application CRs, one folder per app
+- `infrastructure/` — cluster-wide Kustomize resources (StorageClass, secret scaffold, ArgoCD ingress)
+
+---
+
+## Repository Structure
 
 ```
 .
-â”œâ”€â”€ applications/
-â”‚   â”œâ”€â”€ common-utils/              # Helm library chart â€” shared helpers (_helpers.tpl)
-â”‚   â”œâ”€â”€ investory/
-â”‚   â”‚   â”œâ”€â”€ Chart.yaml
-â”‚   â”‚   â”œâ”€â”€ app-dev.yaml           # Argo CD Application CR â€” dev env
-â”‚   â”‚   â”œâ”€â”€ app-prd.yaml           # Argo CD Application CR â€” prd env
-â”‚   â”‚   â”œâ”€â”€ values.yaml            # base defaults
-â”‚   â”‚   â”œâ”€â”€ values-dev.yaml        # dev overrides
-â”‚   â”‚   â”œâ”€â”€ values-prd.yaml        # prd overrides (replicas, ingress host)
-â”‚   â”‚   â””â”€â”€ templates/
-â”‚   â”‚       â”œâ”€â”€ _helpers.tpl
-â”‚   â”‚       â”œâ”€â”€ deployment.yaml
-â”‚   â”‚       â”œâ”€â”€ service.yaml
-â”‚   â”‚       â”œâ”€â”€ pvc.yaml           # optional â€” enabled via values
-â”‚   â”‚       â””â”€â”€ ingress.yaml       # optional â€” enabled via values
-â”‚   â””â”€â”€ smartapp/                  # identical structure to investory
-â”‚
-â”œâ”€â”€ clusters/
-â”‚   â”œâ”€â”€ dev/
-â”‚   â”‚   â””â”€â”€ kustomization.yaml     # references app-dev.yaml from active dev apps
-â”‚   â””â”€â”€ prd/
-â”‚       â”œâ”€â”€ kustomization.yaml     # references apps.yaml + infra.yaml + app-prd.yaml from all apps
-â”‚       â”œâ”€â”€ apps.yaml              # shared Argo CD AppProject for all apps
-â”‚       â””â”€â”€ infra.yaml             # Application CR â†’ infrastructure/
-â”‚
-â””â”€â”€ infrastructure/
-â”‚   â”œâ”€â”€ kustomization.yaml
-â”‚   â”œâ”€â”€ secret.yaml                # ceph-csi-secret in default ns (Ceph RBD provisioner)
-â”‚   â””â”€â”€ pvc.yaml                   # platform-storage PVC in infrastructure ns
+├── applications/
+│   ├── common-utils/              # Helm library — shared _helpers.tpl
+│   ├── investory/
+│   │   ├── Chart.yaml
+│   │   ├── app-dev.yaml           # Argo CD Application CR — dev
+│   │   ├── app-prd.yaml           # Argo CD Application CR — prod
+│   │   ├── values.yaml            # base defaults
+│   │   ├── values-dev.yaml        # dev overrides
+│   │   ├── values-prd.yaml        # prod overrides (replicas, ingress host)
+│   │   └── templates/
+│   │       ├── _helpers.tpl
+│   │       ├── deployment.yaml
+│   │       ├── service.yaml
+│   │       ├── ingress.yaml       # optional — enabled via values
+│   │       ├── pvc.yaml           # optional — enabled via values
+│   │       ├── networkpolicy.yaml # default-deny with allow rules
+│   │       └── resourcequota.yaml # namespace CPU/memory/pod limits
+│   ├── smartapp/                  # identical structure to investory
+│   └── postgres/                  # shared DB — no env suffix, schema-per-env
+│
+├── clusters/
+│   ├── dev/
+│   │   ├── parent-app.yaml        # bootstrap entry point for dev
+│   │   └── kustomization.yaml     # lists app-dev.yaml for active dev apps only
+│   └── prd/
+│       ├── parent-app.yaml        # bootstrap entry point for prd
+│       ├── kustomization.yaml     # lists all platform + app Application CRs
+│       ├── base-app-project.yaml  # shared AppProject for all apps
+│       ├── infrastructure.yaml    # Application → infrastructure/ (Kustomize)
+│       ├── ingress-nginx.yaml     # Application → upstream Helm chart
+│       ├── cert-manager.yaml
+│       ├── metallb.yaml
+│       ├── metrics-server.yaml
+│       ├── monitoring.yaml        # kube-prometheus-stack
+│       ├── ceph-csi-rbd.yaml
+│       └── ceph-csi-cephfs.yaml
+│
+└── infrastructure/                # Kustomize — cluster-wide resources
+    ├── kustomization.yaml
+    ├── storageclass.yaml          # proxmox-ceph-rbd (default StorageClass)
+    ├── secret.yaml                # ceph-csi-secret scaffold (credentials applied manually)
+    ├── pvc.yaml                   # platform-storage PVC
+    ├── argocd-config.yaml         # argocd-server insecure mode
+    └── argocd-ingress.yaml        # Ingress for argocd.home.k3s.com
 ```
 
 ---
 
-# ðŸš€ How It Works
+## Namespace Convention
 
-## 1. Bootstrap (one-time only)
+| Type | Pattern | Example |
+|------|---------|---------|
+| Production apps | `{app}-prod` | `investory-prod` |
+| Dev apps | `{app}-dev` | `investory-dev` |
+| Shared services | `{app}` | `postgres` |
+| Platform tools | own namespace | `monitoring`, `ingress-nginx`, ... |
+
+---
+
+## Bootstrap (one-time per cluster)
+
+**prd must be bootstrapped first** — it owns infrastructure that dev depends on.
 
 ```bash
-kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/prd/ | kubectl apply -f -
-kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/dev/ | kubectl apply -f -
-```
+# 1. Bootstrap prd
+kubectl apply -f clusters/prd/parent-app.yaml
 
-`--load-restrictor=LoadRestrictionsNone` is required because the app Application CRs live in `applications/{app}/` and are referenced cross-directory from `clusters/`. Argo CD itself handles this natively once running — the flag is only needed for the one-time bootstrap.
-
-`prd` must be bootstrapped first â€” it owns the infrastructure (Ceph secret, PVC) that `dev` depends on.
-
-**After bootstrapping prd**, set the Ceph credentials (not stored in git):
-```bash
+# 2. Set Ceph credentials (not in git — run once)
 kubectl create secret generic ceph-csi-secret \
   --from-literal=userID=admin \
   --from-literal=userKey=$(ceph auth get-key client.admin) \
+  --type=kubernetes.io/rbd \
   --namespace=default --dry-run=client -o yaml | kubectl apply -f -
+
+# 3. Set postgres credentials (not in git — run once)
+kubectl create secret generic postgres-credentials \
+  --from-literal=POSTGRES_USER=postgres \
+  --from-literal=POSTGRES_PASSWORD=<password> \
+  --from-literal=POSTGRES_DB=postgres \
+  --namespace=postgres --dry-run=client -o yaml | kubectl apply -f -
+
+# 4. Bootstrap dev (optional)
+kubectl apply -f clusters/dev/parent-app.yaml
 ```
 
-## 2. Cluster layer
-
-The cluster kustomization files are thin â€” they just reference Application CRs that live inside each app's own folder:
-
-- `clusters/prd/kustomization.yaml` references `infrastructure.yaml` + each app's `app-prd.yaml`
-- `clusters/dev/kustomization.yaml` references only the active dev app's `app-dev.yaml`
-
-All app-specific config (Helm chart, values, Application CRs) lives together in `applications/{app}/`.
-
-## 3. Helm chart layer
-
-Argo CD auto-detects Helm when `Chart.yaml` is present. Each app chart selects env-specific values:
-
-```yaml
-source:
-  path: applications/investory
-  helm:
-    releaseName: investory
-    valueFiles:
-      - values.yaml
-      - values-prd.yaml     # or values-dev.yaml
-```
-
-`values.yaml` holds safe defaults. `values-prd.yaml` overrides replicas and enables ingress. `values-dev.yaml` overrides the image tag to `latest`.
-
-## 4. Infrastructure layer
-
-Managed by `clusters/prd/` â€” each component is a separate Argo CD Application:
-
-| Application | Source | Namespace |
-|-------------|--------|-----------|
-| `infra` | `infrastructure/` (this repo, Kustomize) | `infrastructure` |
-| `metallb` | `metallb.github.io/metallb` chart | `metallb-system` |
-| `ingress-nginx` | `kubernetes.github.io/ingress-nginx` chart | `ingress-nginx` |
-| `cert-manager` | `charts.jetstack.io` chart | `cert-manager` |
-| `metrics-server` | `kubernetes-sigs.github.io/metrics-server` chart | `kube-system` |
-
-Namespaces are created automatically via `CreateNamespace=true`. The `ceph-csi-secret` is scaffolded by `infra` but credentials must be applied manually (see Bootstrap section).
+After bootstrap, **everything is automatic** — commit to git, Argo CD deploys.
 
 ---
 
-# ðŸ“¦ Application Flow
+## Adding a New Application
 
-```
-git push
-   â†“
-Argo CD detects change
-   â†“
-{app} Application syncs
-   â†“
-Helm renders templates with env values
-   â†“
-Deployment + Service (+ PVC / Ingress if enabled) applied to {app}-{env} namespace
-```
-
----
-
-# ðŸ§ª How to Use
-
-## ðŸ”¹ Add a new application
-
-**1.** Copy an existing chart as a starting point:
+**1.** Copy an existing chart:
 ```bash
 cp -r applications/investory applications/myapp
 ```
 
-**2.** Update `applications/myapp/Chart.yaml` â€” set `name: myapp`.
+**2.** Update `Chart.yaml` name, edit `values.yaml`, `values-prd.yaml`, `values-dev.yaml`.
 
-**3.** Edit `values.yaml`, `values-prd.yaml`, `values-dev.yaml` for the new app.
-
-**4.** Create `applications/myapp/app-prd.yaml`:
+**3.** Update `app-prd.yaml`:
 ```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
 metadata:
-  name: myapp-prd
-  namespace: argocd
+  name: myapp-prod
 spec:
-  project: apps
   source:
-    repoURL: https://github.com/spider-su/ops-autopilot.git
-    targetRevision: main
     path: applications/myapp
     helm:
       releaseName: myapp
-      valueFiles:
-        - values.yaml
-        - values-prd.yaml
+      valueFiles: [values.yaml, values-prd.yaml]
   destination:
-    server: https://kubernetes.default.svc
-    namespace: myapp-prd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+    namespace: myapp-prod
 ```
 
-**5.** Add `- ../../applications/myapp/app-prd.yaml` to `clusters/prd/kustomization.yaml`.
+**4.** Add to `clusters/prd/kustomization.yaml`:
+```yaml
+- ../../applications/myapp/app-prd.yaml
+```
 
-**6.** Commit and push to `main` â€” Argo CD deploys automatically and creates the `myapp-prd` namespace on its own.
+**5.** Commit and push to `main` — Argo CD deploys automatically. ✅
 
-For dev work: create `applications/myapp/app-dev.yaml` (same pattern, `targetRevision: dev`, `values-dev.yaml`, `namespace: myapp-dev`) and add `- ../../applications/myapp/app-dev.yaml` to `clusters/dev/kustomization.yaml`.
+For dev: create `app-dev.yaml` (`targetRevision: dev`, `namespace: myapp-dev`) and add to `clusters/dev/kustomization.yaml`.
 
 ---
 
-## ðŸ”¹ Enable storage for an app
+## Platform Services
 
-In `values-prd.yaml` or `values-dev.yaml`:
+| Application | Purpose | URL / Access |
+|-------------|---------|--------------|
+| `metallb` | L2 LoadBalancer (192.168.1.220-240) | — |
+| `ingress-nginx` | HTTP/TCP ingress | `192.168.1.221` |
+| `cert-manager` | TLS certificate management | — |
+| `metrics-server` | `kubectl top` + HPA | — |
+| `ceph-csi-rbd` | RBD block storage CSI | — |
+| `ceph-csi-cephfs` | CephFS shared storage CSI | — |
+| `monitoring` | Prometheus + Grafana + Alertmanager | `https://grafana.home.k3s.com` |
+| `postgres` | Shared PostgreSQL (schema-per-env) | `192.168.1.221:5432` |
+| `argocd` | GitOps controller | `https://argocd.home.k3s.com` |
+
+---
+
+## Storage
+
+Enable per-app Ceph RBD storage in `values-prd.yaml`:
 ```yaml
 pvc:
   enabled: true
@@ -194,52 +172,61 @@ pvc:
   mountPath: /data
 ```
 
-Uses `proxmox-ceph-rbd` StorageClass automatically. The PVC and volume mount are added by the Helm templates.
+---
 
-## ðŸ”¹ Enable ingress for an app
+## Ingress & External Access
 
+**Traffic flow:**
+```
+Browser → Traefik (pihole, HTTPS) → ingress-nginx (192.168.1.221, HTTP) → app Pod
+```
+
+**PiHole** is the internal DNS server — all `*.home.k3s.com` entries point to Traefik's IP.
+
+**Traefik** (running on the pihole server) handles TLS and forwards plain HTTP to ingress-nginx at `192.168.1.221`. Config lives in `/etc/traefik/dynamic/k3s.yml` on the pihole host — uses a wildcard `HostRegexp` rule so new subdomains work automatically without Traefik changes.
+
+**To add a new app subdomain:**
+1. Add DNS record in PiHole: `myapp.home.k3s.com` → Traefik IP
+2. Set in `values-prd.yaml`: `ingress.host: myapp.home.k3s.com`
+3. Commit to `main` — done ✅
+
+Enable HTTP ingress in `values-prd.yaml`:
 ```yaml
 ingress:
   enabled: true
-  host: myapp.example.com
+  host: myapp.home.k3s.com
 ```
 
-Requires `ingress-nginx` to be present in the cluster.
 
-## ðŸ”¹ Switch which app dev is working on
+To expose a TCP service, add to `clusters/prd/ingress-nginx.yaml`:
+```yaml
+tcp:
+  5432: "postgres/postgres:5432"
+```
 
-Edit `clusters/dev/kustomization.yaml` â€” swap the listed app file. All other apps remain untouched in prd.
+---
 
-## ðŸ”¹ Check system status
+## Network Policies & Resource Quotas
+
+All app charts include `NetworkPolicy` and `ResourceQuota` templates (enabled by default).
+
+- **Apps** allow ingress from `ingress-nginx` and `monitoring` only
+- **Postgres** allows ingress on port 5432 from any namespace
+- Quotas are set in `values.yaml` and can be overridden per env
+
+---
+
+## Useful Commands
 
 ```bash
+# Check all Applications
 kubectl get applications -n argocd
-kubectl get pods -A
-kubectl get svc -A
-```
 
-## ðŸ”¹ Debug sync issues
-
-```bash
+# Debug sync failure
 kubectl describe application <name> -n argocd
 kubectl logs -n argocd deploy/argocd-repo-server
+
+# Check resources per namespace
+kubectl get pods,svc,ingress,pvc -n investory-prod
+kubectl top nodes
 ```
-
----
-
-# ðŸŒ Environments
-
-| Cluster | Branch | Namespace pattern | Manages |
-|---------|--------|-------------------|---------|
-| `clusters/prd` | `main` | `{app}-prd` | Infrastructure + all apps |
-| `clusters/dev` | `dev` | `{app}-dev` | Active dev app only |
-
----
-
-# ðŸ§© Design Principles
-
-- Git is the single source of truth
-- No manual `kubectl` deployments after bootstrap
-- Env separation lives entirely in `clusters/` â€” `applications/` has no env awareness
-- One shared AppProject `base-app` (`clusters/prd/base-app-project.yaml`) â€” no per-app RBAC overhead
-- Infrastructure owned by prd, consumed by dev
