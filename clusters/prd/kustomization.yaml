@@ -11,8 +11,9 @@ resources:
   - ceph-csi-rbd.yaml
   - ceph-csi-cephfs.yaml
   - monitoring.yaml
+  # DBs and other stateful services
+  - ../../applications/postgres/app-prd.yaml
   # Applications
   - ../../applications/investory/app-prd.yaml
-  - ../../applications/smartapp/app-prd.yaml
-  - ../../applications/postgres/app-prd.yaml
+  # - ../../applications/smartapp/app-prd.yaml   # temporarily removed for app-of-apps test
   # Add new app app-prd.yaml references here to deploy to prd

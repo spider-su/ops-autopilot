@@ -42,9 +42,27 @@ clusters/{env}/kustomization.yaml   # bootstrap (kubectl apply once)
 3. **Register in prd**: add `- ../../applications/{appname}/app-prd.yaml` to `clusters/prd/kustomization.yaml`.
 4. **Register in dev** (when needed): add `- ../../applications/{appname}/app-dev.yaml` to `clusters/dev/kustomization.yaml`.
 
-Namespaces are created automatically via `syncOptions: [CreateNamespace=true]` on each Application CR â€” no separate namespace manifest needed.
+Namespaces are created automatically via `syncOptions: [CreateNamespace=true]` on each Application CR — no separate namespace manifest needed.
 
-## Infra Layer â€” Connecting Apps to Storage, Ingress, Secrets
+## PostgreSQL — Shared Instance, Schema-per-Env
+
+A single `postgres-prd` instance serves all environments. **Do not create a `postgres-dev` deployment.**  
+Dev and prd apps are separated by **PostgreSQL schemas**, not by separate instances.
+
+- **Internal DNS:** `postgres.postgres-prd.svc.cluster.local:5432`
+- **External access:** `192.168.1.221:5432` (TCP via ingress-nginx)
+- **Credentials:** stored in `postgres-credentials` secret in `postgres-prd` namespace — never in git. Apply once:
+  ```bash
+  kubectl create secret generic postgres-credentials \
+    --from-literal=POSTGRES_USER=postgres \
+    --from-literal=POSTGRES_PASSWORD=<password> \
+    --from-literal=POSTGRES_DB=postgres \
+    --namespace=postgres-prd --dry-run=client -o yaml | kubectl apply -f -
+  ```
+- **Storage:** 10Gi Ceph RBD via `proxmox-ceph-rbd` StorageClass
+- **TCP port** 5432 is mapped in `clusters/prd/ingress-nginx.yaml` under `tcp:` — update there if postgres namespace/port ever changes.
+
+## Infra Layer — Connecting Apps to Storage, Ingress, Secrets
 
 Platform Applications in `clusters/prd/` (each is a separate Argo CD Application):
 - `infrastructure.yaml` → `infrastructure/` (Kustomize) — `ceph-csi-secret` scaffold, `platform-storage` PVC, `proxmox-ceph-rbd` StorageClass
@@ -66,11 +84,17 @@ pvc:
   mountPath: /data
 ```
 
-**To enable ingress** â€” set in `values-prd.yaml`:
+**To enable ingress** — set in `values-prd.yaml`:
 ```yaml
 ingress:
   enabled: true
   host: myapp.example.com   # requires ingress-nginx in infra layer
+```
+
+**To expose a TCP service** (e.g. a database) — add to `clusters/prd/ingress-nginx.yaml` under `tcp:`:
+```yaml
+tcp:
+  5432: "postgres-prd/postgres:5432"   # port: "namespace/service:port"
 ```
 
 ## Helm Template Helpers (`_helpers.tpl`)
@@ -87,21 +111,26 @@ All apps use four named templates defined in `templates/_helpers.tpl` (canonical
 ## Operational Commands
 
 ```bash
-# Bootstrap (prd first, then dev)
-# Note: --load-restrictor flag is needed because app Application CRs live in
-# applications/{app}/ and are referenced cross-directory from clusters/prd/
-kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/prd/ | kubectl apply -f -
-kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/dev/ | kubectl apply -f -
+# Bootstrap (prd first, then dev) — one-time only per cluster
+kubectl apply -f clusters/prd/parent-app.yaml
+kubectl apply -f clusters/dev/parent-app.yaml
 
-# Set Ceph credentials after prd bootstrap (not stored in git — run once per namespace)
+# After bootstrap, adding/removing apps is automatic:
+# - Add: commit new app-prd.yaml ref to clusters/prd/kustomization.yaml → Argo CD creates it
+# - Remove: remove ref from kustomization.yaml → Argo CD prunes the Application + its resources
+
+# Set Ceph credentials after prd bootstrap (not stored in git — run once)
 kubectl create secret generic ceph-csi-secret \
   --from-literal=userID=admin \
   --from-literal=userKey=$(ceph auth get-key client.admin) \
   --namespace=default --dry-run=client -o yaml | kubectl apply -f -
 
-# Re-bootstrap after adding new platform Applications to clusters/prd/kustomization.yaml
-# (idempotent — existing Applications are untouched)
-kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/prd/ | kubectl apply -f -
+# Set postgres credentials (not stored in git — run once)
+kubectl create secret generic postgres-credentials \
+  --from-literal=POSTGRES_USER=postgres \
+  --from-literal=POSTGRES_PASSWORD=<password> \
+  --from-literal=POSTGRES_DB=postgres \
+  --namespace=postgres-prd --dry-run=client -o yaml | kubectl apply -f -
 
 # Check all Argo CD Applications
 kubectl get applications -n argocd

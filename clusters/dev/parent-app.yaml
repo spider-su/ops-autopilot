@@ -1,0 +1,25 @@
+# Bootstrap entry point for dev — apply ONCE manually:
+#   kubectl apply -f clusters/dev/parent-app.yaml
+#
+# This file is intentionally NOT listed in kustomization.yaml (circular dependency).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: clusters-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/spider-su/ops-autopilot.git
+    targetRevision: dev
+    path: clusters/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

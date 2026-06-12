@@ -1,0 +1,29 @@
+# Bootstrap entry point for prd — apply ONCE manually:
+#   kubectl apply -f clusters/prd/parent-app.yaml
+#
+# After this, Argo CD self-manages all Applications in clusters/prd/kustomization.yaml.
+# Adding an app = add ref to kustomization.yaml + commit. No re-bootstrap needed.
+# Removing an app = remove ref from kustomization.yaml + commit. Argo CD prunes it.
+#
+# This file is intentionally NOT listed in kustomization.yaml (circular dependency).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: clusters-prd
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/spider-su/ops-autopilot.git
+    targetRevision: main
+    path: clusters/prd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
