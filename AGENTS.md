@@ -47,10 +47,14 @@ Namespaces are created automatically via `syncOptions: [CreateNamespace=true]` o
 ## Infra Layer â€” Connecting Apps to Storage, Ingress, Secrets
 
 Platform Applications in `clusters/prd/` (each is a separate Argo CD Application):
-- `infrastructure.yaml` â†’ `infrastructure/` (Kustomize) â€” `ceph-csi-secret` scaffold + `platform-storage` PVC
-- `ingress-nginx.yaml` â†’ upstream Helm chart â€” routes external traffic to app Ingress resources
-- `cert-manager.yaml` â†’ upstream Helm chart â€” TLS certificate management
-- `metrics-server.yaml` â†’ upstream Helm chart â€” enables `kubectl top` and HPA
+- `infrastructure.yaml` → `infrastructure/` (Kustomize) — `ceph-csi-secret` scaffold, `platform-storage` PVC, `proxmox-ceph-rbd` StorageClass
+- `ingress-nginx.yaml` → upstream Helm chart — routes external traffic to app Ingress resources
+- `cert-manager.yaml` → upstream Helm chart — TLS certificate management
+- `metrics-server.yaml` → upstream Helm chart — enables `kubectl top` and HPA
+- `metallb.yaml` → upstream Helm chart — L2 LoadBalancer, IP pool `192.168.1.220-240`, ingress-nginx gets `192.168.1.221`
+- `monitoring.yaml` → `prometheus-community/kube-prometheus-stack` — Prometheus + Grafana + Alertmanager
+- `ceph-csi-rbd.yaml` → `ceph.github.io/csi-charts/ceph-csi-rbd` — RBD block storage CSI driver (k3s kubelet path configured)
+- `ceph-csi-cephfs.yaml` → `ceph.github.io/csi-charts/ceph-csi-cephfs` — CephFS shared storage CSI driver (k3s kubelet path configured)
 
 Namespaces are **not** managed here â€” each Application CR uses `syncOptions: [CreateNamespace=true]` to create its own namespace on first deploy.
 
@@ -89,11 +93,15 @@ All apps use four named templates defined in `templates/_helpers.tpl` (canonical
 kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/prd/ | kubectl apply -f -
 kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/dev/ | kubectl apply -f -
 
-# Set Ceph credentials after prd bootstrap (not stored in git — run once)
+# Set Ceph credentials after prd bootstrap (not stored in git — run once per namespace)
 kubectl create secret generic ceph-csi-secret \
   --from-literal=userID=admin \
   --from-literal=userKey=$(ceph auth get-key client.admin) \
   --namespace=default --dry-run=client -o yaml | kubectl apply -f -
+
+# Re-bootstrap after adding new platform Applications to clusters/prd/kustomization.yaml
+# (idempotent — existing Applications are untouched)
+kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/prd/ | kubectl apply -f -
 
 # Check all Argo CD Applications
 kubectl get applications -n argocd
