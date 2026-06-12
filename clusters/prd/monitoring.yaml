@@ -19,6 +19,55 @@ spec:
               nginx.ingress.kubernetes.io/ssl-redirect: "false"
             hosts:
               - grafana.home.k3s.com
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+
+        prometheus:
+          prometheusSpec:
+            retention: 7d          # default 15d — reduce stored data
+            scrapeInterval: 60s    # default 15s — less ingestion pressure
+            evaluationInterval: 60s
+            walCompression: true   # reduces WAL memory usage
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                cpu: 500m
+                memory: 1Gi
+
+        alertmanager:
+          alertmanagerSpec:
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                cpu: 100m
+                memory: 128Mi
+
+        kube-state-metrics:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+
+        prometheusOperator:
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
