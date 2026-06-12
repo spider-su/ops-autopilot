@@ -3,5 +3,5 @@ replicaCount: 2
 
 ingress:
   enabled: true
-  host: investory.192.168.1.221.nip.io
+  host: investory.home.k3s.com
 

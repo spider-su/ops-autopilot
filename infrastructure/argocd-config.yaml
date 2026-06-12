@@ -1,0 +1,10 @@
+# Disables argocd-server's built-in TLS so ingress-nginx can proxy plain HTTP.
+# Traefik handles TLS externally.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cmd-params-cm
+  namespace: argocd
+data:
+  server.insecure: "true"
+
