@@ -61,9 +61,11 @@ clusters/{env}/kustomization.yaml        â† bootstrap (kubectl apply once)
 ## 1. Bootstrap (one-time only)
 
 ```bash
-kubectl apply -f clusters/prd/kustomization.yaml   # deploys infra + all apps
-kubectl apply -f clusters/dev/kustomization.yaml   # deploys active dev app only
+kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/prd/ | kubectl apply -f -
+kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/dev/ | kubectl apply -f -
 ```
+
+`--load-restrictor=LoadRestrictionsNone` is required because the app Application CRs live in `applications/{app}/` and are referenced cross-directory from `clusters/`. Argo CD itself handles this natively once running — the flag is only needed for the one-time bootstrap.
 
 `prd` must be bootstrapped first â€” it owns the infrastructure (Ceph secret, PVC) that `dev` depends on.
 

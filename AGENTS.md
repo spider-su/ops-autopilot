@@ -84,10 +84,12 @@ All apps use four named templates defined in `templates/_helpers.tpl` (canonical
 
 ```bash
 # Bootstrap (prd first, then dev)
-kubectl apply -f clusters/prd/kustomization.yaml
-kubectl apply -f clusters/dev/kustomization.yaml
+# Note: --load-restrictor flag is needed because app Application CRs live in
+# applications/{app}/ and are referenced cross-directory from clusters/prd/
+kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/prd/ | kubectl apply -f -
+kubectl kustomize --load-restrictor=LoadRestrictionsNone clusters/dev/ | kubectl apply -f -
 
-# Set Ceph credentials after prd bootstrap (not stored in git â€” run once)
+# Set Ceph credentials after prd bootstrap (not stored in git — run once)
 kubectl create secret generic ceph-csi-secret \
   --from-literal=userID=admin \
   --from-literal=userKey=$(ceph auth get-key client.admin) \
