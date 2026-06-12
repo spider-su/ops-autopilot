@@ -1,0 +1,26 @@
+image:
+  repository: postgres
+  tag: "16"
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+storage:
+  size: 5Gi
+  storageClassName: proxmox-ceph-rbd
+  mountPath: /var/lib/postgresql/data
+
+service:
+  port: 5432
+
+# Secret name holding POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB.
+# Pre-create with kubectl before first sync — never stored in git.
+credentials:
+  secretName: postgres-credentials
+

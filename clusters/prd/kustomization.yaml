@@ -14,4 +14,5 @@ resources:
   # Applications
   - ../../applications/investory/app-prd.yaml
   - ../../applications/smartapp/app-prd.yaml
+  - ../../applications/postgres/app-prd.yaml
   # Add new app app-prd.yaml references here to deploy to prd

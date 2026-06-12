@@ -1,0 +1,7 @@
+storage:
+  size: 2Gi
+
+image:
+  tag: "16"
+  pullPolicy: Always
+

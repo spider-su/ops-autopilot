@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-prd
+  namespace: argocd
+spec:
+  project: base-app
+  source:
+    repoURL: https://github.com/spider-su/ops-autopilot.git
+    targetRevision: main
+    path: applications/postgres
+    helm:
+      releaseName: postgres
+      valueFiles:
+        - values.yaml
+        - values-prd.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: postgres-prd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: postgres-credentials
+      namespace: postgres-prd
+      jsonPointers:
+        - /data
+
