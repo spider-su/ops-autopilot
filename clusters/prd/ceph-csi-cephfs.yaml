@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ceph-csi-cephfs
+  namespace: argocd
+spec:
+  project: base-app
+  source:
+    repoURL: https://ceph.github.io/csi-charts
+    chart: ceph-csi-cephfs
+    targetRevision: 3.17.0
+    helm:
+      values: |
+        csi:
+          kubeletDirPath: /var/lib/rancher/k3s/agent/kubelet
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ceph-csi-cephfs
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true   # required for CRDs shipped with the chart
+

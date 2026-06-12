@@ -8,6 +8,9 @@ resources:
   - ingress-nginx.yaml
   - cert-manager.yaml
   - metrics-server.yaml
+  - ceph-csi-rbd.yaml
+  - ceph-csi-cephfs.yaml
+  - monitoring.yaml
   # Applications
   - ../../applications/investory/app-prd.yaml
   - ../../applications/smartapp/app-prd.yaml

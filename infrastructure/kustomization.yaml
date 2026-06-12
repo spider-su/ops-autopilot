@@ -4,3 +4,4 @@ resources:
   - metallb-config.yaml  # IPAddressPool 192.168.1.220-240 + L2Advertisement
   - secret.yaml          # ceph-csi-secret scaffold (credentials applied manually)
   - pvc.yaml             # platform-storage PVC
+  - storageclass.yaml    # proxmox-ceph-rbd StorageClass (default)

@@ -10,6 +10,8 @@ spec:
     - https://charts.jetstack.io
     - https://metallb.github.io/metallb
     - https://kubernetes-sigs.github.io/metrics-server/
+    - https://prometheus-community.github.io/helm-charts
+    - https://ceph.github.io/csi-charts
   destinations:
     - server: https://kubernetes.default.svc
       namespace: "*"
