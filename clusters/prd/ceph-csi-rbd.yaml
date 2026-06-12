@@ -13,6 +13,12 @@ spec:
       values: |
         csi:
           kubeletDirPath: /var/lib/rancher/k3s/agent/kubelet
+        csiConfig:
+          - clusterID: "proxmox-ceph"
+            monitors:
+              - "192.168.1.51:6789"
+              - "192.168.1.52:6789"
+              - "192.168.1.53:6789"
   destination:
     server: https://kubernetes.default.svc
     namespace: ceph-csi-rbd
