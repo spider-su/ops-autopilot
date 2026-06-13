@@ -1,23 +1,42 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: stable
+  repository: aserobaba/investory
+  tag: latest
   pullPolicy: IfNotPresent
 
-containerPort: 80
+containerPort: 8080
 
 resources:
   requests:
     cpu: 100m
-    memory: 64Mi
+    memory: 256Mi
   limits:
     cpu: 500m
-    memory: 128Mi
+    memory: 512Mi
 
 service:
   port: 80
-  targetPort: 80
+  targetPort: 8080
+
+# Non-sensitive config — safe to store in git
+config:
+  DB_URL: "jdbc:postgresql://postgres.postgres.svc.cluster.local:5432/inventory"
+  GOOGLE_CLIENT_ID: "61359240267-35d5q59j0turdjk5fu22vq3rvoia7i19.apps.googleusercontent.com"
+  TELEGRAM_BOT_USERNAME: "investory_adviser_mega_bot"
+  TELEGRAM_CHAT_ID: "705026016"
+
+# Sensitive config — applied manually via kubectl, never stored in git
+# kubectl create secret generic investory-secrets \
+#   --from-literal=DB_USERNAME=postgres \
+#   --from-literal=DB_PASSWORD=<password> \
+#   --from-literal=GOOGLE_CLIENT_SECRET=<secret> \
+#   --from-literal=TWELVEDATA_API_KEY=<key> \
+#   --from-literal=EXCHANGERATE_API_KEY=<key> \
+#   --from-literal=TELEGRAM_BOT_TOKEN=<token> \
+#   --namespace=investory-prod --dry-run=client -o yaml | kubectl apply -f -
+secrets:
+  secretName: investory-secrets
 
 pvc:
   enabled: false

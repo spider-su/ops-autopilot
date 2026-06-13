@@ -26,6 +26,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.containerPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "app.name" . }}-config
+            - secretRef:
+                name: {{ .Values.secrets.secretName }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.pvc.enabled }}

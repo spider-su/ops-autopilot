@@ -7,3 +7,6 @@
 /dataSources/
 /dataSources.local.xml
 /.idea/
+# Environment files — contain secrets, never commit
+.env
+*.env
