@@ -230,3 +230,80 @@ kubectl logs -n argocd deploy/argocd-repo-server
 kubectl get pods,svc,ingress,pvc -n investory-prod
 kubectl top nodes
 ```
+
+---
+
+## Release Process
+
+### How Argo CD deploys apps
+
+Argo CD watches **this repo only** — not your application code repo. To deploy a new version:
+
+1. Build and push a Docker image to a registry
+2. Update `image.tag` in `applications/{app}/values-prd.yaml`
+3. Commit and push to `main` → Argo CD auto-deploys within ~3 minutes
+
+```
+App code repo          ops-autopilot repo (this repo)
+(E:\projects\myapp)    (watched by Argo CD)
+       │                        │
+  docker build                  │
+  docker push ──────────────────┤
+       │               update values-prd.yaml
+       │               image.tag: "1.2.3"
+       │                        │
+       │               git push to main
+       │                        │
+       └────────────────────────┘
+                                ↓
+                         Argo CD syncs
+                         rolls out new pods
+```
+
+### Manual release steps (no CI/CD)
+
+```bash
+# 1. Build image
+cd E:\projects\myapp
+docker build -t ghcr.io/<user>/myapp:1.0.0 .
+docker push ghcr.io/<user>/myapp:1.0.0
+
+# 2. Update tag in this repo
+# applications/myapp/values-prd.yaml:
+#   image:
+#     tag: "1.0.0"
+
+# 3. Push — Argo CD deploys automatically
+git add -A && git commit -m "release: myapp 1.0.0" && git push origin main
+```
+
+### Dev workflow (no tag changes needed)
+
+Dev uses `image.pullPolicy: Always` and `tag: latest` in `values-dev.yaml`.  
+Push a new `latest` image → restart the pod → new code running:
+
+```bash
+docker build -t ghcr.io/<user>/myapp:latest . && docker push ghcr.io/<user>/myapp:latest
+kubectl rollout restart deployment/myapp -n myapp-dev
+```
+
+### With CI/CD (GitHub Actions — recommended)
+
+```
+git push to app repo
+  └── GitHub Actions
+        ├── run tests
+        ├── docker build + push → ghcr.io/<user>/myapp:sha-abc123
+        └── update values-prd.yaml in ops-autopilot repo
+              └── Argo CD auto-deploys ← fully automatic
+```
+
+### Dev vs Prod comparison
+
+| | Dev | Prod |
+|--|-----|------|
+| Branch (ops-autopilot) | `dev` | `main` |
+| Image tag | `latest` | pinned e.g. `1.0.0` |
+| Pull policy | `Always` | `IfNotPresent` |
+| Replicas | 1 | 2 |
+| Deploy trigger | push new `latest` image + restart pod | update tag in `values-prd.yaml` |
