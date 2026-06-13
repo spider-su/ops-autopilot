@@ -5,3 +5,11 @@ ingress:
   enabled: true
   host: investory.home.k3s.com
 
+# Override quota for 2 replicas of Spring Boot (2 × 512Mi = 1Gi)
+resourceQuota:
+  hard:
+    requests.cpu: "1"
+    requests.memory: "512Mi"
+    limits.cpu: "2"
+    limits.memory: "1Gi"
+    pods: "10"
