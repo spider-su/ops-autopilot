@@ -28,4 +28,7 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - Replace=true   # Deployment selector is immutable — must replace, not patch
 
