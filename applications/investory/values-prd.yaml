@@ -1,5 +1,5 @@
 # Production overrides for investory
-replicaCount: 2
+replicaCount: 1
 
 ingress:
   enabled: true
