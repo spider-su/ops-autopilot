@@ -3,14 +3,14 @@ replicaCount: 1
 image:
   repository: aserobaba/investory
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 containerPort: 8080
 
 resources:
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 512Mi
   limits:
     cpu: 500m
     memory: 512Mi
