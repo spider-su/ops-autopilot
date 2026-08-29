@@ -7,7 +7,6 @@ resources:
   - infrastructure.yaml
   - ingress-nginx.yaml
   - cert-manager.yaml
-  - metrics-server.yaml
   - ceph-csi-rbd.yaml
   - ceph-csi-cephfs.yaml
   - monitoring.yaml
