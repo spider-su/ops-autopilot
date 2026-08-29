@@ -8,6 +8,7 @@ metadata:
 data:
   server.insecure: "true"
   timeout.reconciliation: "600s"
-  controller.status.processors: "5"
-  controller.operation.processors: "2"
+  # Trade reconciliation throughput for lower steady-state controller CPU.
+  controller.status.processors: "3"
+  controller.operation.processors: "1"
 

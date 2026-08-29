@@ -40,16 +40,17 @@ spec:
 
         prometheus:
           prometheusSpec:
-            retention: 7d
-            scrapeInterval: 60s
-            evaluationInterval: 60s
+            # Lower-frequency collection/evaluation reduces API, CPU, and disk use.
+            retention: 3d
+            scrapeInterval: 360s
+            evaluationInterval: 180s
             walCompression: true
             resources:
               requests:
                 cpu: 100m
                 memory: 512Mi
               limits:
-                cpu: 500m
+                cpu: 350m
                 memory: 2Gi
 
         alertmanager:
