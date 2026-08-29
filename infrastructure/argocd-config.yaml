@@ -8,6 +8,8 @@ metadata:
 data:
   server.insecure: "true"
   timeout.reconciliation: "600s"
+  # Cache application state longer between passive full comparisons.
+  controller.app.state.cache.expiration: "600s"
   # Trade reconciliation throughput for lower steady-state controller CPU.
   controller.status.processors: "3"
   controller.operation.processors: "1"
