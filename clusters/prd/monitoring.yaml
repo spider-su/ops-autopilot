@@ -26,6 +26,10 @@ spec:
             limits:
               cpu: 200m
               memory: 512Mi
+          livenessProbe:
+            initialDelaySeconds: 300
+            timeoutSeconds: 30
+            failureThreshold: 6
           sidecar:
             dashboards:
               enabled: true
