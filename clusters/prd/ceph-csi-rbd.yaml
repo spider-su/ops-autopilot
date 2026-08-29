@@ -19,6 +19,8 @@ spec:
               - "192.168.1.51:6789"
               - "192.168.1.52:6789"
               - "192.168.1.53:6789"
+        metrics:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: ceph-csi-rbd
@@ -28,5 +30,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true   # required for CRDs shipped with the chart
+      - ServerSideApply=true
 

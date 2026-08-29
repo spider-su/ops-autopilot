@@ -11,9 +11,8 @@ spec:
     targetRevision: 3.12.2
     helm:
       values: |
-        # Uncomment if your cluster uses self-signed kubelet certificates (common in kubeadm/k3s):
-        # args:
-        #   - --kubelet-insecure-tls
+        args:
+          - --kubelet-insecure-tls
         resources:
           requests:
             cpu: 10m
@@ -30,5 +29,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - Replace=true   # Deployment selector is immutable — must replace, not patch
+      - Replace=true
 

@@ -26,13 +26,20 @@ spec:
             limits:
               cpu: 200m
               memory: 512Mi
+          sidecar:
+            dashboards:
+              enabled: true
+              searchNamespace: "monitoring"
+            datasources:
+              enabled: true
+              searchNamespace: "monitoring"
 
         prometheus:
           prometheusSpec:
-            retention: 7d          # default 15d — reduce stored data
-            scrapeInterval: 60s    # default 15s — less ingestion pressure
+            retention: 7d
+            scrapeInterval: 60s
             evaluationInterval: 60s
-            walCompression: true   # reduces WAL memory usage
+            walCompression: true
             resources:
               requests:
                 cpu: 100m
@@ -77,5 +84,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - ServerSideApply=true   # required for CRDs (PrometheusRule, ServiceMonitor, etc.)
+      - ServerSideApply=true
 

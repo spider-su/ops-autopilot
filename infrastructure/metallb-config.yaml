@@ -12,4 +12,8 @@ kind: L2Advertisement
 metadata:
   name: homelab-advertisement
   namespace: metallb-system
-
+spec:
+  ipAddressPools:
+    - homelab-pool
+  interfaces:
+    - enp6s18
