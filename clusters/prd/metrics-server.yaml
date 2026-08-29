@@ -13,13 +13,19 @@ spec:
       values: |
         args:
           - --kubelet-insecure-tls
+          - --metric-resolution=30s
+        livenessProbe:
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          timeoutSeconds: 5
         resources:
           requests:
-            cpu: 10m
-            memory: 32Mi
+            cpu: 25m
+            memory: 64Mi
           limits:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 200m
+            memory: 256Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
