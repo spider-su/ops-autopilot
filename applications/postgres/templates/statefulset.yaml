@@ -19,6 +19,19 @@ spec:
         - name: {{ include "app.name" . }}
           image: {{ include "app.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - -c
+            - shared_buffers={{ .Values.postgresConfig.sharedBuffers }}
+            - -c
+            - work_mem={{ .Values.postgresConfig.workMem }}
+            - -c
+            - maintenance_work_mem={{ .Values.postgresConfig.maintenanceWorkMem }}
+            - -c
+            - max_connections={{ .Values.postgresConfig.maxConnections }}
+            {{- if .Values.postgresConfig.synchronousCommit }}
+            - -c
+            - synchronous_commit={{ .Values.postgresConfig.synchronousCommit }}
+            {{- end }}
           ports:
             - containerPort: 5432
           envFrom:
@@ -32,12 +45,18 @@ spec:
               subPath: pgdata
           readinessProbe:
             exec:
-              command: ["pg_isready", "-U", "postgres"]
+              command:
+                - sh
+                - -c
+                - pg_isready -U "${POSTGRES_USER:-postgres}" -h 127.0.0.1
             initialDelaySeconds: 10
             periodSeconds: 5
           livenessProbe:
             exec:
-              command: ["pg_isready", "-U", "postgres"]
+              command:
+                - sh
+                - -c
+                - pg_isready -U "${POSTGRES_USER:-postgres}" -h 127.0.0.1
             initialDelaySeconds: 30
             periodSeconds: 10
   volumeClaimTemplates:
@@ -49,4 +68,3 @@ spec:
         resources:
           requests:
             storage: {{ .Values.storage.size }}
-

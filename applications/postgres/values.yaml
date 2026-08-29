@@ -11,6 +11,12 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+postgresConfig:
+  sharedBuffers: "128MB"
+  workMem: "8MB"
+  maintenanceWorkMem: "32MB"
+  maxConnections: "50"
+
 storage:
   size: 5Gi
   storageClassName: proxmox-ceph-rbd
@@ -27,8 +33,8 @@ credentials:
 resourceQuota:
   enabled: true
   hard:
-    requests.cpu: "500m"
-    requests.memory: "512Mi"
+    requests.cpu: "50m"
+    requests.memory: "256Mi"
     limits.cpu: "2"
     limits.memory: "1Gi"
     pods: "5"
