@@ -7,10 +7,20 @@ metadata:
   namespace: argocd
 data:
   server.insecure: "true"
-  timeout.reconciliation: "600s"
   # Cache application state longer between passive full comparisons.
   controller.app.state.cache.expiration: "600s"
   # Trade reconciliation throughput for lower steady-state controller CPU.
   controller.status.processors: "3"
   controller.operation.processors: "1"
+
+---
+# Application reconciliation cadence is configured in argocd-cm, separately
+# from controller command parameters in argocd-cmd-params-cm.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  timeout.reconciliation: "600s"
 
