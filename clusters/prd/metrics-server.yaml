@@ -13,6 +13,8 @@ spec:
       values: |
         args:
           - --kubelet-insecure-tls
+          - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+          - --kubelet-use-node-status-port
         resources:
           requests:
             cpu: 10m
@@ -30,4 +32,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - Replace=true
-
