@@ -11,6 +11,8 @@ spec:
     targetRevision: 3.12.2
     helm:
       values: |
+        podLabels:
+          k8s-app: metrics-server
         args:
           - --kubelet-insecure-tls
           - --metric-resolution=30s
