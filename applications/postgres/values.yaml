@@ -33,7 +33,7 @@ credentials:
 resourceQuota:
   enabled: true
   hard:
-    requests.cpu: "50m"
+    requests.cpu: "100m"
     requests.memory: "256Mi"
     limits.cpu: "2"
     limits.memory: "1Gi"
