@@ -8,6 +8,6 @@ metadata:
 data:
   server.insecure: "true"
   timeout.reconciliation: "600s"
-  controller.status.processors: "10"
-  controller.operation.processors: "5"
+  controller.status.processors: "5"
+  controller.operation.processors: "2"
 
