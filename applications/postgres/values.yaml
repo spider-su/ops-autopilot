@@ -54,3 +54,15 @@ pdb:
   enabled: true
 
 nodeSelector: {}
+
+backup:
+  enabled: false
+  schedule: "0 3 1 * *"
+  storage:
+    size: 10Gi
+    storageClassName: proxmox-ceph-rbd
+  image:
+    repository: postgres
+    tag: "16"
+    pullPolicy: IfNotPresent
+  imageDigest: ""

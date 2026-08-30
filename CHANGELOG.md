@@ -2,6 +2,14 @@
 
 ## 2026-08-30
 
+- Selected SOPS/age for encrypted declarative secrets; added the repository encryption convention and
+  decryption-boundary documentation without committing credentials.
+- Enabled Ceph RBD persistence for Prometheus and Alertmanager, with email routing to
+  `a.serobaba@gmail.com` supplied by an external SMTP Secret.
+- Added a monthly PostgreSQL custom-format backup CronJob on a separate 10 GiB Ceph RBD claim, retaining
+  only the newest backup.
+- Retained legacy unregistered `applications/*/app-dev.yaml` compatibility artifacts while keeping
+  environment management authoritative under `clusters/*`.
 - Added CI rendering for every pinned upstream Helm chart referenced by production Applications,
   preserving the Application's inline Helm values during rendering.
 - Added strict Kubernetes schema validation for rendered cluster, infrastructure, local workload, and

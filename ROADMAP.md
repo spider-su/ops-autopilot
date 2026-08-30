@@ -9,9 +9,10 @@ days), and **L** (multi-day).
 - [ ] **P0 - Restore trustworthy monitoring:** repair node-exporter reachability on two nodes, align
   collection intervals with enabled queries and rules, remove k3s-inapplicable alerts, and configure an
   intentional notification path.
-- [ ] **P1 - Make secrets declarative:** replace empty Secret scaffolds and manual data injection with
-  SOPS/age, Sealed Secrets, External Secrets, or another selected GitOps-compatible mechanism.
-- [ ] **P1 - Add PostgreSQL backup and tested restore:** PVC durability and a PDB are not backups.
+- [ ] **P1 - Complete encrypted secret migration:** connect SOPS/age decryption to Argo CD and migrate
+  all operator-managed Secret payloads without committing plaintext.
+- [ ] **P1 - Test PostgreSQL backup restore:** restore the retained monthly dump into a disposable
+  PostgreSQL instance and document the verified procedure.
 - [ ] **P2 - Harden workload contracts:** add pod/container security contexts, compatible quotas, and
   least-privilege networking.
 - [ ] **P3 - Remove unused platform surface:** retain only components with a documented consumer and
@@ -22,7 +23,6 @@ days), and **L** (multi-day).
 | Item | Effort | Evidence and target outcome |
 |---|---:|---|
 | Repair node-exporter target reachability | M | Prometheus observed timeouts for `192.168.1.201:9100` and `192.168.1.203:9100`, while only `192.168.1.202:9100` was up. Diagnose node firewall/routing/listener reachability and verify all targets from Prometheus. |
-| Decide Prometheus and Alertmanager persistence | M | Both currently use ephemeral storage. Add RBD-backed claims if history and alert continuity must survive Pod recreation; explicitly document the ephemeral choice otherwise. |
 | Add application metrics discovery contracts | M | NetworkPolicy ingress from `monitoring` does not create scrape targets. Define ServiceMonitor/PodMonitor conventions and expose metrics only for apps that implement them. |
 | Tune Grafana startup/readiness from evidence | S | Recent readiness and liveness failures occurred during startup. Keep the extended liveness allowance, inspect readiness semantics, and tune based on measured startup behavior. |
 
@@ -42,13 +42,11 @@ days), and **L** (multi-day).
 | Item | Effort | Why |
 |---|---:|---|
 | Add pod and container security contexts | M | Define non-root execution where supported, dropped capabilities, no privilege escalation, seccomp, and read-only root filesystems where compatible. |
-| Add automated PostgreSQL backup and restore verification | L | Schedule backups to independent storage, define retention, and periodically prove restoration into a disposable instance. |
 
 ## Theme E - Secrets and operational safety
 
 | Item | Effort | Why |
 |---|---:|---|
-| Adopt encrypted declarative secrets | M | Empty Secret scaffolds plus ignored `/data` fields create first-sync races and manual state outside Git. Select and document the decryption/key-recovery boundary. |
 | Remove Secret scaffolds after migration | S | Prevent Argo from creating invalid empty credentials before the operator or secret controller supplies data. |
 | Add secret scanning | S | Block committed environment files, Secret payloads, private keys, tokens, and high-confidence credentials. |
 | Document credential rotation and recovery | M | Cover Ceph, PostgreSQL, applications, Grafana, notification receivers, and GitOps decryption keys without recording their values. |

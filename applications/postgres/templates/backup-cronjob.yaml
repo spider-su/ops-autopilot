@@ -1,0 +1,75 @@
+{{- if .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "app.name" . }}-backup
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.backup.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            {{- include "app.selectorLabels" . | nindent 12 }}
+        spec:
+          automountServiceAccountToken: false
+          restartPolicy: OnFailure
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: postgres-backup
+              image: {{ .Values.backup.image.repository }}@{{ .Values.backup.imageDigest }}
+              imagePullPolicy: {{ .Values.backup.image.pullPolicy }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+              env:
+                - name: PGHOST
+                  value: {{ include "app.name" . | quote }}
+                - name: PGPORT
+                  value: {{ .Values.service.port | quote }}
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.credentials.secretName }}
+                      key: POSTGRES_USER
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.credentials.secretName }}
+                      key: POSTGRES_PASSWORD
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.credentials.secretName }}
+                      key: POSTGRES_DB
+              command: ["/bin/sh", "-ec"]
+              args:
+                - |
+                  file="/backups/postgres-$(date -u +%Y-%m-%d).dump"
+                  pg_dump --format=custom --file="$file"
+                  find /backups -maxdepth 1 -type f -name '*.dump' -printf '%T@ %p\n' \
+                    | sort -nr | tail -n +2 | cut -d' ' -f2- | xargs -r rm -f
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+                limits:
+                  cpu: 250m
+                  memory: 512Mi
+              volumeMounts:
+                - name: backups
+                  mountPath: /backups
+          volumes:
+            - name: backups
+              persistentVolumeClaim:
+                claimName: {{ include "app.name" . }}-backups
+{{- end }}

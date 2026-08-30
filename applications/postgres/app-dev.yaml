@@ -1,0 +1,30 @@
+# Legacy, unregistered compatibility artifact. Development is managed from
+# clusters/dev/workloads and shares the production PostgreSQL service.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-dev
+  namespace: argocd
+  annotations:
+    ops-autopilot.io/status: legacy-unregistered
+spec:
+  project: base-app
+  source:
+    repoURL: https://github.com/spider-su/ops-autopilot.git
+    targetRevision: main
+    path: applications/postgres
+    helm:
+      releaseName: postgres
+      valueFiles:
+        - values.yaml
+        - values-dev.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: postgres-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true

@@ -32,9 +32,10 @@ probe endpoints follow the same profile rather than the chart's default `10s` cA
 
 ## Current limitations
 
-- Prometheus and Alertmanager use ephemeral storage.
-- Alertmanager is currently disabled because no external notification receiver is configured; re-enable
-  it only with an intentional receiver and tested routing.
+- Prometheus uses a 10 GiB Ceph RBD claim and Alertmanager uses a 2 GiB Ceph RBD claim. These claims
+  preserve time series and alert state across Pod recreation; they are not a backup strategy.
+- Alertmanager sends email through Gmail SMTP to `a.serobaba@gmail.com`. The SMTP password is supplied
+  by the SOPS/age-managed `monitoring/alertmanager-smtp` Secret and is never stored in Git plaintext.
 - Some upstream dashboards use longer historical windows than the three-day retention period; this is
   an intentional history limitation, not an alerting-sample failure.
 - Controller-manager, scheduler, and kube-proxy scraping and default rule groups are disabled because
@@ -71,5 +72,5 @@ Pod does not prove that port `9100` is reachable across nodes.
 - Keep the upstream chart version pinned.
 - Render the exact chart version and values before changing field names.
 - Reconcile scrape intervals with every rate/range window used by enabled rules.
-- Decide persistence and notification semantics explicitly rather than relying on chart defaults.
+- Test the email route after supplying the SMTP Secret and verify that the RBD claims bind.
 - Validate resource tuning after startup and outside active Argo retry or sync storms.

@@ -87,6 +87,8 @@ this repository.
 - PostgreSQL is a single shared StatefulSet with an RBD-backed PVC.
 - `infrastructure/platform-storage` is a deliberately reserved 5 GiB RBD-backed PVC with no current
   workload consumer; retain it until an explicit storage cleanup decision is made.
+- Prometheus and Alertmanager use separate RBD-backed claims for short-term operational state. PostgreSQL
+  writes one monthly custom-format dump to a separate 10 GiB RBD claim and retains only the newest dump.
 - PostgreSQL ingress is restricted by an explicit namespace allowlist in its chart values. TCP port 5432
   is intentionally exposed through the private-LAN ingress-nginx LoadBalancer for operator-PC testing;
   this is not an Internet exposure or TLS boundary.

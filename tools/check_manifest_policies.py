@@ -90,9 +90,10 @@ def check_workloads(workload_dir: Path, errors: list[str]) -> None:
             resources = container.get("resources", {})
             if not resources.get("requests") or not resources.get("limits"):
                 fail(errors, f"{file}/{name}: requests and limits are required")
-            for probe in ("startupProbe", "readinessProbe", "livenessProbe"):
-                if not container.get(probe):
-                    fail(errors, f"{file}/{name}: {probe} is required")
+            if document.get("kind") in {"Deployment", "StatefulSet", "DaemonSet"}:
+                for probe in ("startupProbe", "readinessProbe", "livenessProbe"):
+                    if not container.get(probe):
+                        fail(errors, f"{file}/{name}: {probe} is required")
             image = container.get("image", "")
             if file.name.endswith("-prd.yaml") and "@sha256:" not in image:
                 fail(errors, f"{file}/{name}: production image must use a digest")

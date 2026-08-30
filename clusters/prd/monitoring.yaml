@@ -89,6 +89,15 @@ spec:
             scrapeInterval: 60s
             evaluationInterval: 60s
             walCompression: true
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: proxmox-ceph-rbd
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: 10Gi
             resources:
               requests:
                 cpu: 100m
@@ -98,10 +107,37 @@ spec:
                 memory: 2Gi
 
         alertmanager:
-          # No notification receiver is configured yet. Keep Alertmanager disabled rather than
-          # presenting a healthy-looking null route that silently drops every alert.
-          enabled: false
+          enabled: true
+          config:
+            global:
+              smtp_smarthost: smtp.gmail.com:587
+              smtp_from: a.serobaba@gmail.com
+              smtp_auth_username: a.serobaba@gmail.com
+              smtp_auth_password_file: /etc/alertmanager/secrets/alertmanager-smtp/smtp-password
+            route:
+              receiver: email
+              group_by:
+                - alertname
+              group_wait: 30s
+              group_interval: 5m
+              repeat_interval: 12h
+            receivers:
+              - name: email
+                email_configs:
+                  - to: a.serobaba@gmail.com
+                    send_resolved: true
           alertmanagerSpec:
+            secrets:
+              - alertmanager-smtp
+            storage:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: proxmox-ceph-rbd
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: 2Gi
             resources:
               requests:
                 cpu: 10m

@@ -6,7 +6,7 @@
 - `kubectl` access to the target cluster.
 - Reachability from cluster nodes to the configured Ceph monitors.
 - Operator access to the external Pi-hole and Traefik configuration.
-- Ceph and PostgreSQL credentials available outside Git.
+- Ceph and PostgreSQL credentials available through the SOPS/age decryption boundary.
 
 Confirm the active context before every bootstrap or recovery command:
 
@@ -29,18 +29,18 @@ healthy.
 
 ## Required credentials
 
-Secret values are intentionally not stored in Git. Create them with an operator-approved secret input
-mechanism and never paste real values into shell history, issue comments, or documentation.
+Secret values are managed with SOPS/age. Never paste real values into shell history, issue comments, or
+documentation. See [`secrets/README.md`](../../secrets/README.md) for the encryption boundary.
 
 Required Secret objects currently include:
 
 - `default/ceph-csi-secret`
 - `postgres/postgres-credentials`
 - `investory-prod/investory-secrets`
+- `monitoring/alertmanager-smtp` (`smtp-password`)
 
-The current manifests contain empty Secret scaffolds and Argo CD ignores their `/data` fields. This is
-a transitional operator-managed process; declarative encrypted secret management is tracked in the
-roadmap.
+The existing chart Secret scaffolds remain as compatibility artifacts until encrypted replacements are
+connected to the Argo CD decryption boundary. Do not put their payloads in Git.
 
 ## Bootstrap development
 
@@ -91,3 +91,5 @@ actual user-facing route as appropriate.
 - Do not delete an Application until its resource-deletion behavior and stateful data impact are
   understood.
 - Restore PostgreSQL from a tested backup procedure, not from assumptions about PVC durability.
+- PostgreSQL production creates one monthly custom-format dump on a separate Ceph RBD claim. The backup
+  job retains only the newest dump; verify restoration manually before relying on it.
