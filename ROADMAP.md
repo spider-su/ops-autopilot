@@ -51,7 +51,6 @@ days), and **L** (multi-day).
 | Item | Effort | Why |
 |---|---:|---|
 | Add pod and container security contexts | M | Define non-root execution where supported, dropped capabilities, no privilege escalation, seccomp, and read-only root filesystems where compatible. |
-| Correct application egress policy semantics | M | The rule described as kube-apiserver access actually permits all public IPs and excludes private ranges. Model DNS, database, external APIs, and any Kubernetes API access explicitly. |
 | Add automated PostgreSQL backup and restore verification | L | Schedule backups to independent storage, define retention, and periodically prove restoration into a disposable instance. |
 
 ## Theme E - Secrets and operational safety

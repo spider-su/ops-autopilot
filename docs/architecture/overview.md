@@ -115,6 +115,7 @@ escalation, and all Linux capabilities dropped. Non-root execution and read-only
 compatibility follow-ups for images whose entrypoints and writable paths have been verified.
 
 Application egress permits DNS only to `kube-system`, PostgreSQL only through its namespace and port,
-and same-namespace traffic where required. Investory's current public egress exception remains a
-temporary compatibility setting for dynamic third-party API endpoints and requires an explicit allowlist
-decision before it can be hardened.
+and same-namespace traffic where required. Investory intentionally retains broad public egress because
+the application owner controls the service and its external integrations; this is an accepted private
+homelab tradeoff rather than an accidental allowlist omission. Revisit it if the trust boundary or
+deployment model changes.
