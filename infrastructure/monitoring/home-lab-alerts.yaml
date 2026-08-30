@@ -77,4 +77,3 @@ spec:
           annotations:
             summary: StatefulSet has unavailable replicas
             description: "StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has unavailable replicas for more than 15 minutes."
-

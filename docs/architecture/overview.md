@@ -40,7 +40,7 @@ PVCs, NetworkPolicies, and ResourceQuotas.
 
 This Kustomize target owns cluster-wide and cross-cutting resources that are not naturally part of a
 single workload chart, including storage, MetalLB configuration, Argo CD configuration and ingress,
-and home-lab alert rules.
+  and the monitoring-rules Application's homelab alert rules.
 
 ## Environment model
 

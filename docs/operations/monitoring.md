@@ -11,9 +11,10 @@
 - node-exporter
 - chart-provided ServiceMonitors, dashboards, and rules
 
-`infrastructure/home-lab-alerts.yaml` adds homelab-specific node and workload rules. Kubernetes
-`metrics-server` is separate: the live k3s installation currently owns it as a packaged add-on, while
-the repository also contains an unregistered Argo Application manifest.
+The `monitoring-rules` Argo Application owns `infrastructure/monitoring/home-lab-alerts.yaml` after the
+monitoring Application creates the monitoring CRDs. Kubernetes `metrics-server` is separate: the live
+k3s installation currently owns it as a packaged add-on, while the repository also contains an
+unregistered Argo Application manifest.
 
 ## Current collection profile
 

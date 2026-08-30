@@ -39,5 +39,7 @@ Completed repository-level documentation and platform changes are recorded here.
   monitoring profile instead of retaining the chart's separate 10-second cAdvisor interval.
 - Set Prometheus collection and rule evaluation to 60 seconds so enabled upstream 2-minute and
   5-minute queries have multiple usable samples.
+- Moved homelab Prometheus rules into a dedicated monitoring-rules Application ordered after the
+  monitoring CRDs, removing them from the mixed infrastructure Application.
 - Disabled kube-prometheus scraping for controller-manager, scheduler, and kube-proxy because those
   component endpoints are not exposed by this k3s control plane.

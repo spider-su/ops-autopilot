@@ -10,6 +10,7 @@ resources:
   - ceph-csi-rbd.yaml
   - ceph-csi-cephfs.yaml
   - monitoring.yaml
+  - monitoring-rules.yaml
   # DBs and other stateful services
   - ../../applications/postgres/app-prd.yaml
   # Applications

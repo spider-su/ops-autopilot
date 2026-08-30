@@ -7,4 +7,3 @@ resources:
   - storageclass.yaml      # proxmox-ceph-rbd StorageClass (default)
   - argocd-config.yaml     # argocd-server insecure mode (TLS handled by Traefik)
   - argocd-ingress.yaml    # Ingress for argocd.home.k3s.com
-  - home-lab-alerts.yaml   # low-noise node and workload alerts
