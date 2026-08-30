@@ -41,9 +41,9 @@ kubectl kustomize clusters/prd --load-restrictor LoadRestrictionsNone | Out-Null
 kubectl kustomize clusters/dev --load-restrictor LoadRestrictionsNone | Out-Null
 ```
 
-The unrestricted load option is currently required because cluster kustomizations reference
-Application resources under `applications/`. Argo CD is configured with the same option. Removing this
-global requirement is tracked in the roadmap.
+The unrestricted load option remains temporarily required because cluster kustomizations still reference
+Application resources under `applications/`. Argo CD is configured with the same temporary option;
+reorganizing those environment overlays is tracked in the roadmap.
 
 ## What these checks prove
 

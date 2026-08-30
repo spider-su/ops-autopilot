@@ -1,9 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - metallb-config.yaml    # IPAddressPool 192.168.1.220-240 + L2Advertisement
-  - secret.yaml            # ceph-csi-secret scaffold (credentials applied manually)
-  - pvc.yaml               # reserved platform-storage PVC
-  - storageclass.yaml      # proxmox-ceph-rbd StorageClass (default)
-  - argocd-config.yaml     # argocd-server insecure mode (TLS handled by Traefik)
-  - argocd-ingress.yaml    # Ingress for argocd.home.k3s.com

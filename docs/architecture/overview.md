@@ -38,9 +38,10 @@ PVCs, NetworkPolicies, and ResourceQuotas.
 
 ### `infrastructure/`
 
-This Kustomize target owns cluster-wide and cross-cutting resources that are not naturally part of a
-single workload chart, including storage, MetalLB configuration, Argo CD configuration and ingress,
-  and the monitoring-rules Application's homelab alert rules.
+The `infrastructure/platform` Kustomize target owns storage and MetalLB resources. The
+`infrastructure/argocd` target owns Argo CD configuration and ingress. The separate
+`infrastructure/monitoring` target owns homelab alert rules. Each target is reconciled by its own Argo
+Application so resources with different lifecycles have explicit ownership.
 
 ## Environment model
 

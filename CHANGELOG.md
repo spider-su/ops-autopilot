@@ -51,3 +51,5 @@ Completed repository-level documentation and platform changes are recorded here.
   rather than pruning its bound volume.
 - Disabled kube-prometheus scraping for controller-manager, scheduler, and kube-proxy because those
   component endpoints are not exposed by this k3s control plane.
+- Split platform storage/MetalLB and Argo CD configuration into separate infrastructure Applications;
+  monitoring rules were already isolated into their own Application.

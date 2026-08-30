@@ -4,7 +4,8 @@ resources:
   # Child Applications use sync waves; this list is registration, not dependency ordering.
   - base-app-project.yaml
   - metallb.yaml
-  - infrastructure.yaml
+  - platform-infrastructure.yaml
+  - argocd-infrastructure.yaml
   - ingress-nginx.yaml
   - ceph-csi-rbd.yaml
   - monitoring.yaml

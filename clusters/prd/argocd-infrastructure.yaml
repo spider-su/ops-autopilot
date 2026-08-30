@@ -1,7 +1,7 @@
-﻿apiVersion: argoproj.io/v1alpha1
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: infrastructure
+  name: argocd-infrastructure
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -12,21 +12,13 @@ spec:
   source:
     repoURL: https://github.com/spider-su/ops-autopilot.git
     targetRevision: main
-    path: infrastructure
+    path: infrastructure/argocd
   destination:
     server: https://kubernetes.default.svc
-    namespace: infrastructure
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - RespectIgnoreDifferences=true
-  ignoreDifferences:
-    - group: ""
-      kind: Secret
-      name: ceph-csi-secret
-      namespace: default
-      jsonPointers:
-        - /data
