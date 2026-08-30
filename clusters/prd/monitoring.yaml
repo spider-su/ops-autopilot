@@ -58,6 +58,12 @@ spec:
               cpu: 50m
               memory: 32Mi
 
+        kubelet:
+          serviceMonitor:
+            # Keep kubelet, cAdvisor, and probe endpoints on the same low-frequency
+            # profile as Prometheus. The chart otherwise forces cAdvisor to 10s.
+            interval: 360s
+
         defaultRules:
           # These control-plane endpoints are not exposed by the k3s deployment in this homelab.
           # Keeping their upstream rules enabled produces persistent false-positive alerts.

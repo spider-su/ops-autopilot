@@ -27,7 +27,8 @@ The repository intentionally favors low resource use over rapid detection:
 
 Some chart endpoints can define their own interval and override the Prometheus global default. Always
 inspect effective ServiceMonitors and active Prometheus targets before describing the complete stack as
-low frequency.
+low frequency. The kubelet ServiceMonitor is explicitly set to `360s` so its kubelet, cAdvisor, and
+probe endpoints follow the same profile rather than the chart's default `10s` cAdvisor interval.
 
 ## Current limitations
 
