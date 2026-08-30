@@ -18,5 +18,5 @@ resourceQuota:
     requests.cpu: "1"
     requests.memory: "1Gi"
     limits.cpu: "2"
-    limits.memory: "2Gi"
+    limits.memory: "4Gi"
     pods: "10"
