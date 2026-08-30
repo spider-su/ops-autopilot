@@ -1,0 +1,20 @@
+# This repository benefits from careful GitOps and live-state reasoning.
+model = "gpt-5.6-luna"
+review_model = "gpt-5.6-sol"
+model_reasoning_effort = "medium"
+model_verbosity = "low"
+model_reasoning_summary = "concise"
+personality = "none"
+
+# Load the root router while leaving room for future path-specific guidance.
+project_doc_max_bytes = 32768
+
+# Keep local autonomy inside the repository. Cluster mutations still require task authorization.
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+
+[windows]
+sandbox = "unelevated"
+
+[sandbox_workspace_write]
+network_access = true

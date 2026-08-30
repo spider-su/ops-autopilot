@@ -1,0 +1,21 @@
+# VCS and IDE internals
+.git/
+.idea/
+
+# Local credentials and cluster access
+.env
+.env.*
+*.kubeconfig
+kubeconfig
+
+# Generated and temporary data
+.codex-tmp/
+tmp/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Rendered output
+rendered/
+out/

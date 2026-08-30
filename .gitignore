@@ -10,3 +10,14 @@
 # Environment files — contain secrets, never commit
 .env
 *.env
+
+# Local cluster credentials and generated validation output
+*.kubeconfig
+kubeconfig
+/rendered/
+/out/
+/.codex-tmp/
+*.log
+*.tmp
+__pycache__/
+*.pyc
