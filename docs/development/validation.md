@@ -37,13 +37,12 @@ helm lint applications/investory `
 Cluster composition:
 
 ```powershell
-kubectl kustomize clusters/prd --load-restrictor LoadRestrictionsNone | Out-Null
-kubectl kustomize clusters/dev --load-restrictor LoadRestrictionsNone | Out-Null
+kubectl kustomize clusters/prd | Out-Null
+kubectl kustomize clusters/dev | Out-Null
 ```
 
-The unrestricted load option remains temporarily required because cluster kustomizations still reference
-Application resources under `applications/`. Argo CD is configured with the same temporary option;
-reorganizing those environment overlays is tracked in the roadmap.
+Cluster kustomizations contain the environment-specific Argo Application wiring under `clusters/` and
+refer only to files within their own overlay, so standard restricted rendering is sufficient.
 
 ## What these checks prove
 

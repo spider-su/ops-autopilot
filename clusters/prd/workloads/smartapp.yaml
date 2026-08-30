@@ -1,7 +1,7 @@
-﻿apiVersion: argoproj.io/v1alpha1
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: investory-dev
+  name: smartapp-prod
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -11,20 +11,19 @@ spec:
   project: base-app
   source:
     repoURL: https://github.com/spider-su/ops-autopilot.git
-    targetRevision: dev
-    path: applications/investory
+    targetRevision: main
+    path: applications/smartapp
     helm:
-      releaseName: investory
+      releaseName: smartapp
       valueFiles:
         - values.yaml
-        - values-dev.yaml
+        - values-prd.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: investory-dev
+    namespace: smartapp-prod
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-

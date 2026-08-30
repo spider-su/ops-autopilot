@@ -56,11 +56,11 @@ Invoke-Step 'Chart policy checks' {
 }
 
 Invoke-Step 'Kustomize: production' {
-    kubectl kustomize clusters/prd --load-restrictor LoadRestrictionsNone | Out-Null
+    kubectl kustomize clusters/prd | Out-Null
 }
 
 Invoke-Step 'Kustomize: development' {
-    kubectl kustomize clusters/dev --load-restrictor LoadRestrictionsNone | Out-Null
+    kubectl kustomize clusters/dev | Out-Null
 }
 
 Write-Host 'Repository validation passed.'

@@ -35,7 +35,8 @@ The canonical architecture and dependency description is
 | Path | Responsibility |
 |---|---|
 | `clusters/` | Environment entry points and Argo CD Application wiring. |
-| `applications/` | Workload Helm charts, environment values, and workload Application resources. |
+| `applications/` | Reusable workload Helm charts and environment values. |
+| `clusters/` | Environment-specific Argo Application wiring and bootstrap resources. |
 | `infrastructure/` | Cluster-scoped and cross-cutting Kustomize resources. |
 | `docs/` | Canonical architecture, operations, onboarding, monitoring, and validation documentation. |
 | `.codex/` | Project-local Codex configuration and repeatable actions. |
@@ -59,8 +60,9 @@ The supported onboarding flow is:
 
 1. Create `applications/<app>/` from the closest existing chart.
 2. Replace names, image configuration, ports, resources, and optional capabilities.
-3. Add production and, when needed, development Application resources.
-4. Register the Application in the appropriate cluster kustomization.
+3. Add production and, when needed, development Application manifests under the appropriate
+   `clusters/<env>/workloads/` directory.
+4. Register the manifest in the appropriate cluster kustomization.
 5. Render and lint locally before pushing.
 
 The complete contract and checklist are in

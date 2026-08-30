@@ -11,8 +11,8 @@ resources:
   - monitoring.yaml
   - monitoring-rules.yaml
   # DBs and other stateful services
-  - ../../applications/postgres/app-prd.yaml
+  - workloads/postgres.yaml
   # Applications
-  - ../../applications/investory/app-prd.yaml
-  - ../../applications/smartapp/app-prd.yaml
-  # Add new app app-prd.yaml references here to deploy to prd
+  - workloads/investory.yaml
+  - workloads/smartapp.yaml
+  # Add new workload Application manifests under workloads/ to deploy to prd

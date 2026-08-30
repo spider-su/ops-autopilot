@@ -32,9 +32,9 @@ Environment composition belongs here:
 
 ### `applications/`
 
-Each workload directory contains one Helm chart plus its Argo CD Application resources and environment
-value files. A chart owns namespaced workload resources such as Deployments, Services, Ingresses,
-PVCs, NetworkPolicies, and ResourceQuotas.
+Each workload directory contains one reusable Helm chart and environment value files. Environment
+directories under `clusters/` own Argo CD Application wiring. A chart owns namespaced workload
+resources such as Deployments, Services, Ingresses, PVCs, NetworkPolicies, and ResourceQuotas.
 
 ### `infrastructure/`
 

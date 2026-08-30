@@ -11,9 +11,10 @@ applications/<app>/
   values-prd.yaml
   values-dev.yaml
   values.schema.json
-  app-prd.yaml
-  app-dev.yaml                 # optional until development deployment is needed
   templates/
+
+clusters/prd/workloads/<app>.yaml
+clusters/dev/workloads/<app>.yaml              # optional until development deployment is needed
 ```
 
 Use the closest existing workload as a starting point. `investory` demonstrates configuration and
@@ -36,7 +37,7 @@ value or template capability.
 
 ## Create the Application resources
 
-Production convention:
+Production convention (stored under `clusters/prd/workloads/`):
 
 ```yaml
 metadata:
@@ -62,7 +63,8 @@ environment model.
 
 ## Register the workload
 
-Add the production Application path to `clusters/prd/kustomization.yaml`. Add development to
+Add the production Application manifest under `clusters/prd/workloads/` and register it in
+`clusters/prd/kustomization.yaml`. Add development under `clusters/dev/workloads/` and register it in
 `clusters/dev/kustomization.yaml` only while it is actively needed.
 
 Registration is the deployment trigger after commit and push. Merely creating an Application file
