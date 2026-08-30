@@ -61,3 +61,5 @@ Completed repository-level documentation and platform changes are recorded here.
   helper templates without a misleading unsynchronized dependency.
 - Added a compatible application security baseline: RuntimeDefault seccomp, disabled privilege
   escalation, and dropped Linux capabilities for SmartApp, Investory, and PostgreSQL containers.
+- Scoped application DNS egress to kube-dns Pods in `kube-system`; public Investory egress remains an
+  explicitly documented compatibility exception pending an endpoint allowlist decision.

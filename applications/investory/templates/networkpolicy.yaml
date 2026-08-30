@@ -34,7 +34,11 @@ spec:
     {{- end }}
   egress:
     # Allow DNS
-    - ports:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
         - port: 53
           protocol: UDP
         - port: 53
