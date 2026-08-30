@@ -8,7 +8,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-10"
 spec:
-  project: base-app
+  project: platform-app
   source:
     repoURL: https://metallb.github.io/metallb
     chart: metallb

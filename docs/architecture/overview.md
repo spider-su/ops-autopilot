@@ -103,3 +103,7 @@ operator cleanup and backup decision.
 Child Application dependency order is explicit through sync-wave annotations. Remaining security,
 environment-model, monitoring, and storage improvements are tracked in
 [`../../ROADMAP.md`](../../ROADMAP.md).
+
+Platform Applications use the privileged `platform-app` AppProject with explicit platform destinations
+and cluster-resource allowlists. Workload Applications use the constrained `base-app` AppProject, which
+allows only the application namespaces and namespaced workload resource kinds.

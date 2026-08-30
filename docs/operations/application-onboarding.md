@@ -61,6 +61,9 @@ spec:
 Development uses `targetRevision: dev`, `values-dev.yaml`, and namespace `<app>-dev` under the current
 environment model.
 
+Workload Applications use the constrained `base-app` AppProject. Platform Applications must use
+`platform-app` and be registered under the production platform wiring only.
+
 ## Register the workload
 
 Add the production Application manifest under `clusters/prd/workloads/` and register it in
