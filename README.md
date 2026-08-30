@@ -37,7 +37,6 @@ The canonical architecture and dependency description is
 |---|---|
 | `clusters/` | Environment entry points and Argo CD Application wiring. |
 | `applications/` | Reusable workload Helm charts and environment values. |
-| `clusters/` | Environment-specific Argo Application wiring and bootstrap resources. |
 | `infrastructure/` | Cluster-scoped and cross-cutting Kustomize resources. |
 | `docs/` | Canonical architecture, operations, onboarding, monitoring, and validation documentation. |
 | `.codex/` | Project-local Codex configuration and repeatable actions. |
@@ -77,8 +76,9 @@ On Windows:
 & .\scripts\validate.ps1
 ```
 
-The helper checks local Markdown links, lints every workload chart, and renders both cluster
-kustomizations using the same unrestricted load behavior configured in Argo CD. See
+The helper checks Markdown links, lints and renders every workload chart, renders pinned upstream
+charts, validates rendered Kubernetes schemas and policy contracts, and renders both cluster
+kustomizations with standard restricted loading. See
 [`docs/development/validation.md`](docs/development/validation.md) for individual commands and known
 limitations.
 

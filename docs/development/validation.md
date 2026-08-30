@@ -15,8 +15,13 @@ The helper is read-only and performs:
 1. local Markdown-link validation;
 2. Helm lint for each local chart and registered environment values, including each chart's
    `values.schema.json`;
-3. production policy checks for schema presence and immutable image digests;
-4. production and development Kustomize rendering.
+3. Helm rendering for all local workload environments;
+4. rendering of every pinned upstream chart referenced by production Argo Applications;
+5. policy checks for destinations, namespaces, resources, probes, dangerous sync options, immutable
+   production images, and secret payloads;
+6. Kubernetes schema validation with `kubeconform`, including Argo CD and monitoring CRD schemas;
+7. production, development, and infrastructure Kustomize rendering;
+8. documentation and manifest consistency checks.
 
 ## Individual checks
 
@@ -50,10 +55,12 @@ refer only to files within their own overlay, so standard restricted rendering i
 - Local Helm templates accept their configured values.
 - Kustomize can compose all registered Application resources.
 
+The validator also renders pinned upstream charts and calls `kubeconform` with the Kubernetes schema
+catalog plus the Argo CD and Prometheus Operator CRD catalog. The CRD catalog is fetched at validation
+time; network access is therefore required for a complete run.
+
 They do not prove:
 
-- upstream chart rendering unless the upstream chart is rendered separately;
-- Kubernetes API schema compatibility;
 - Argo CD reconciliation;
 - Pod health, target health, data durability, or user-visible behavior.
 

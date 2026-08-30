@@ -55,12 +55,64 @@ Invoke-Step 'Chart policy checks' {
     }
 }
 
+$renderRoot = Join-Path ([System.IO.Path]::GetTempPath()) 'ops-autopilot-rendered'
+$workloadRender = Join-Path $renderRoot 'workloads'
+$upstreamRender = Join-Path $renderRoot 'upstream'
+$kustomizeRender = Join-Path $renderRoot 'kustomize'
+New-Item -ItemType Directory -Force -Path $workloadRender, $upstreamRender, $kustomizeRender | Out-Null
+
+foreach ($target in $chartTargets) {
+    $app = $target[0]
+    $environment = $target[1]
+    $output = Join-Path $workloadRender "$app-$environment.yaml"
+    Invoke-Step "Helm render: $app ($environment)" {
+        $rendered = helm template "$app-$environment" "applications/$app" `
+            -f "applications/$app/values.yaml" `
+            -f "applications/$app/values-$environment.yaml"
+        if ($LASTEXITCODE -ne 0) { throw "Helm render failed for $app ($environment)" }
+        $rendered | Set-Content -LiteralPath $output -Encoding utf8
+    }
+}
+
+Invoke-Step 'Pinned upstream chart rendering' {
+    python .\tools\render_upstream_charts.py --output-dir $upstreamRender
+}
+
+Invoke-Step 'Manifest policy and documentation checks' {
+    python .\tools\check_manifest_policies.py --workload-dir $workloadRender
+}
+
 Invoke-Step 'Kustomize: production' {
-    kubectl kustomize clusters/prd | Out-Null
+    $rendered = kubectl kustomize clusters/prd
+    if ($LASTEXITCODE -ne 0) { throw 'Production Kustomize rendering failed' }
+    $rendered | Set-Content -LiteralPath (Join-Path $kustomizeRender 'clusters-prd.yaml') -Encoding utf8
 }
 
 Invoke-Step 'Kustomize: development' {
-    kubectl kustomize clusters/dev | Out-Null
+    $rendered = kubectl kustomize clusters/dev
+    if ($LASTEXITCODE -ne 0) { throw 'Development Kustomize rendering failed' }
+    $rendered | Set-Content -LiteralPath (Join-Path $kustomizeRender 'clusters-dev.yaml') -Encoding utf8
+}
+
+foreach ($target in @('infrastructure/platform', 'infrastructure/argocd', 'infrastructure/monitoring')) {
+    $outputName = $target -replace '/', '-'
+    Invoke-Step "Kustomize: $target" {
+        $rendered = kubectl kustomize $target
+        if ($LASTEXITCODE -ne 0) { throw "Kustomize rendering failed for $target" }
+        $rendered | Set-Content -LiteralPath (Join-Path $kustomizeRender "${outputName}.yaml") -Encoding utf8
+    }
+}
+
+if (-not (Get-Command kubeconform -ErrorAction SilentlyContinue)) {
+    throw 'kubeconform is required. Install kubeconform v0.6.7 and put it on PATH.'
+}
+
+Invoke-Step 'Kubernetes schema validation' {
+    $files = Get-ChildItem -LiteralPath $renderRoot -Recurse -File -Filter '*.yaml' | Select-Object -ExpandProperty FullName
+    kubeconform -strict -summary -skip CustomResourceDefinition -kubernetes-version 1.32.0 `
+        -schema-location default `
+        -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' `
+        $files
 }
 
 Write-Host 'Repository validation passed.'

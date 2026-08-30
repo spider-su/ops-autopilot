@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-30
+
+- Added CI rendering for every pinned upstream Helm chart referenced by production Applications,
+  preserving the Application's inline Helm values during rendering.
+- Added strict Kubernetes schema validation for rendered cluster, infrastructure, local workload, and
+  upstream chart manifests, including Argo CD and monitoring CRD schemas.
+- Added policy checks for AppProject destinations, Application destinations and branch conventions,
+  resources, probes, dangerous sync options, immutable production images, secret payloads, and private
+  keys.
+- Added documentation/manifests consistency checks and removed stale development Application files.
+
 Completed repository-level documentation and platform changes are recorded here. Future work remains in
 [`ROADMAP.md`](ROADMAP.md).
 
