@@ -11,9 +11,24 @@ spec:
     targetRevision: 0.14.9
     helm:
       values: |
+        controller:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
         speaker:
           frr:
             enabled: false
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: metallb-system
