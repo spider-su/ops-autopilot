@@ -15,6 +15,31 @@ resources:
     cpu: 500m
     memory: 2Gi
 
+probes:
+  enabled: true
+  startup:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30
+  readiness:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  liveness:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 20
+    timeoutSeconds: 5
+    failureThreshold: 3
+
 service:
   port: 80
   targetPort: 8080
@@ -64,6 +89,9 @@ networkPolicy:
   enabled: true
   # Extra namespaces allowed to reach this app (in addition to ingress-nginx + monitoring)
   extraIngressNamespaces: []
+  # External destinations required by the application. Narrow this list to approved CIDRs when known.
+  externalEgressCidrs:
+    - 0.0.0.0/0
 
 topologySpread:
   enabled: true

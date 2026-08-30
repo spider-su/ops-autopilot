@@ -15,6 +15,31 @@ resources:
     cpu: 500m
     memory: 128Mi
 
+probes:
+  enabled: true
+  startup:
+    httpGet:
+      path: /
+      port: 80
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 12
+  readiness:
+    httpGet:
+      path: /
+      port: 80
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  liveness:
+    httpGet:
+      path: /
+      port: 80
+    initialDelaySeconds: 15
+    periodSeconds: 20
+    timeoutSeconds: 3
+    failureThreshold: 3
+
 service:
   port: 80
   targetPort: 80
@@ -44,6 +69,7 @@ resourceQuota:
 networkPolicy:
   enabled: true
   extraIngressNamespaces: []
+  externalEgressCidrs: []
 
 pdb:
   enabled: false

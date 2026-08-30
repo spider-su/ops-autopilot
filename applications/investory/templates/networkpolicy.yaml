@@ -49,13 +49,11 @@ spec:
     # Allow to same namespace
     - to:
         - podSelector: {}
-    # Allow to kube-apiserver (for health checks, service discovery)
+    # Explicit external destinations (for example, market-data and messaging APIs).
+    {{- range .Values.networkPolicy.externalEgressCidrs }}
     - to:
         - ipBlock:
-            cidr: 0.0.0.0/0
-            except:
-              - 10.0.0.0/8
-              - 172.16.0.0/12
-              - 192.168.0.0/16
+            cidr: {{ . | quote }}
+    {{- end }}
 {{- end }}
 

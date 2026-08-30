@@ -1,6 +1,11 @@
 # Production overrides for smartapp
 replicaCount: 2
 
+# Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
+image:
+  digest: sha256:09cc2702709e6388d979d8030e3ab4eb1ceb699b2dced26d7543e872a822e823
+  pullPolicy: IfNotPresent
+
 pdb:
   enabled: true
 

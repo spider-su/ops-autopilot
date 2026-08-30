@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: metrics-server
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
 spec:
   project: base-app
   source:

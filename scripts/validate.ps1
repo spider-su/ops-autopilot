@@ -37,6 +37,24 @@ foreach ($target in $chartTargets) {
     }
 }
 
+Invoke-Step 'Chart policy checks' {
+    $chartNames = @('investory', 'smartapp', 'postgres')
+    foreach ($chartName in $chartNames) {
+        $schemaPath = "applications/$chartName/values.schema.json"
+        if (-not (Test-Path -LiteralPath $schemaPath)) {
+            throw "Missing Helm values schema: $schemaPath"
+        }
+
+        $productionValues = Get-Content -Raw -LiteralPath "applications/$chartName/values-prd.yaml"
+        if ($productionValues -notmatch '(?m)^\s*digest:\s*sha256:[0-9a-f]{64}\s*$') {
+            throw "Production image digest is not pinned in applications/$chartName/values-prd.yaml"
+        }
+        if ($productionValues -notmatch '(?m)^\s*pullPolicy:\s*IfNotPresent\s*$') {
+            throw "Production image pullPolicy must be IfNotPresent in applications/$chartName/values-prd.yaml"
+        }
+    }
+}
+
 Invoke-Step 'Kustomize: production' {
     kubectl kustomize clusters/prd --load-restrictor LoadRestrictionsNone | Out-Null
 }

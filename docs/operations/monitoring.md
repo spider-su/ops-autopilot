@@ -32,9 +32,12 @@ low frequency.
 ## Current limitations
 
 - Prometheus and Alertmanager use ephemeral storage.
-- Alertmanager currently has no external notification receiver.
+- Alertmanager is currently disabled because no external notification receiver is configured; re-enable
+  it only with an intentional receiver and tested routing.
 - Several upstream rules assume components or scrape windows that do not match k3s and the configured
   collection interval.
+- The default controller-manager, scheduler, and kube-proxy rule groups are disabled because those
+  endpoints are not exposed by this k3s control plane.
 - Monitoring an application requires both metric exposure and a matching ServiceMonitor or PodMonitor;
   allowing the `monitoring` namespace through a NetworkPolicy is not sufficient.
 - Current production target health must be checked live; Argo `Healthy` does not mean every Prometheus

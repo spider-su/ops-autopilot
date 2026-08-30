@@ -41,6 +41,14 @@ resourceQuota:
 
 networkPolicy:
   enabled: true
+  # Namespaces allowed to connect to PostgreSQL on port 5432.
+  allowedNamespaces:
+    - investory-prod
+    - investory-dev
+    - smartapp-prod
+    - smartapp-dev
+    - ingress-nginx
+    - monitoring
 
 pdb:
   enabled: true

@@ -3,7 +3,11 @@
 {{- .Release.Name -}}
 {{- end }}
 {{- define "app.image" -}}
+{{- if .Values.image.digest -}}
+{{- printf "%s@%s" .Values.image.repository .Values.image.digest -}}
+{{- else -}}
 {{- printf "%s:%s" .Values.image.repository .Values.image.tag -}}
+{{- end -}}
 {{- end }}
 {{- define "app.labels" -}}
 app: {{ include "app.name" . }}

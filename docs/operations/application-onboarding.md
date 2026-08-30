@@ -10,6 +10,7 @@ applications/<app>/
   values.yaml
   values-prd.yaml
   values-dev.yaml
+  values.schema.json
   app-prd.yaml
   app-dev.yaml                 # optional until development deployment is needed
   templates/
@@ -23,12 +24,15 @@ must not be used as the default application template.
 
 1. Copy the closest chart to `applications/<app>/`.
 2. Replace the chart name, description, image, ports, resources, and ingress host.
+   Keep the chart's `kubeVersion` constraint aligned with the cluster API versions it uses.
 3. Delete capabilities the workload does not need.
 4. Add workload-specific readiness, startup, and liveness probes when the application exposes suitable
    endpoints or commands.
 5. Keep sensitive values out of all values files.
 
-Base values describe reusable defaults. Environment files contain only intentional overrides.
+Base values describe reusable defaults. Environment files contain only intentional overrides. The chart
+schema is evaluated against the merged values during `helm lint`; update it when adding a new supported
+value or template capability.
 
 ## Create the Application resources
 
@@ -81,10 +85,15 @@ and network reachability.
 - [ ] Production uses a pinned image tag or digest and an intentional pull policy.
 - [ ] Requests, limits, and namespace quotas are mutually compatible.
 - [ ] Service selectors match Pod labels and Service ports match container ports.
-- [ ] Health probes represent application readiness rather than only process existence.
+- [ ] Health probes represent application readiness rather than only process existence (the workload
+      chart defaults are configurable).
 - [ ] Secret names and required keys are documented without secret values.
 - [ ] NetworkPolicy allows only required ingress and egress.
+- [ ] `networkPolicy.externalEgressCidrs` is narrowed from the compatibility default when external APIs
+      are known.
 - [ ] Stateful data has a storage, backup, and restore decision.
+- [ ] Stateless/platform Application resources use the cascade finalizer; stateful Applications have an
+      explicit deletion-protection decision.
 - [ ] Helm lint and template rendering pass for each registered environment.
 - [ ] Cluster Kustomize rendering passes.
 - [ ] Markdown links pass.

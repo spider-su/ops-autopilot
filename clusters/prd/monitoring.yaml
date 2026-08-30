@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: monitoring
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
 spec:
   project: base-app
   source:
@@ -54,6 +58,14 @@ spec:
               cpu: 50m
               memory: 32Mi
 
+        defaultRules:
+          # These control-plane endpoints are not exposed by the k3s deployment in this homelab.
+          # Keeping their upstream rules enabled produces persistent false-positive alerts.
+          rules:
+            kubeControllerManager: false
+            kubeScheduler: false
+            kubeProxy: false
+
         prometheus:
           prometheusSpec:
             # Lower-frequency collection/evaluation reduces API, CPU, and disk use.
@@ -70,6 +82,9 @@ spec:
                 memory: 2Gi
 
         alertmanager:
+          # No notification receiver is configured yet. Keep Alertmanager disabled rather than
+          # presenting a healthy-looking null route that silently drops every alert.
+          enabled: false
           alertmanagerSpec:
             resources:
               requests:

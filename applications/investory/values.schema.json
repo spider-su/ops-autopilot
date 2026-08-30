@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["replicaCount", "image", "containerPort", "resources", "probes", "service", "config", "secrets", "pvc", "ingress", "resourceQuota", "networkPolicy", "topologySpread"],
+  "properties": {
+    "replicaCount": {"type": "integer", "minimum": 1},
+    "image": {"$ref": "#/definitions/image"},
+    "containerPort": {"type": "integer", "minimum": 1, "maximum": 65535},
+    "resources": {"$ref": "#/definitions/resources"},
+    "probes": {"$ref": "#/definitions/probes"},
+    "service": {"type": "object", "additionalProperties": false, "required": ["port", "targetPort"], "properties": {"port": {"type": "integer", "minimum": 1, "maximum": 65535}, "targetPort": {"type": "integer", "minimum": 1, "maximum": 65535}}},
+    "config": {"type": "object", "additionalProperties": {"type": "string"}},
+    "secrets": {"type": "object", "additionalProperties": false, "required": ["secretName"], "properties": {"secretName": {"type": "string", "minLength": 1}}},
+    "pvc": {"$ref": "#/definitions/pvc"},
+    "ingress": {"$ref": "#/definitions/ingress"},
+    "resourceQuota": {"$ref": "#/definitions/quota"},
+    "networkPolicy": {"type": "object", "additionalProperties": false, "required": ["enabled", "extraIngressNamespaces", "externalEgressCidrs"], "properties": {"enabled": {"type": "boolean"}, "extraIngressNamespaces": {"type": "array", "items": {"type": "string"}}, "externalEgressCidrs": {"type": "array", "items": {"type": "string"}}}},
+    "topologySpread": {"type": "object", "additionalProperties": false, "required": ["enabled", "maxSkew", "whenUnsatisfiable"], "properties": {"enabled": {"type": "boolean"}, "maxSkew": {"type": "integer", "minimum": 1}, "whenUnsatisfiable": {"type": "string", "enum": ["DoNotSchedule", "ScheduleAnyway"]}}}
+  },
+  "definitions": {
+    "image": {"type": "object", "additionalProperties": false, "required": ["repository", "tag", "pullPolicy"], "properties": {"repository": {"type": "string", "minLength": 1}, "tag": {"type": "string", "minLength": 1}, "pullPolicy": {"type": "string", "enum": ["Always", "IfNotPresent", "Never"]}, "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}},
+    "quantity": {"type": ["string", "number"]},
+    "resources": {"type": "object", "additionalProperties": false, "required": ["requests", "limits"], "properties": {"requests": {"$ref": "#/definitions/quantities"}, "limits": {"$ref": "#/definitions/quantities"}}},
+    "quantities": {"type": "object", "additionalProperties": false, "required": ["cpu", "memory"], "properties": {"cpu": {"$ref": "#/definitions/quantity"}, "memory": {"$ref": "#/definitions/quantity"}}},
+    "probe": {"type": "object", "additionalProperties": false, "required": ["httpGet", "periodSeconds", "timeoutSeconds", "failureThreshold"], "properties": {"httpGet": {"type": "object", "additionalProperties": false, "required": ["path", "port"], "properties": {"path": {"type": "string", "minLength": 1}, "port": {"type": "integer", "minimum": 1, "maximum": 65535}}}, "initialDelaySeconds": {"type": "integer", "minimum": 0}, "periodSeconds": {"type": "integer", "minimum": 1}, "timeoutSeconds": {"type": "integer", "minimum": 1}, "failureThreshold": {"type": "integer", "minimum": 1}}},
+    "probes": {"type": "object", "additionalProperties": false, "required": ["enabled", "startup", "readiness", "liveness"], "properties": {"enabled": {"type": "boolean"}, "startup": {"$ref": "#/definitions/probe"}, "readiness": {"$ref": "#/definitions/probe"}, "liveness": {"$ref": "#/definitions/probe"}}},
+    "pvc": {"type": "object", "additionalProperties": false, "required": ["enabled", "storageClassName", "size", "mountPath"], "properties": {"enabled": {"type": "boolean"}, "storageClassName": {"type": "string"}, "size": {"type": "string", "minLength": 1}, "mountPath": {"type": "string", "minLength": 1}}},
+    "ingress": {"type": "object", "additionalProperties": false, "required": ["enabled", "className", "host", "path", "pathType"], "properties": {"enabled": {"type": "boolean"}, "className": {"type": "string"}, "host": {"type": "string"}, "path": {"type": "string"}, "pathType": {"type": "string", "enum": ["Prefix", "Exact", "ImplementationSpecific"]}}},
+    "quota": {"type": "object", "additionalProperties": false, "required": ["enabled", "hard"], "properties": {"enabled": {"type": "boolean"}, "hard": {"type": "object", "additionalProperties": {"$ref": "#/definitions/quantity"}}}}
+  }
+}

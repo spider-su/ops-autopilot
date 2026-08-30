@@ -1,6 +1,7 @@
 apiVersion: v2
 name: smartapp
 description: Smartapp application Helm chart
+kubeVersion: ">=1.25.0-0"
 type: application
 version: 0.1.0
 appVersion: "1.0.0"

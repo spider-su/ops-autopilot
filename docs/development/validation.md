@@ -8,11 +8,15 @@ From the repository root on Windows:
 & .\scripts\validate.ps1
 ```
 
+The same command runs in GitHub Actions for pushes to `main`/`dev` and for pull requests.
+
 The helper is read-only and performs:
 
 1. local Markdown-link validation;
-2. Helm lint for each local chart and registered environment values;
-3. production and development Kustomize rendering.
+2. Helm lint for each local chart and registered environment values, including each chart's
+   `values.schema.json`;
+3. production policy checks for schema presence and immutable image digests;
+4. production and development Kustomize rendering.
 
 ## Individual checks
 

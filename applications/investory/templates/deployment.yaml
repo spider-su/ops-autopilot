@@ -16,6 +16,7 @@ spec:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
     spec:
+      automountServiceAccountToken: false
       {{- if .Values.topologySpread.enabled }}
       topologySpreadConstraints:
         - maxSkew: {{ .Values.topologySpread.maxSkew }}
@@ -44,6 +45,14 @@ spec:
                 name: {{ .Values.secrets.secretName }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.probes.enabled }}
+          startupProbe:
+            {{- toYaml .Values.probes.startup | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.probes.readiness | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.probes.liveness | nindent 12 }}
+          {{- end }}
           {{- if .Values.pvc.enabled }}
           volumeMounts:
             - name: storage

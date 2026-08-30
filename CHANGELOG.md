@@ -10,3 +10,28 @@ Completed repository-level documentation and platform changes are recorded here.
 - Added project-local Codex actions and repository helper files for repeatable documentation, Helm, and
   Kustomize checks.
 - Consolidated the architecture review findings into the roadmap without changing runtime manifests.
+- Added explicit Argo sync waves for platform, infrastructure, database, and workload Applications.
+- Added cascading deletion finalizers for platform/stateless Applications while preserving PostgreSQL
+  from accidental cascade deletion.
+- Added configurable startup, readiness, and liveness probes to Investory and SmartApp, and disabled
+  unused service-account token mounts for application and PostgreSQL Pods.
+- Aligned Investory development resources with its namespace quota and corrected the production quota
+  comment.
+- Added digest-aware image helpers and pinned all production workload images to registry-resolved
+  immutable digests; development remains mutable by design.
+- Added `values.schema.json` to all workload charts so Helm lint rejects unknown keys and invalid image,
+  port, probe, resource, storage, quota, and policy values before deployment.
+- Added a GitHub Actions validation workflow that runs the repository validator on `main`, `dev`, and
+  pull requests.
+- Extended repository validation with chart policy checks for required schemas and immutable production
+  image digests with `IfNotPresent` pull policy.
+- Restricted PostgreSQL NetworkPolicy ingress to the explicitly documented application, ingress, and
+  monitoring namespaces instead of allowing every namespace.
+- Made application external egress destinations explicit and configurable via
+  `networkPolicy.externalEgressCidrs`; SmartApp defaults to no external egress.
+- Declared Kubernetes 1.25+ compatibility in every application chart to make API-version assumptions
+  visible during Helm lint and install.
+- Disabled the unconfigured Alertmanager component so monitoring does not imply notifications that are
+  silently discarded; re-enable it when a real receiver is selected.
+- Disabled kube-prometheus default rule groups for controller-manager, scheduler, and kube-proxy, which
+  are not exposed by this k3s control plane and otherwise generate persistent false positives.

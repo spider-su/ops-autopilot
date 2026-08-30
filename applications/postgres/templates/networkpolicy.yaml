@@ -13,9 +13,13 @@ spec:
     - Ingress
     - Egress
   ingress:
-    # Allow any namespace to connect on 5432 (all apps share this postgres instance)
+    # Allow only explicitly registered clients to connect on 5432.
     - from:
-        - namespaceSelector: {}
+        {{- range .Values.networkPolicy.allowedNamespaces }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ . | quote }}
+        {{- end }}
       ports:
         - port: 5432
     # Allow from monitoring (Prometheus scraping)

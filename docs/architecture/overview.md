@@ -82,6 +82,8 @@ this repository.
 - Ceph CSI supplies RBD and CephFS drivers.
 - `proxmox-ceph-rbd` is the workload StorageClass managed by this repository.
 - PostgreSQL is a single shared StatefulSet with an RBD-backed PVC.
+- PostgreSQL ingress is restricted by an explicit namespace allowlist in its chart values; external TCP
+  exposure through ingress-nginx remains a separate operational security decision.
 - Environment separation inside PostgreSQL is an application/schema concern; this repository does not
   currently provision one database server per environment.
 
@@ -89,7 +91,11 @@ this repository.
 
 Argo CD reconciles the remote repository, not a developer's working tree. Rendering proves that YAML
 can be generated; an Argo `Synced` state proves desired objects match Git; workload `Healthy` state and
-application behavior require additional evidence.
+application behavior require additional evidence. Platform and stateless child Applications carry Argo's
+resources finalizer so an intentional manifest removal cascades their resources. The PostgreSQL child is
+deliberately excluded from that finalizer to protect stateful data; removing it requires an explicit
+operator cleanup and backup decision.
 
-Known lifecycle, ordering, security, and environment-model improvements are tracked in
+Child Application dependency order is explicit through sync-wave annotations. Remaining security,
+environment-model, monitoring, and storage improvements are tracked in
 [`../../ROADMAP.md`](../../ROADMAP.md).

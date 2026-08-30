@@ -8,11 +8,16 @@ resources:
   limits:
     cpu: 1
 
+# Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
+image:
+  digest: sha256:8864197c4979001d10735071700d234303f711ea7e27a6a2305e340f9511fca1
+  pullPolicy: IfNotPresent
+
 ingress:
   enabled: true
   host: investory.home.k3s.com
 
-# Override quota for 2 replicas of Spring Boot (2 × 512Mi = 1Gi)
+# Quota for the currently configured single Spring Boot replica, with rollout headroom.
 resourceQuota:
   hard:
     requests.cpu: "1"
