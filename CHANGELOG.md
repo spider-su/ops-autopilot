@@ -41,5 +41,7 @@ Completed repository-level documentation and platform changes are recorded here.
   5-minute queries have multiple usable samples.
 - Moved homelab Prometheus rules into a dedicated monitoring-rules Application ordered after the
   monitoring CRDs, removing them from the mixed infrastructure Application.
+- Removed the unused metrics-server Argo Application manifest and repository allowlist entry so
+  ownership remains with the k3s packaged add-on.
 - Disabled kube-prometheus scraping for controller-manager, scheduler, and kube-proxy because those
   component endpoints are not exposed by this k3s control plane.

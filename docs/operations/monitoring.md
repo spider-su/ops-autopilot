@@ -12,9 +12,8 @@
 - chart-provided ServiceMonitors, dashboards, and rules
 
 The `monitoring-rules` Argo Application owns `infrastructure/monitoring/home-lab-alerts.yaml` after the
-monitoring Application creates the monitoring CRDs. Kubernetes `metrics-server` is separate: the live
-k3s installation currently owns it as a packaged add-on, while the repository also contains an
-unregistered Argo Application manifest.
+monitoring Application creates the monitoring CRDs. Kubernetes `metrics-server` is separate and is
+owned by the k3s packaged add-on; it is intentionally not an Argo-managed resource in this repository.
 
 ## Current collection profile
 
