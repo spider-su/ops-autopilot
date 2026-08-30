@@ -47,3 +47,8 @@ networkPolicy:
 
 pdb:
   enabled: false
+
+topologySpread:
+  enabled: true
+  maxSkew: 1
+  whenUnsatisfiable: ScheduleAnyway

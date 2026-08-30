@@ -1,3 +1,7 @@
 storage:
   size: 10Gi
 
+# Keep the RWO-backed database on the node currently hosting its volume.
+nodeSelector:
+  kubernetes.io/hostname: k3s-2
+

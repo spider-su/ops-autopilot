@@ -64,3 +64,8 @@ networkPolicy:
   enabled: true
   # Extra namespaces allowed to reach this app (in addition to ingress-nginx + monitoring)
   extraIngressNamespaces: []
+
+topologySpread:
+  enabled: true
+  maxSkew: 1
+  whenUnsatisfiable: ScheduleAnyway
