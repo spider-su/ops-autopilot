@@ -34,9 +34,32 @@ spec:
             dashboards:
               enabled: true
               searchNamespace: "monitoring"
+              resources:
+                requests:
+                  cpu: 5m
+                  memory: 96Mi
+                limits:
+                  cpu: 50m
+                  memory: 128Mi
             datasources:
               enabled: true
               searchNamespace: "monitoring"
+              resources:
+                requests:
+                  cpu: 5m
+                  memory: 96Mi
+                limits:
+                  cpu: 50m
+                  memory: 128Mi
+
+        prometheus-node-exporter:
+          resources:
+            requests:
+              cpu: 5m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
 
         prometheus:
           prometheusSpec:
