@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  # Reserved platform storage. It is intentionally retained without a current
+  # workload consumer; do not remove without checking the bound RBD volume.
   name: platform-storage
   namespace: infrastructure
 spec:

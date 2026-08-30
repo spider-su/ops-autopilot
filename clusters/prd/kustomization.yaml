@@ -7,7 +7,6 @@ resources:
   - infrastructure.yaml
   - ingress-nginx.yaml
   - ceph-csi-rbd.yaml
-  - ceph-csi-cephfs.yaml
   - monitoring.yaml
   - monitoring-rules.yaml
   # DBs and other stateful services

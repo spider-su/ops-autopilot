@@ -79,9 +79,12 @@ this repository.
 
 ## Storage and database
 
-- Ceph CSI supplies RBD and CephFS drivers.
+- Ceph CSI RBD supplies the workload storage driver; no CephFS StorageClass or workload consumer is
+  managed by this repository.
 - `proxmox-ceph-rbd` is the workload StorageClass managed by this repository.
 - PostgreSQL is a single shared StatefulSet with an RBD-backed PVC.
+- `infrastructure/platform-storage` is a deliberately reserved 5 GiB RBD-backed PVC with no current
+  workload consumer; retain it until an explicit storage cleanup decision is made.
 - PostgreSQL ingress is restricted by an explicit namespace allowlist in its chart values; external TCP
   exposure through ingress-nginx remains a separate operational security decision.
 - Environment separation inside PostgreSQL is an application/schema concern; this repository does not

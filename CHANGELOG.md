@@ -45,5 +45,9 @@ Completed repository-level documentation and platform changes are recorded here.
   ownership remains with the k3s packaged add-on.
 - Removed cert-manager because no in-cluster certificate consumer exists; TLS remains terminated by
   the external Traefik boundary.
+- Removed the unused CephFS CSI Application because no CephFS StorageClass or workload consumer exists;
+  the RBD driver remains the managed storage path.
+- Retained and documented the unused `infrastructure/platform-storage` PVC as reserved Ceph RBD storage
+  rather than pruning its bound volume.
 - Disabled kube-prometheus scraping for controller-manager, scheduler, and kube-proxy because those
   component endpoints are not exposed by this k3s control plane.
