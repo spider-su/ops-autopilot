@@ -5,6 +5,9 @@ kind: ConfigMap
 metadata:
   name: argocd-cmd-params-cm
   namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cmd-params-cm
+    app.kubernetes.io/part-of: argocd
 data:
   server.insecure: "true"
   # Cache application state longer between passive full comparisons.
@@ -21,6 +24,9 @@ kind: ConfigMap
 metadata:
   name: argocd-cm
   namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
 data:
   timeout.reconciliation: "600s"
 
