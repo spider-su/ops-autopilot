@@ -63,3 +63,5 @@ Completed repository-level documentation and platform changes are recorded here.
   escalation, and dropped Linux capabilities for SmartApp, Investory, and PostgreSQL containers.
 - Scoped application DNS egress to kube-dns Pods in `kube-system`; public Investory egress remains an
   explicitly documented compatibility exception pending an endpoint allowlist decision.
+- Documented PostgreSQL TCP exposure through the private-LAN ingress-nginx LoadBalancer as intentional
+  operator-PC testing access, not an Internet-facing or TLS boundary.

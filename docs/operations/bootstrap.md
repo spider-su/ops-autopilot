@@ -61,6 +61,10 @@ For each public homelab hostname:
 
 These first two steps are outside GitOps scope and must be verified separately.
 
+For private-LAN PostgreSQL testing, use the ingress-nginx LoadBalancer LAN address on TCP port `5432`.
+This path is intentionally available to operator PCs for testing and must not be published beyond the
+homelab LAN; production credentials and untrusted networks require a separate secure-access design.
+
 ## Verify convergence
 
 ```bash

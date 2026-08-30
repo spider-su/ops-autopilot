@@ -42,6 +42,8 @@ spec:
             limits:
               cpu: 500m
               memory: 256Mi
+        # Intentional private-LAN testing access from operator PCs. This is not
+        # an Internet exposure contract; keep the LoadBalancer on the homelab LAN.
         tcp:
           5432: "postgres/postgres:5432"
   destination:
