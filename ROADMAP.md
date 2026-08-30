@@ -44,7 +44,6 @@ days), and **L** (multi-day).
 | Item | Effort | Why |
 |---|---:|---|
 | Reconcile shared PostgreSQL documentation and files | S | `applications/postgres/app-dev.yaml` exists even though the architecture states that development shares the production PostgreSQL instance. Remove it or document a deliberate alternative. |
-| Replace copied helper templates with a supported sharing strategy | M | `common-utils` is described as a Helm library, but every chart copies `_helpers.tpl` and no dependency wiring keeps copies synchronized. Either make it a real dependency or remove the misleading library abstraction. |
 | Automate application promotion | M | Add a controlled CI or dependency-update workflow that publishes an immutable image reference and changes the GitOps repository through review. |
 
 ## Theme D - Workload reliability and security

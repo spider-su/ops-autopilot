@@ -57,3 +57,5 @@ Completed repository-level documentation and platform changes are recorded here.
   destinations, while `base-app` is limited to workload namespaces and namespaced resource kinds.
 - Consolidated environment sources on `main`; production and development retain separate values and
   namespaces without relying on a drifting `dev` branch.
+- Removed the unused `common-utils` Helm library; workload charts now own their independently rendered
+  helper templates without a misleading unsynchronized dependency.
