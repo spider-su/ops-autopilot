@@ -28,5 +28,7 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
 data:
+  # Allow Kustomize bases to reference files outside their local directory.
+  kustomize.buildOptions: "--load-restrictor=LoadRestrictionsNone"
   timeout.reconciliation: "600s"
 
