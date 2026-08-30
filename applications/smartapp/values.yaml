@@ -44,3 +44,6 @@ resourceQuota:
 networkPolicy:
   enabled: true
   extraIngressNamespaces: []
+
+pdb:
+  enabled: false
