@@ -60,9 +60,18 @@ spec:
 
         kubelet:
           serviceMonitor:
-            # Keep kubelet, cAdvisor, and probe endpoints on the same low-frequency
-            # profile as Prometheus. The chart otherwise forces cAdvisor to 10s.
-            interval: 360s
+            # Keep kubelet, cAdvisor, and probe endpoints on the same cadence as
+            # Prometheus so the enabled 2m and 5m rules have usable samples.
+            interval: 60s
+
+        # These components are not separately exposed by this k3s control plane.
+        # Disable their ServiceMonitors as well as their default rule groups.
+        kubeControllerManager:
+          enabled: false
+        kubeScheduler:
+          enabled: false
+        kubeProxy:
+          enabled: false
 
         defaultRules:
           # These control-plane endpoints are not exposed by the k3s deployment in this homelab.
@@ -74,10 +83,11 @@ spec:
 
         prometheus:
           prometheusSpec:
-            # Lower-frequency collection/evaluation reduces API, CPU, and disk use.
+            # A 60-second cadence keeps the enabled 2m and 5m rules meaningful while
+            # remaining deliberately less aggressive than the chart defaults.
             retention: 3d
-            scrapeInterval: 360s
-            evaluationInterval: 180s
+            scrapeInterval: 60s
+            evaluationInterval: 60s
             walCompression: true
             resources:
               requests:

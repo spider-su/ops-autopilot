@@ -17,17 +17,17 @@ the repository also contains an unregistered Argo Application manifest.
 
 ## Current collection profile
 
-The repository intentionally favors low resource use over rapid detection:
+The repository intentionally favors bounded resource use over rapid detection:
 
 - short Prometheus retention;
-- a low-frequency global scrape interval;
-- a lower-frequency evaluation interval;
+- a 60-second global scrape interval;
+- a 60-second evaluation interval;
 - explicit CPU and memory budgets;
 - extended Grafana liveness startup allowance.
 
 Some chart endpoints can define their own interval and override the Prometheus global default. Always
 inspect effective ServiceMonitors and active Prometheus targets before describing the complete stack as
-low frequency. The kubelet ServiceMonitor is explicitly set to `360s` so its kubelet, cAdvisor, and
+low frequency. The kubelet ServiceMonitor is explicitly set to `60s` so its kubelet, cAdvisor, and
 probe endpoints follow the same profile rather than the chart's default `10s` cAdvisor interval.
 
 ## Current limitations
@@ -35,10 +35,10 @@ probe endpoints follow the same profile rather than the chart's default `10s` cA
 - Prometheus and Alertmanager use ephemeral storage.
 - Alertmanager is currently disabled because no external notification receiver is configured; re-enable
   it only with an intentional receiver and tested routing.
-- Several upstream rules assume components or scrape windows that do not match k3s and the configured
-  collection interval.
-- The default controller-manager, scheduler, and kube-proxy rule groups are disabled because those
-  endpoints are not exposed by this k3s control plane.
+- Some upstream dashboards use longer historical windows than the three-day retention period; this is
+  an intentional history limitation, not an alerting-sample failure.
+- Controller-manager, scheduler, and kube-proxy scraping and default rule groups are disabled because
+  those endpoints are not exposed by this k3s control plane.
 - Monitoring an application requires both metric exposure and a matching ServiceMonitor or PodMonitor;
   allowing the `monitoring` namespace through a NetworkPolicy is not sufficient.
 - Current production target health must be checked live; Argo `Healthy` does not mean every Prometheus

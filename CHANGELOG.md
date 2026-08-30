@@ -35,5 +35,9 @@ Completed repository-level documentation and platform changes are recorded here.
   silently discarded; re-enable it when a real receiver is selected.
 - Disabled kube-prometheus default rule groups for controller-manager, scheduler, and kube-proxy, which
   are not exposed by this k3s control plane and otherwise generate persistent false positives.
-- Aligned kubelet, cAdvisor, and probe scraping with the intentional 360-second low-power monitoring
-  profile instead of retaining the chart's separate 10-second cAdvisor interval.
+- Aligned kubelet, cAdvisor, and probe scraping with the intentional 60-second bounded-resource
+  monitoring profile instead of retaining the chart's separate 10-second cAdvisor interval.
+- Set Prometheus collection and rule evaluation to 60 seconds so enabled upstream 2-minute and
+  5-minute queries have multiple usable samples.
+- Disabled kube-prometheus scraping for controller-manager, scheduler, and kube-proxy because those
+  component endpoints are not exposed by this k3s control plane.
