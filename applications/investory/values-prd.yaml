@@ -1,5 +1,6 @@
 # Production overrides for investory
-replicaCount: 1
+# Temporarily paused while the next image fixes the database-schema mismatch.
+replicaCount: 0
 
 ingress:
   enabled: true

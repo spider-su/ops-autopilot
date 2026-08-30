@@ -41,3 +41,6 @@ resourceQuota:
 
 networkPolicy:
   enabled: true
+
+pdb:
+  enabled: true
