@@ -16,6 +16,9 @@ spec:
         {{- include "app.selectorLabels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -24,6 +27,11 @@ spec:
         - name: {{ include "app.name" . }}
           image: {{ include "app.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           args:
             - -c
             - shared_buffers={{ .Values.postgresConfig.sharedBuffers }}

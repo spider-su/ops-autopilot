@@ -108,3 +108,7 @@ environment-model, monitoring, and storage improvements are tracked in
 Platform Applications use the privileged `platform-app` AppProject with explicit platform destinations
 and cluster-resource allowlists. Workload Applications use the constrained `base-app` AppProject, which
 allows only the application namespaces and namespaced workload resource kinds.
+
+Application Pods use the compatible security baseline of `RuntimeDefault` seccomp, no privilege
+escalation, and all Linux capabilities dropped. Non-root execution and read-only root filesystems remain
+compatibility follow-ups for images whose entrypoints and writable paths have been verified.

@@ -59,3 +59,5 @@ Completed repository-level documentation and platform changes are recorded here.
   namespaces without relying on a drifting `dev` branch.
 - Removed the unused `common-utils` Helm library; workload charts now own their independently rendered
   helper templates without a misleading unsynchronized dependency.
+- Added a compatible application security baseline: RuntimeDefault seccomp, disabled privilege
+  escalation, and dropped Linux capabilities for SmartApp, Investory, and PostgreSQL containers.
