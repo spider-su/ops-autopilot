@@ -55,3 +55,5 @@ Completed repository-level documentation and platform changes are recorded here.
   monitoring rules were already isolated into their own Application.
 - Added separate AppProject boundaries: `platform-app` is restricted to platform sources and
   destinations, while `base-app` is limited to workload namespaces and namespaced resource kinds.
+- Consolidated environment sources on `main`; production and development retain separate values and
+  namespaces without relying on a drifting `dev` branch.

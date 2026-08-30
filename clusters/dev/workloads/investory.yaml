@@ -11,7 +11,7 @@ spec:
   project: base-app
   source:
     repoURL: https://github.com/spider-su/ops-autopilot.git
-    targetRevision: dev
+    targetRevision: main
     path: applications/investory
     helm:
       releaseName: investory

@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/spider-su/ops-autopilot.git
-    targetRevision: dev
+    targetRevision: main
     path: clusters/dev
   destination:
     server: https://kubernetes.default.svc

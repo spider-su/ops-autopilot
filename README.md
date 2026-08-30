@@ -23,9 +23,10 @@ clusters/prd/parent-app.yaml
         -> workload Applications
 ```
 
-The production parent reads `main`; the development parent currently reads `dev`. Child Applications
-reconcile either an upstream Helm chart or a chart under `applications/`. Argo CD reads the remote Git
-repository, so local edits do not affect the cluster until they are committed, pushed, and reconciled.
+Both environment parents read `main`; environment-specific values remain in the cluster wiring and
+workload chart values. Child Applications reconcile either an upstream Helm chart or a chart under
+`applications/`. Argo CD reads the remote Git repository, so local edits do not affect the cluster until
+they are committed, pushed, and reconciled.
 
 The canonical architecture and dependency description is
 [`docs/architecture/overview.md`](docs/architecture/overview.md).

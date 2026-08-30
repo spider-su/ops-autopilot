@@ -12,8 +12,6 @@ days), and **L** (multi-day).
 - [ ] **P1 - Make secrets declarative:** replace empty Secret scaffolds and manual data injection with
   SOPS/age, Sealed Secrets, External Secrets, or another selected GitOps-compatible mechanism.
 - [ ] **P1 - Add PostgreSQL backup and tested restore:** PVC durability and a PDB are not backups.
-- [ ] **P2 - Consolidate environment management:** evaluate moving dev and production composition to
-  one branch with environment values to prevent the current `dev` branch drift.
 - [ ] **P2 - Harden workload contracts:** add pod/container security contexts, compatible quotas, and
   least-privilege networking.
 - [ ] **P2 - Add continuous manifest validation:** run documentation, Helm, Kustomize, Kubernetes
@@ -45,7 +43,6 @@ days), and **L** (multi-day).
 
 | Item | Effort | Why |
 |---|---:|---|
-| Consolidate the environment branch model | M | `origin/dev` was 37 commits behind `main` during review. Prefer one branch plus environment overlays unless independent branch history is an explicit requirement. |
 | Reconcile shared PostgreSQL documentation and files | S | `applications/postgres/app-dev.yaml` exists even though the architecture states that development shares the production PostgreSQL instance. Remove it or document a deliberate alternative. |
 | Replace copied helper templates with a supported sharing strategy | M | `common-utils` is described as a Helm library, but every chart copies `_helpers.tpl` and no dependency wiring keeps copies synchronized. Either make it a real dependency or remove the misleading library abstraction. |
 | Automate application promotion | M | Add a controlled CI or dependency-update workflow that publishes an immutable image reference and changes the GitOps repository through review. |

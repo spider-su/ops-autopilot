@@ -58,8 +58,8 @@ spec:
     namespace: <app>-prod
 ```
 
-Development uses `targetRevision: dev`, `values-dev.yaml`, and namespace `<app>-dev` under the current
-environment model.
+Development uses `targetRevision: main`, `values-dev.yaml`, and namespace `<app>-dev`. Keep development
+overrides in `values-dev.yaml`; do not create a second branch for environment-only differences.
 
 Workload Applications use the constrained `base-app` AppProject. Platform Applications must use
 `platform-app` and be registered under the production platform wiring only.

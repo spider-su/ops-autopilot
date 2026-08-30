@@ -11,8 +11,8 @@ for the task instead of treating all repository notes as equal sources of truth.
 - Argo CD reads remote Git. Do not claim a local change is deployed until it is committed, pushed,
   reconciled, and live-verified.
 - Keep `applications/` reusable and environment differences in cluster wiring or environment values.
-- Production Applications use `main`; development currently uses `dev`. Do not deploy development work
-  to production unintentionally.
+- Production and development Applications use `main`; environment-specific values remain in their
+  respective cluster wiring. Do not deploy development values to production unintentionally.
 - PostgreSQL is shared in the `postgres` namespace. Do not introduce a second development PostgreSQL
   deployment without an explicit architecture decision.
 - Use pinned versions for production images and upstream Helm charts.

@@ -48,11 +48,12 @@ Application so resources with different lifecycles have explicit ownership.
 | Environment | Git revision | Workload namespace |
 |---|---|---|
 | Production | `main` | `<app>-prod` |
-| Development | `dev` | `<app>-dev` |
+| Development | `main` | `<app>-dev` |
 | Shared services | normally `main` | service name, for example `postgres` |
 
 Development is optional and contains only actively developed applications. Production owns shared
-platform infrastructure. Branch consolidation is a planned improvement, not current behavior.
+platform infrastructure. Both environments now use one branch; values files and cluster wiring carry
+the environment differences.
 
 ## Naming and service discovery
 
