@@ -7,8 +7,7 @@ configuration out of the reusable workload templates.
 ## What this repository manages
 
 - Argo CD app-of-apps bootstrap for production and development.
-- Homelab platform services: MetalLB, ingress-nginx, cert-manager, Ceph CSI, monitoring, and supporting
-  infrastructure.
+- Homelab platform services: MetalLB, ingress-nginx, Ceph CSI, monitoring, and supporting infrastructure.
 - Shared PostgreSQL and the Investory and SmartApp workloads.
 - Namespace creation, resource quotas, network policies, ingress, storage, and pinned platform chart
   versions.

@@ -43,5 +43,7 @@ Completed repository-level documentation and platform changes are recorded here.
   monitoring CRDs, removing them from the mixed infrastructure Application.
 - Removed the unused metrics-server Argo Application manifest and repository allowlist entry so
   ownership remains with the k3s packaged add-on.
+- Removed cert-manager because no in-cluster certificate consumer exists; TLS remains terminated by
+  the external Traefik boundary.
 - Disabled kube-prometheus scraping for controller-manager, scheduler, and kube-proxy because those
   component endpoints are not exposed by this k3s control plane.

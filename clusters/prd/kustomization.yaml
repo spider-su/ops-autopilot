@@ -6,7 +6,6 @@ resources:
   - metallb.yaml
   - infrastructure.yaml
   - ingress-nginx.yaml
-  - cert-manager.yaml
   - ceph-csi-rbd.yaml
   - ceph-csi-cephfs.yaml
   - monitoring.yaml
