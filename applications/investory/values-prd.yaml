@@ -2,6 +2,12 @@
 # Enabled again after the database-schema fix image was published.
 replicaCount: 1
 
+# The current Spring Boot/Hibernate image is CPU-intensive during startup.
+# Keep the request unchanged while allowing startup to use one vCPU.
+resources:
+  limits:
+    cpu: 1
+
 ingress:
   enabled: true
   host: investory.home.k3s.com
