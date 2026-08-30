@@ -21,6 +21,56 @@ spec:
               - "192.168.1.53:6789"
         metrics:
           enabled: false
+        nodeplugin:
+          registrar:
+            resources:
+              requests:
+                cpu: 5m
+                memory: 16Mi
+              limits:
+                cpu: 50m
+                memory: 32Mi
+          plugin:
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                cpu: 100m
+                memory: 128Mi
+        provisioner:
+          provisioner:
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                cpu: 100m
+                memory: 64Mi
+          attacher:
+            resources:
+              requests:
+                cpu: 5m
+                memory: 16Mi
+              limits:
+                cpu: 50m
+                memory: 32Mi
+          resizer:
+            resources:
+              requests:
+                cpu: 5m
+                memory: 16Mi
+              limits:
+                cpu: 50m
+                memory: 32Mi
+          snapshotter:
+            resources:
+              requests:
+                cpu: 5m
+                memory: 16Mi
+              limits:
+                cpu: 50m
+                memory: 32Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: ceph-csi-cephfs
