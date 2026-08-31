@@ -10,7 +10,7 @@ resources:
 
 # Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
 image:
-  digest: sha256:825a63f7b1cf3ce089f61e6af4056ae6fc3eca04017945e6471cdc61a7ee46b0
+  digest: sha256:8864197c4979001d10735071700d234303f711ea7e27a6a2305e340f9511fca1
   pullPolicy: IfNotPresent
 
 ingress:
