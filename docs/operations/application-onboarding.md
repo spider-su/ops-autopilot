@@ -88,6 +88,7 @@ and network reachability.
 ## Acceptance checklist
 
 - [ ] Production uses a pinned image tag or digest and an intentional pull policy.
+- [ ] Production image changes are submitted through the reviewed `Promote production image` workflow.
 - [ ] Requests, limits, and namespace quotas are mutually compatible.
 - [ ] Service selectors match Pod labels and Service ports match container ports.
 - [ ] Health probes represent application readiness rather than only process existence (the workload

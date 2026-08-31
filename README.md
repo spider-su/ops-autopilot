@@ -89,7 +89,7 @@ limitations.
 - PostgreSQL is a shared stateful service in the `postgres` namespace.
 - Prometheus, Grafana, and Alertmanager are deployed by `clusters/prd/monitoring.yaml`.
 - Sensitive values are currently created manually and excluded from Argo CD data diffs.
-- Application image promotion is currently manual.
+- Application image promotion is initiated through the reviewed `Promote production image` workflow.
 
 These statements describe the current implementation, not the desired end state. Known design and
 operational improvements are intentionally parked in [`ROADMAP.md`](ROADMAP.md).

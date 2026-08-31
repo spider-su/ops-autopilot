@@ -35,7 +35,6 @@ days), and **L** (multi-day).
 
 | Item | Effort | Why |
 |---|---:|---|
-| Automate application promotion | M | Add a controlled CI or dependency-update workflow that publishes an immutable image reference and changes the GitOps repository through review. |
 
 ## Theme D - Workload reliability and security
 

@@ -16,6 +16,8 @@
   intentional private-LAN testing continuity choice.
 - Tuned Ceph CSI RBD to two provisioner replicas after measuring low steady-state usage; nodeplugin
   remains scheduled on every node.
+- Added a manual GitHub Actions image-promotion workflow that validates a SHA-256 digest and opens a
+  reviewable pull request for production values changes.
 - Added CI rendering for every pinned upstream Helm chart referenced by production Applications,
   preserving the Application's inline Helm values during rendering.
 - Added strict Kubernetes schema validation for rendered cluster, infrastructure, local workload, and

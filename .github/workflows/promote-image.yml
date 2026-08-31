@@ -1,0 +1,49 @@
+name: Promote production image
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: Workload to promote
+        required: true
+        type: choice
+        options:
+          - investory
+          - smartapp
+          - postgres
+      digest:
+        description: Published image digest, for example sha256 followed by 64 lowercase hex characters
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Update production digest
+        run: python tools/promote_image.py --app "${{ inputs.app }}" --digest "${{ inputs.digest }}"
+      - name: Open promotion pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: automation/promote-${{ inputs.app }}
+          delete-branch: true
+          commit-message: "ci: promote ${{ inputs.app }} production image"
+          title: "ci: promote ${{ inputs.app }} production image"
+          body: |
+            Promotes `${{ inputs.app }}` to the explicitly supplied immutable digest.
+
+            Repository validation must pass before merge.
