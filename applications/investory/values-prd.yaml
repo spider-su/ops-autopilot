@@ -17,11 +17,11 @@ ingress:
   enabled: true
   host: investory.home.k3s.com
 
-# Quota for the currently configured single Spring Boot replica, with rollout headroom.
+# Quota for one active replica plus one temporary replacement during a rolling update.
 resourceQuota:
   hard:
-    requests.cpu: "1"
-    requests.memory: "1Gi"
+    requests.cpu: "2"
+    requests.memory: "2Gi"
     limits.cpu: "2"
     limits.memory: "4Gi"
     pods: "10"

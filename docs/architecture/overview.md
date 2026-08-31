@@ -92,6 +92,12 @@ this repository.
   writes one monthly custom-format dump to a separate 10 GiB RBD claim and retains only the newest dump.
 - SmartApp runs one development replica for active testing; its production counterpart is registered but
   scaled to zero. This is an environment-placement choice, not a high-availability guarantee.
+- Investory runs one production replica; its production namespace quota allows a temporary second pod
+  during rolling replacement. Its inactive development counterpart remains at zero replicas.
+- PostgreSQL is a single StatefulSet replica on shared Ceph RBD. It deliberately has no PDB: a
+  `minAvailable: 1` budget would not add redundancy and would prevent voluntary node maintenance.
+- Ingress-NGINX remains two replicas with `minAvailable: 1`, which is meaningful because one replica can
+  continue serving while the other is disrupted.
 - Ceph CSI RBD uses two provisioner replicas after measuring three live Pods at approximately 9–22m CPU
   and 104–147Mi memory each; nodeplugin remains one DaemonSet Pod per node.
 - PostgreSQL retains the restricted capability exception required by the official image entrypoint to

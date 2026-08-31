@@ -69,7 +69,14 @@ def check_source_manifests(root: Path, errors: list[str]) -> None:
             if project in ALLOWED_DESTINATIONS and namespace not in ALLOWED_DESTINATIONS[project]:
                 fail(errors, f"{file}: {project} cannot deploy to {namespace}")
             options = spec.get("syncPolicy", {}).get("syncOptions", [])
-            if any(re.match(r"(?i)^(replace|force)=true$", option) for option in options):
+            # The pinned Argo installation owns very large upstream CRDs. Replace is
+            # narrowly allowed there because client-side apply exceeds the annotation
+            # limit; all workload/platform Applications remain protected by this rule.
+            allowed_replace = (
+                file.as_posix().endswith("clusters/prd/argocd-infrastructure.yaml")
+                and any(re.match(r"(?i)^replace=true$", option) for option in options)
+            )
+            if any(re.match(r"(?i)^(replace|force)=true$", option) for option in options) and not allowed_replace:
                 fail(errors, f"{file}: dangerous sync option present")
         elif kind == "AppProject":
             destinations = {entry.get("namespace") for entry in spec.get("destinations", [])}

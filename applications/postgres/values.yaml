@@ -52,7 +52,9 @@ networkPolicy:
     - monitoring
 
 pdb:
-  enabled: true
+  # PostgreSQL is intentionally a singleton. A minAvailable: 1 PDB cannot
+  # provide availability and would block voluntary node drains/maintenance.
+  enabled: false
 
 nodeSelector: {}
 
