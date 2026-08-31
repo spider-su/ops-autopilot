@@ -46,6 +46,8 @@ spec:
               # worker user before dropping privileges.
               add:
                 - CHOWN
+                - SETGID
+                - SETUID
           ports:
             - containerPort: {{ .Values.containerPort }}
           resources:

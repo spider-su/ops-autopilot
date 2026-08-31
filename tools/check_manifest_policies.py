@@ -20,6 +20,7 @@ ALLOWED_DESTINATIONS = {
         "ingress-nginx",
         "monitoring",
         "ceph-csi-rbd",
+        "default",
         # kube-prometheus-stack creates discovery Services for the k3s
         # control-plane components in kube-system.
         "kube-system",

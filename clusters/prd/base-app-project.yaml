@@ -77,6 +77,8 @@ spec:
       namespace: kube-system
     - server: https://kubernetes.default.svc
       namespace: ceph-csi-rbd
+    - server: https://kubernetes.default.svc
+      namespace: default
   clusterResourceWhitelist:
     - group: ""
       kind: Namespace
