@@ -55,7 +55,6 @@ days), and **L** (multi-day).
 
 | Item | Effort | Why |
 |---|---:|---|
-| Tune Ceph CSI provisioner replicas | M | Both CSI charts currently run three multi-container provisioner Pods. Measure failure tolerance and resource cost before selecting a lower homelab replica count. |
 
 ## Theme G - Validation and documentation
 

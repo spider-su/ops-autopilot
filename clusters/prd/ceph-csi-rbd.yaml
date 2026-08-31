@@ -43,6 +43,9 @@ spec:
                 cpu: 100m
                 memory: 128Mi
         provisioner:
+          # Two replicas retain controller failover while avoiding an idle third
+          # seven-container Pod in this three-node homelab.
+          replicaCount: 2
           provisioner:
             resources:
               requests:

@@ -91,6 +91,8 @@ this repository.
   writes one monthly custom-format dump to a separate 10 GiB RBD claim and retains only the newest dump.
 - SmartApp production intentionally runs two replicas with a one-unavailable PDB and hostname spreading;
   this is retained for private-LAN testing continuity, not presented as a high-availability guarantee.
+- Ceph CSI RBD uses two provisioner replicas after measuring three live Pods at approximately 9–22m CPU
+  and 104–147Mi memory each; nodeplugin remains one DaemonSet Pod per node.
 - PostgreSQL retains the restricted capability exception required by the official image entrypoint to
   initialize ownership on the Ceph-mounted data directory; the application containers retain the
   drop-all-capabilities baseline.
