@@ -4,7 +4,6 @@ resources:
   # Pin the Argo CD installation base so repo-server/KSOPS lifecycle is Git-managed.
   - https://github.com/argoproj/argo-cd//manifests/cluster-install?ref=v3.4.3
   - argocd-ingress.yaml
-  - argocd-cmd-params.yaml
 patches:
   - path: argocd-config.yaml
   - path: argocd-repo-server-ksops-patch.yaml
