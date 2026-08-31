@@ -94,8 +94,6 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels:
-          {{- include "app.labels" . | nindent 10 }}
       spec:
         accessModes: ["ReadWriteOnce"]
         storageClassName: {{ .Values.storage.storageClassName }}
