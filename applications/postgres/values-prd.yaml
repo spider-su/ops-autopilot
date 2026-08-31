@@ -6,9 +6,9 @@ image:
   digest: sha256:f1c3376c26f2609ab9f29f71f824103fe2fcd8ee0346485cb6122a4f93df6f94
   pullPolicy: IfNotPresent
 
-# Keep the RWO-backed database on the node currently hosting its volume.
-nodeSelector:
-  kubernetes.io/hostname: k3s-2
+# Ceph RBD is available on every node; leave scheduling flexible so CSI can
+# reattach this RWO volume after a node failure.
+nodeSelector: {}
 
 backup:
   enabled: true
