@@ -7,7 +7,7 @@ replicaCount: 1
 resources:
   limits:
     cpu: 1000m
-    memory: 1024Mi
+    memory: 2048Mi
 
 # Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
 #image:

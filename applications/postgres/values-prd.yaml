@@ -4,11 +4,11 @@ storage:
 resources:
   limits:
     cpu: 2000m
-    memory: 2048Mi
+    memory: 1024Mi
 
 resourceQuota:
   hard:
-    limits.memory: "2Gi"
+    limits.memory: "1Gi"
 
 # Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
 image:
