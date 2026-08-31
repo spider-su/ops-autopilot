@@ -19,7 +19,7 @@ probes:
   enabled: true
   startup:
     httpGet:
-      path: /actuator/health
+      path: /actuator/health/readiness
       port: 8080
     periodSeconds: 10
     timeoutSeconds: 5
@@ -28,14 +28,14 @@ probes:
     failureThreshold: 60
   readiness:
     httpGet:
-      path: /actuator/health
+      path: /actuator/health/readiness
       port: 8080
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
   liveness:
     httpGet:
-      path: /actuator/health
+      path: /actuator/health/liveness
       port: 8080
     initialDelaySeconds: 60
     periodSeconds: 20
