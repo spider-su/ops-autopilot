@@ -38,6 +38,8 @@ spec:
                 - CHOWN
                 - DAC_OVERRIDE
                 - FOWNER
+                - SETGID
+                - SETUID
           args:
             - -c
             - shared_buffers={{ .Values.postgresConfig.sharedBuffers }}

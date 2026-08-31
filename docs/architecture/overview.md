@@ -95,7 +95,8 @@ this repository.
   and 104–147Mi memory each; nodeplugin remains one DaemonSet Pod per node.
 - PostgreSQL retains the restricted capability exception required by the official image entrypoint to
   initialize ownership on the Ceph-mounted data directory; the application containers retain the
-  drop-all-capabilities baseline.
+  drop-all-capabilities baseline. The exception also includes `SETUID` and `SETGID` so the entrypoint
+  can drop from root to the PostgreSQL user.
 - PostgreSQL ingress is restricted by an explicit namespace allowlist in its chart values. TCP port 5432
   is intentionally exposed through the private-LAN ingress-nginx LoadBalancer for operator-PC testing;
   this is not an Internet exposure or TLS boundary.

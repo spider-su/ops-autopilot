@@ -103,5 +103,5 @@ actual user-facing route as appropriate.
 - PostgreSQL production creates one monthly custom-format dump on a separate Ceph RBD claim. The backup
   job retains only the newest dump; verify restoration manually before relying on it.
 - The PostgreSQL image requires `CHOWN`, `DAC_OVERRIDE`, and `FOWNER` during entrypoint initialization
-  of its mounted data directory. This is an intentional, narrowly scoped exception to the workload
-  capability baseline.
+  of its mounted data directory, plus `SETUID` and `SETGID` to drop to the PostgreSQL user. This is an
+  intentional, narrowly scoped exception to the workload capability baseline.
