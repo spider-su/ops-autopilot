@@ -9,9 +9,9 @@ resources:
     cpu: 1
 
 # Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
-image:
-  digest: sha256:8864197c4979001d10735071700d234303f711ea7e27a6a2305e340f9511fca1
-  pullPolicy: IfNotPresent
+#image:
+#  digest: sha256:8864197c4979001d10735071700d234303f711ea7e27a6a2305e340f9511fca1
+#  pullPolicy: IfNotPresent
 
 ingress:
   enabled: true
