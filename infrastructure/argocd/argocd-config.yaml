@@ -25,3 +25,4 @@ metadata:
     app.kubernetes.io/part-of: argocd
 data:
   timeout.reconciliation: "600s"
+  kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"

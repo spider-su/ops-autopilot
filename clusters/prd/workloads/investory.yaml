@@ -28,10 +28,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
-  ignoreDifferences:
-    - group: ""
-      kind: Secret
-      name: investory-secrets
-      namespace: investory-prod
-      jsonPointers:
-        - /data

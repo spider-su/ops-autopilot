@@ -1,5 +1,5 @@
 creation_rules:
-  - path_regex: secrets/.*\.sops\.ya?ml$
+  - path_regex: secrets[\\/].*\.sops\.ya?ml$
+    age: age13ja9yaftagvpgdnyfr7rc3q9ecaatghe6g69gxaafpdp0ef5xd2q7jnhzh
     encrypted_regex: '^(data|stringData)$'
-    # Supply the repository's age recipient with --age or SOPS_AGE_RECIPIENT.
-    # Do not commit private keys or plaintext secret values.
+    # The private identity is stored only in the Argo CD decryption boundary.

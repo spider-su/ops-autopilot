@@ -26,10 +26,3 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
-  ignoreDifferences:
-    - group: ""
-      kind: Secret
-      name: postgres-credentials
-      namespace: postgres
-      jsonPointers:
-        - /data

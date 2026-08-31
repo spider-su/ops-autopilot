@@ -39,8 +39,9 @@ Required Secret objects currently include:
 - `investory-prod/investory-secrets`
 - `monitoring/alertmanager-smtp` (`smtp-password`)
 
-The existing chart Secret scaffolds remain as compatibility artifacts until encrypted replacements are
-connected to the Argo CD decryption boundary. Do not put their payloads in Git.
+The encrypted platform and workload bundles own these Secret objects. The repo-server must have the
+`argocd/sops-age` Secret and the KSOPS patch from [`infrastructure/argocd/argocd-repo-server-ksops-patch.yaml`](../../infrastructure/argocd/argocd-repo-server-ksops-patch.yaml)
+applied before the encrypted-secret Applications can render.
 
 ## Credential rotation and recovery
 

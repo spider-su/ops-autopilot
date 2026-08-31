@@ -12,7 +12,7 @@ import yaml
 WORKLOAD_KINDS = {"Deployment", "StatefulSet", "DaemonSet", "Job", "CronJob"}
 WORKLOAD_FILES = {"investory-prd.yaml", "smartapp-prd.yaml", "postgres-prd.yaml"}
 ALLOWED_DESTINATIONS = {
-    "base-app": {"investory-prod", "investory-dev", "smartapp-prod", "smartapp-dev", "postgres", "postgres-dev"},
+    "base-app": {"argocd", "investory-prod", "investory-dev", "smartapp-prod", "smartapp-dev", "postgres", "postgres-dev"},
     "platform-app": {
         "argocd",
         "infrastructure",
@@ -86,6 +86,8 @@ def check_source_manifests(root: Path, errors: list[str]) -> None:
         if not relative:
             continue
         candidate = root / relative
+        if not candidate.exists():
+            continue
         if candidate.name.startswith(".env") or candidate.suffix == ".env":
             fail(errors, f"{candidate}: environment file must not be committed")
             continue

@@ -3,6 +3,8 @@ kind: Kustomization
 resources:
   # Child Applications use sync waves; this list is registration, not dependency ordering.
   - base-app-project.yaml
+  - secrets-platform.yaml
+  - secrets-workloads.yaml
   - metallb.yaml
   - platform-infrastructure.yaml
   - argocd-infrastructure.yaml
