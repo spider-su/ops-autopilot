@@ -6,25 +6,13 @@ days), and **L** (multi-day).
 
 ## Priority queue
 
-- [ ] **P0 - Restore trustworthy monitoring:** repair node-exporter reachability on two nodes, align
-  collection intervals with enabled queries and rules, remove k3s-inapplicable alerts, and configure an
-  intentional notification path.
-- [ ] **P1 - Complete encrypted secret migration:** connect SOPS/age decryption to Argo CD and migrate
-  all operator-managed Secret payloads without committing plaintext.
-- [ ] **P1 - Test PostgreSQL backup restore:** restore the retained monthly dump into a disposable
-  PostgreSQL instance and document the verified procedure.
-- [ ] **P2 - Harden workload contracts:** add pod/container security contexts, compatible quotas, and
-  least-privilege networking.
-- [ ] **P3 - Remove unused platform surface:** retain only components with a documented consumer and
-  ownership model.
+All previously queued roadmap items are complete. The next item should be added here only when a new
+evidence-backed operational or architecture need is identified.
 
 ## Theme A - Monitoring reliability
 
 | Item | Effort | Evidence and target outcome |
 |---|---:|---|
-| Repair node-exporter target reachability | M | Prometheus observed timeouts for `192.168.1.201:9100` and `192.168.1.203:9100`, while only `192.168.1.202:9100` was up. Diagnose node firewall/routing/listener reachability and verify all targets from Prometheus. |
-| Add application metrics discovery contracts | M | NetworkPolicy ingress from `monitoring` does not create scrape targets. Define ServiceMonitor/PodMonitor conventions and expose metrics only for apps that implement them. |
-| Tune Grafana startup/readiness from evidence | S | Recent readiness and liveness failures occurred during startup. Keep the extended liveness allowance, inspect readiness semantics, and tune based on measured startup behavior. |
 
 ## Theme B - App-of-apps lifecycle and ordering
 
@@ -40,15 +28,11 @@ days), and **L** (multi-day).
 
 | Item | Effort | Why |
 |---|---:|---|
-| Add pod and container security contexts | M | Define non-root execution where supported, dropped capabilities, no privilege escalation, seccomp, and read-only root filesystems where compatible. |
 
 ## Theme E - Secrets and operational safety
 
 | Item | Effort | Why |
 |---|---:|---|
-| Remove Secret scaffolds after migration | S | Prevent Argo from creating invalid empty credentials before the operator or secret controller supplies data. |
-| Add secret scanning | S | Block committed environment files, Secret payloads, private keys, tokens, and high-confidence credentials. |
-| Document credential rotation and recovery | M | Cover Ceph, PostgreSQL, applications, Grafana, notification receivers, and GitOps decryption keys without recording their values. |
 
 ## Theme F - Platform simplification
 

@@ -20,6 +20,8 @@ repeatable procedures.
 
 - [`operations/bootstrap.md`](operations/bootstrap.md): one-time Argo bootstrap, secret prerequisites,
   and recovery checks.
+- [`operations/postgres-restore.md`](operations/postgres-restore.md): tested monthly backup restore
+  procedure and disposable-target safety boundary.
 - [`operations/application-onboarding.md`](operations/application-onboarding.md): supported workflow and
   acceptance checklist for a new workload.
 - [`operations/monitoring.md`](operations/monitoring.md): monitoring components, collection behavior,

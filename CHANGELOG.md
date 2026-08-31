@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-31
+
+- Verified the monthly PostgreSQL custom-format backup by restoring a 6.4 MiB dump into a disposable
+  Ceph-backed PostgreSQL instance; confirmed the `investory` schema and 49 table/materialized-relation
+  objects, then removed the test resources.
+- Audited PostgreSQL labels and retained the stable `app: postgres` selector contract; existing bound
+  StatefulSet data PVC labels were left unchanged because volume-claim templates are immutable.
+
 ## 2026-08-30
 
 - Selected SOPS/age for encrypted declarative secrets; added the repository encryption convention and
