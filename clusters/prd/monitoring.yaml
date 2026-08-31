@@ -52,11 +52,18 @@ spec:
         prometheus-node-exporter:
           resources:
             requests:
-              cpu: 5m
+              cpu: 20m
               memory: 16Mi
             limits:
-              cpu: 50m
+              cpu: 200m
               memory: 32Mi
+          livenessProbe:
+            timeoutSeconds: 5
+          readinessProbe:
+            timeoutSeconds: 5
+          prometheus:
+            monitor:
+              scrapeTimeout: 5s
 
         kubelet:
           serviceMonitor:
