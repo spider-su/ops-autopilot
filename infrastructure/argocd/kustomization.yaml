@@ -7,3 +7,4 @@ resources:
 patches:
   - path: argocd-config.yaml
   - path: argocd-repo-server-ksops-patch.yaml
+  - path: argocd-crd-patch.yaml

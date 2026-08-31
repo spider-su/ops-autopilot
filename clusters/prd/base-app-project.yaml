@@ -23,6 +23,9 @@ spec:
       namespace: postgres
     - server: https://kubernetes.default.svc
       namespace: postgres-dev
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
   namespaceResourceWhitelist:
     - group: ""
       kind: ConfigMap
