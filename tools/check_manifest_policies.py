@@ -12,7 +12,7 @@ import yaml
 WORKLOAD_KINDS = {"Deployment", "StatefulSet", "DaemonSet", "Job", "CronJob"}
 WORKLOAD_FILES = {"investory-prd.yaml", "smartapp-prd.yaml", "postgres-prd.yaml"}
 ALLOWED_DESTINATIONS = {
-    "base-app": {"argocd", "investory-prod", "investory-dev", "smartapp-prod", "smartapp-dev", "postgres", "postgres-dev"},
+    "base-app": {"investory-prod", "investory-dev", "smartapp-prod", "smartapp-dev", "postgres", "postgres-dev"},
     "platform-app": {
         "argocd",
         "infrastructure",
@@ -68,15 +68,12 @@ def check_source_manifests(root: Path, errors: list[str]) -> None:
             namespace = destination.get("namespace")
             if project in ALLOWED_DESTINATIONS and namespace not in ALLOWED_DESTINATIONS[project]:
                 fail(errors, f"{file}: {project} cannot deploy to {namespace}")
+            helm = source.get("helm", {})
+            source_path = source.get("path", "")
+            if source_path.startswith("applications/") and helm.get("releaseName") != Path(source_path).name:
+                fail(errors, f"{file}: Helm releaseName must match the local chart directory")
             options = spec.get("syncPolicy", {}).get("syncOptions", [])
-            # The pinned Argo installation owns very large upstream CRDs. Replace is
-            # narrowly allowed there because client-side apply exceeds the annotation
-            # limit; all workload/platform Applications remain protected by this rule.
-            allowed_replace = (
-                file.as_posix().endswith("clusters/prd/argocd-infrastructure.yaml")
-                and any(re.match(r"(?i)^replace=true$", option) for option in options)
-            )
-            if any(re.match(r"(?i)^(replace|force)=true$", option) for option in options) and not allowed_replace:
+            if any(re.match(r"(?i)^(replace|force)=true$", option) for option in options):
                 fail(errors, f"{file}: dangerous sync option present")
         elif kind == "AppProject":
             destinations = {entry.get("namespace") for entry in spec.get("destinations", [])}

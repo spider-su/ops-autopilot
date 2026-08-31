@@ -25,7 +25,6 @@ spec:
       - RespectIgnoreDifferences=true
       # Argo's client-side apply annotation cannot hold the large upstream CRDs.
       - ServerSideApply=true
-      - Replace=true
   ignoreDifferences:
     - group: ""
       kind: Secret

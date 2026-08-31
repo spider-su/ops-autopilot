@@ -23,9 +23,8 @@ The helper is read-only and performs:
 7. production, development, and infrastructure Kustomize rendering;
 8. documentation and manifest consistency checks.
 
-`Replace=true` is rejected by policy for normal Applications. The sole exception is the pinned
-`argocd-infrastructure` Application, where it is required to manage Argo's oversized upstream CRDs
-without exceeding Kubernetes' annotation limit.
+`Replace=true` and `Force=true` are rejected by policy. Argo's oversized upstream CRDs use
+`ServerSideApply=true`, which avoids the client-side annotation limit without destructive replacement.
 
 ## Individual checks
 

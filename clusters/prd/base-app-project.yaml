@@ -10,8 +10,6 @@ spec:
     - https://github.com/spider-su/ops-autopilot.git
   destinations:
     - server: https://kubernetes.default.svc
-      namespace: argocd
-    - server: https://kubernetes.default.svc
       namespace: investory-prod
     - server: https://kubernetes.default.svc
       namespace: investory-dev

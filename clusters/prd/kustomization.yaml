@@ -5,6 +5,7 @@ resources:
   - base-app-project.yaml
   - secrets-platform.yaml
   - secrets-workloads.yaml
+  - secrets-postgres.yaml
   - metallb.yaml
   - platform-infrastructure.yaml
   - argocd-infrastructure.yaml

@@ -2,6 +2,11 @@
 
 ## 2026-08-31
 
+- Removed Argo's destructive `Replace=true` exception from the Argo infrastructure Application while
+  retaining server-side apply for oversized CRDs; CI now checks that local Helm release names match
+  their chart directories.
+- Split workload secrets into namespace-scoped Investory and PostgreSQL Applications, allowing the
+  constrained `base-app` project to drop its `argocd` destination.
 - Verified the monthly PostgreSQL custom-format backup by restoring a 6.4 MiB dump into a disposable
   Ceph-backed PostgreSQL instance; confirmed the `investory` schema and 49 table/materialized-relation
   objects, then removed the test resources.

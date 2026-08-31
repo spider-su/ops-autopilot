@@ -3,6 +3,10 @@
 The production backup is a monthly custom-format dump on the `postgres-backups` Ceph RBD claim.
 The CronJob keeps only the newest dump.
 
+The CronJob and backup Pod use stable `app: postgres` identity labels for discovery and operations.
+Kubernetes labels are mutable metadata; preventing an operator or another controller from changing them
+requires a separate admission policy and is not provided by the CronJob manifest itself.
+
 ## Create a backup for a test
 
 Trigger the CronJob template manually and wait for completion:
