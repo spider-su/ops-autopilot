@@ -40,4 +40,4 @@ spec:
         - name: sops-age
           secret:
             secretName: sops-age
-            defaultMode: 0400
+            defaultMode: 0444
