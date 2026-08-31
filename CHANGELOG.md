@@ -10,6 +10,10 @@
   only the newest backup.
 - Retained legacy unregistered `applications/*/app-dev.yaml` compatibility artifacts while keeping
   environment management authoritative under `clusters/*`.
+- Added tracked-file secret scanning for environment files, private keys, and high-confidence tokens;
+  documented credential rotation and recovery boundaries.
+- Confirmed SmartApp's two-replica, one-unavailable PDB, and hostname-spreading configuration as an
+  intentional private-LAN testing continuity choice.
 - Added CI rendering for every pinned upstream Helm chart referenced by production Applications,
   preserving the Application's inline Helm values during rendering.
 - Added strict Kubernetes schema validation for rendered cluster, infrastructure, local workload, and

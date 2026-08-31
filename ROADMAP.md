@@ -56,7 +56,6 @@ days), and **L** (multi-day).
 | Item | Effort | Why |
 |---|---:|---|
 | Tune Ceph CSI provisioner replicas | M | Both CSI charts currently run three multi-container provisioner Pods. Measure failure tolerance and resource cost before selecting a lower homelab replica count. |
-| Reassess SmartApp redundancy | S | Two nginx replicas, a PDB, and topology spreading may be appropriate, but should reflect an actual availability requirement rather than template inheritance. |
 
 ## Theme G - Validation and documentation
 

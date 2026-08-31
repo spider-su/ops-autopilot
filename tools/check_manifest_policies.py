@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 from pathlib import Path
 
 import yaml
@@ -69,13 +70,19 @@ def check_source_manifests(root: Path, errors: list[str]) -> None:
             if document.get("data") or document.get("stringData"):
                 fail(errors, f"{file}: Secret payloads must not be committed")
 
-    for file in [root / "clusters", root / "infrastructure", root / "applications"]:
-        if file.exists():
-            for candidate in file.rglob("*"):
-                if candidate.is_file() and candidate.name not in {"values.schema.json"}:
-                    text = candidate.read_text(encoding="utf-8", errors="ignore")
-                    if re.search(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----", text):
-                        fail(errors, f"{candidate}: private key payload detected")
+    tracked = subprocess.run(["git", "ls-files", "-z"], cwd=root, check=True, capture_output=True).stdout.decode()
+    for relative in tracked.split("\0"):
+        if not relative:
+            continue
+        candidate = root / relative
+        if candidate.name.startswith(".env") or candidate.suffix == ".env":
+            fail(errors, f"{candidate}: environment file must not be committed")
+            continue
+        text = candidate.read_text(encoding="utf-8", errors="ignore")
+        if re.search(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----", text):
+            fail(errors, f"{candidate}: private key payload detected")
+        if re.search(r"\b(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{20,})\b", text):
+            fail(errors, f"{candidate}: high-confidence token detected")
 
 
 def check_workloads(workload_dir: Path, errors: list[str]) -> None:

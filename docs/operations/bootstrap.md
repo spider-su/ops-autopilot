@@ -42,6 +42,15 @@ Required Secret objects currently include:
 The existing chart Secret scaffolds remain as compatibility artifacts until encrypted replacements are
 connected to the Argo CD decryption boundary. Do not put their payloads in Git.
 
+## Credential rotation and recovery
+
+Rotate each external credential at its provider first, then update the corresponding encrypted SOPS
+manifest and reconcile the owning Application. Rotate Ceph credentials before revoking the old key so
+existing PVC mounts remain recoverable; rotate PostgreSQL credentials by updating the database and its
+Secret in a coordinated maintenance window; rotate application API keys and the Alertmanager SMTP app
+password independently. Keep the age private key and recovery instructions in the operator's secured
+key store. A lost age private key cannot be recovered from this repository.
+
 ## Bootstrap development
 
 Production must be bootstrapped first because development consumes shared platform and database
