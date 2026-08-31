@@ -104,12 +104,13 @@ foreach ($target in @('infrastructure/platform', 'infrastructure/argocd', 'infra
 }
 
 if (-not (Get-Command kubeconform -ErrorAction SilentlyContinue)) {
-    throw 'kubeconform is required. Install kubeconform v0.6.7 and put it on PATH.'
+    throw 'kubeconform is required. Install kubeconform v0.8.0 and put it on PATH.'
 }
 
 Invoke-Step 'Kubernetes schema validation' {
     $files = Get-ChildItem -LiteralPath $renderRoot -Recurse -File -Filter '*.yaml' | Select-Object -ExpandProperty FullName
-    kubeconform -strict -summary -skip CustomResourceDefinition -kubernetes-version 1.32.0 `
+    # Match the current k3s API minor (v1.35.5); kubeconform accepts the minor schema target.
+    kubeconform -strict -summary -skip CustomResourceDefinition -kubernetes-version 1.35.0 `
         -schema-location default `
         -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' `
         $files
