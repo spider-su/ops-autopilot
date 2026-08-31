@@ -23,6 +23,8 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
+      # Argo's client-side apply annotation cannot hold the large upstream CRDs.
+      - ServerSideApply=true
   ignoreDifferences:
     - group: ""
       kind: Secret
