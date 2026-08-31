@@ -89,6 +89,9 @@ this repository.
   workload consumer; retain it until an explicit storage cleanup decision is made.
 - Prometheus and Alertmanager use separate RBD-backed claims for short-term operational state. PostgreSQL
   writes one monthly custom-format dump to a separate 10 GiB RBD claim and retains only the newest dump.
+- PostgreSQL retains the restricted capability exception required by the official image entrypoint to
+  initialize ownership on the Ceph-mounted data directory; the application containers retain the
+  drop-all-capabilities baseline.
 - PostgreSQL ingress is restricted by an explicit namespace allowlist in its chart values. TCP port 5432
   is intentionally exposed through the private-LAN ingress-nginx LoadBalancer for operator-PC testing;
   this is not an Internet exposure or TLS boundary.

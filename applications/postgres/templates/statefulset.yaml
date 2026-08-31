@@ -32,6 +32,12 @@ spec:
             capabilities:
               drop:
                 - ALL
+              # The official PostgreSQL entrypoint initializes/chowns the mounted
+              # data directory before dropping to the postgres UID.
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
           args:
             - -c
             - shared_buffers={{ .Values.postgresConfig.sharedBuffers }}
