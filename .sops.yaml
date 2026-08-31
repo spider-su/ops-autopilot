@@ -1,5 +1,5 @@
 creation_rules:
   - path_regex: secrets[\\/].*\.sops\.ya?ml$
-    age: age13ja9yaftagvpgdnyfr7rc3q9ecaatghe6g69gxaafpdp0ef5xd2q7jnhzh
+    age: age1swrrwx043y7h2wemuxvk93fg384ch9f5h8zalj9l4kan5cjduvxstmp0hp
     encrypted_regex: '^(data|stringData)$'
     # The private identity is stored only in the Argo CD decryption boundary.
