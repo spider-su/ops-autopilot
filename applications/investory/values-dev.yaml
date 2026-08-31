@@ -1,3 +1,6 @@
+# Dev counterpart is retained for environment parity but inactive while production is authoritative.
+replicaCount: 0
+
 # Dev overrides for investory — latest image for active development
 image:
   tag: latest

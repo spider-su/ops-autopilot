@@ -41,7 +41,9 @@ Required Secret objects currently include:
 
 The encrypted platform and workload bundles own these Secret objects. The repo-server must have the
 `argocd/sops-age` Secret and the KSOPS patch from [`infrastructure/argocd/argocd-repo-server-ksops-patch.yaml`](../../infrastructure/argocd/argocd-repo-server-ksops-patch.yaml)
-applied before the encrypted-secret Applications can render.
+applied before the encrypted-secret Applications can render. The pinned Argo CD installation base is
+rendered by `argocd-infrastructure`; its internal credential Secret payloads remain operator-managed
+and are protected by the Application's data ignore rules.
 
 ## Credential rotation and recovery
 

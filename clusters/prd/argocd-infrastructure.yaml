@@ -22,3 +22,17 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: argocd-secret
+      namespace: argocd
+      jsonPointers:
+        - /data
+    - group: ""
+      kind: Secret
+      name: argocd-notifications-secret
+      namespace: argocd
+      jsonPointers:
+        - /data

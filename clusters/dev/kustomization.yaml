@@ -2,4 +2,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - workloads/investory.yaml
+  - workloads/smartapp.yaml
   # Add more workload Application manifests under workloads/ while actively developing them

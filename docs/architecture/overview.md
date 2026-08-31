@@ -51,9 +51,10 @@ Application so resources with different lifecycles have explicit ownership.
 | Development | `main` | `<app>-dev` |
 | Shared services | normally `main` | service name, for example `postgres` |
 
-Development is optional and contains only actively developed applications. Production owns shared
-platform infrastructure. Both environments now use one branch; values files and cluster wiring carry
-the environment differences.
+Development is optional and contains the active SmartApp workload. Investory remains registered in dev
+with zero replicas for environment parity, while production is its active environment. Production keeps
+the SmartApp counterpart registered with zero replicas. Both environments use one branch; values files
+and cluster wiring carry the environment differences.
 
 ## Naming and service discovery
 
@@ -89,8 +90,8 @@ this repository.
   workload consumer; retain it until an explicit storage cleanup decision is made.
 - Prometheus and Alertmanager use separate RBD-backed claims for short-term operational state. PostgreSQL
   writes one monthly custom-format dump to a separate 10 GiB RBD claim and retains only the newest dump.
-- SmartApp production intentionally runs two replicas with a one-unavailable PDB and hostname spreading;
-  this is retained for private-LAN testing continuity, not presented as a high-availability guarantee.
+- SmartApp runs one development replica for active testing; its production counterpart is registered but
+  scaled to zero. This is an environment-placement choice, not a high-availability guarantee.
 - Ceph CSI RBD uses two provisioner replicas after measuring three live Pods at approximately 9–22m CPU
   and 104–147Mi memory each; nodeplugin remains one DaemonSet Pod per node.
 - PostgreSQL retains the restricted capability exception required by the official image entrypoint to

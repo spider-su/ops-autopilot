@@ -3,7 +3,7 @@
   "type": "object", "additionalProperties": false,
   "required": ["replicaCount", "image", "containerPort", "resources", "probes", "service", "pvc", "ingress", "resourceQuota", "networkPolicy", "pdb", "topologySpread"],
   "properties": {
-    "replicaCount": {"type": "integer", "minimum": 1}, "image": {"$ref": "#/definitions/image"}, "containerPort": {"type": "integer", "minimum": 1, "maximum": 65535}, "resources": {"$ref": "#/definitions/resources"}, "probes": {"$ref": "#/definitions/probes"},
+    "replicaCount": {"type": "integer", "minimum": 0}, "image": {"$ref": "#/definitions/image"}, "containerPort": {"type": "integer", "minimum": 1, "maximum": 65535}, "resources": {"$ref": "#/definitions/resources"}, "probes": {"$ref": "#/definitions/probes"},
     "service": {"type": "object", "additionalProperties": false, "required": ["port", "targetPort"], "properties": {"port": {"type": "integer", "minimum": 1, "maximum": 65535}, "targetPort": {"type": "integer", "minimum": 1, "maximum": 65535}}},
     "pvc": {"$ref": "#/definitions/pvc"}, "ingress": {"$ref": "#/definitions/ingress"}, "resourceQuota": {"$ref": "#/definitions/quota"},
     "networkPolicy": {"type": "object", "additionalProperties": false, "required": ["enabled", "extraIngressNamespaces", "externalEgressCidrs"], "properties": {"enabled": {"type": "boolean"}, "extraIngressNamespaces": {"type": "array", "items": {"type": "string"}}, "externalEgressCidrs": {"type": "array", "items": {"type": "string"}}}},

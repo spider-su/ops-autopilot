@@ -1,5 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - argocd-config.yaml
+  # Pin the Argo CD installation base so repo-server/KSOPS lifecycle is Git-managed.
+  - https://github.com/argoproj/argo-cd//manifests/cluster-install?ref=v3.4.3
   - argocd-ingress.yaml
+patches:
+  - path: argocd-config.yaml
+  - path: argocd-repo-server-ksops-patch.yaml
