@@ -9,7 +9,7 @@ containerPort: 8080
 
 resources:
   requests:
-    cpu: 100m
+    cpu: 500m
     memory: 1Gi
   limits:
     cpu: 500m
@@ -23,7 +23,9 @@ probes:
       port: 8080
     periodSeconds: 10
     timeoutSeconds: 5
-    failureThreshold: 30
+    # Hibernate/Flyway startup is slow on the homelab nodes; keep the probe
+    # strict after startup while allowing the measured cold-start duration.
+    failureThreshold: 60
   readiness:
     httpGet:
       path: /actuator/health
