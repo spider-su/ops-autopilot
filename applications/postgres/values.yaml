@@ -33,8 +33,9 @@ credentials:
 resourceQuota:
   enabled: true
   hard:
-    requests.cpu: "100m"
-    requests.memory: "256Mi"
+    # Reserve headroom for the monthly backup Job alongside PostgreSQL.
+    requests.cpu: "200m"
+    requests.memory: "512Mi"
     limits.cpu: "2"
     limits.memory: "1Gi"
     pods: "5"
