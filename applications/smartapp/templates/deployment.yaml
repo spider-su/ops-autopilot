@@ -42,6 +42,10 @@ spec:
             capabilities:
               drop:
                 - ALL
+              # The official nginx entrypoint creates cache directories for its
+              # worker user before dropping privileges.
+              add:
+                - CHOWN
           ports:
             - containerPort: {{ .Values.containerPort }}
           resources:

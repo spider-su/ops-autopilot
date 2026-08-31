@@ -13,7 +13,17 @@ WORKLOAD_KINDS = {"Deployment", "StatefulSet", "DaemonSet", "Job", "CronJob"}
 WORKLOAD_FILES = {"investory-prd.yaml", "smartapp-prd.yaml", "postgres-prd.yaml"}
 ALLOWED_DESTINATIONS = {
     "base-app": {"investory-prod", "investory-dev", "smartapp-prod", "smartapp-dev", "postgres", "postgres-dev"},
-    "platform-app": {"argocd", "infrastructure", "metallb-system", "ingress-nginx", "monitoring", "ceph-csi-rbd"},
+    "platform-app": {
+        "argocd",
+        "infrastructure",
+        "metallb-system",
+        "ingress-nginx",
+        "monitoring",
+        "ceph-csi-rbd",
+        # kube-prometheus-stack creates discovery Services for the k3s
+        # control-plane components in kube-system.
+        "kube-system",
+    },
 }
 REQUIRED_DOC_TEXT = {
     "README.md": ("clusters/", "applications/", "main"),
