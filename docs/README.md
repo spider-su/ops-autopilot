@@ -15,6 +15,8 @@ repeatable procedures.
 
 - [`architecture/overview.md`](architecture/overview.md): app-of-apps hierarchy, repository boundaries,
   environments, dependency flow, and external traffic.
+- [`architecture/DESIGN-DECISIONS.md`](architecture/DESIGN-DECISIONS.md): intentional constraints and
+  when to reconsider them; why certain enterprise features are deliberately excluded.
 
 ## Operations
 
@@ -33,6 +35,17 @@ repeatable procedures.
   checks.
 - [`development/agent-workflow.md`](development/agent-workflow.md): safe workflow for coding agents and
   operational evidence.
+
+## Review & Assessment
+
+- [`review.md`](review.md): comprehensive technical review of ops-autopilot design, pragmatism,
+  security posture, and resource footprint.
+- [`review-summary.md`](review-summary.md): executive summary of project assessment with quick verdict
+  and key findings.
+- [`review-proxmox-infrastructure.md`](review-proxmox-infrastructure.md): detailed analysis tailored to
+  your specific 3-node Mac Mini Proxmox cluster, including capacity analysis and recommendations.
+- [`deployment-decision.md`](deployment-decision.md): go/no-go deployment checklist, pre-deployment
+  verification, and post-deployment monitoring guidance.
 
 ## Documentation rules
 

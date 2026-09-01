@@ -44,6 +44,42 @@ evidence-backed operational or architecture need is identified.
 | Item | Effort | Why |
 |---|---:|---|
 
+## Intentional Non-Goals
+
+These capabilities are deliberately excluded. The repository is scoped to serve a single-operator homelab
+without growing into a multi-tenant platform.
+
+### Policy Enforcement
+
+- **No Kyverno policy layer.** CI validation via `scripts/validate.ps1` catches schema, image, and
+  AppProject violations before Git. For a single operator, manual validation is sufficient and avoids
+  runtime policy complexity. Reconsider if operators multiply or untrusted deployments are accepted.
+
+### Storage Operations
+
+- **No Ceph RBD snapshots.** Workloads are stateless except PostgreSQL; PVCs are either backed by a
+  single application (PostgreSQL, Prometheus, Alertmanager) or unused. Monthly PostgreSQL dump-based
+  backup provides point-in-time recovery. Reconsider if durable multi-tenant stateful workloads are
+  added.
+
+### Observability
+
+- **Limited Argo CD observability.** Manual Argo UI inspection is sufficient for 2-5 applications; each
+  Application independently reports sync and health. Reconsider deep metrics/alerting if scaling beyond
+  5 applications or if multi-operator access requires audit trails.
+
+### Testing
+
+- **No application-specific test suite.** Unit and integration tests belong in application repositories,
+  not in this cluster repository. Repository validation checks schema, policy, and Kubernetes manifest
+  compliance. Workload behavior testing is out of scope for cluster operations.
+
+### Cost Tracking
+
+- **No cost tracking or resource attribution.** Proxmox licensing is static; Ceph hardware cost is
+  amortized across the entire homelab. Cost per application is irrelevant for hobby infrastructure.
+  Reconsider if this cluster serves chargeback or capacity planning across multiple cost centers.
+
 ## Explicitly deferred
 
 - **ApplicationSet migration.** With only a few applications, explicit Application resources remain
