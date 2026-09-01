@@ -1,10 +1,9 @@
 storage:
   size: 5Gi
 
+resourceQuota:
+  hard:
+    limits.memory: "1Gi"
+
 postgresConfig:
   synchronousCommit: "off"
-
-image:
-  tag: "16"
-  pullPolicy: Always
-

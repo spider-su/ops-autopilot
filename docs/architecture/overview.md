@@ -86,6 +86,11 @@ this repository.
   managed by this repository.
 - `proxmox-ceph-rbd` is the workload StorageClass managed by this repository.
 - PostgreSQL is a single shared StatefulSet with an RBD-backed PVC.
+- Production PostgreSQL is capped at `2 CPU` and `1 GiB` memory; a controlled test showed the
+  performance query was CPU-bound, improving from roughly 62 seconds at `500m` CPU to 23–25 seconds
+  at `2 CPU`, while storage reads remained below 200 ms. The extra memory was not a limiting factor.
+- The PostgreSQL ResourceQuota is `2 CPU` and `2 GiB` memory to leave room for the monthly backup Job
+  alongside the database pod, whose production limit is `1 GiB`.
 - `infrastructure/platform-storage` is a deliberately reserved 5 GiB RBD-backed PVC with no current
   workload consumer; retain it until an explicit storage cleanup decision is made.
 - Prometheus and Alertmanager use separate RBD-backed claims for short-term operational state. PostgreSQL
