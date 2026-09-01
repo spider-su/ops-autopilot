@@ -24,6 +24,10 @@ resourceQuota:
     limits.memory: "3Gi"
 
 postgresConfig:
+  # 2Gi pod: keep more of the working set (indexes + hot heap pages) cached so
+  # simple reads stay off the heap. Well within the 2Gi limit alongside
+  # work_mem * connections + maintenance_work_mem.
+  sharedBuffers: "256MB"
   workMem: "16MB"
   maintenanceWorkMem: "128MB"
   effectiveCacheSize: "1GB"

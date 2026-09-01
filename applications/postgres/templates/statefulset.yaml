@@ -16,6 +16,7 @@ spec:
         {{- include "app.selectorLabels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: false
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       securityContext:
         seccompProfile:
           type: RuntimeDefault
@@ -69,6 +70,22 @@ spec:
             - -c
             - log_temp_files={{ .Values.postgresConfig.logTempFiles }}
             {{- end }}
+            {{- with .Values.postgresConfig.autovacuumNaptime }}
+            - -c
+            - autovacuum_naptime={{ . }}
+            {{- end }}
+            {{- with .Values.postgresConfig.autovacuumVacuumScaleFactor }}
+            - -c
+            - autovacuum_vacuum_scale_factor={{ . }}
+            {{- end }}
+            {{- with .Values.postgresConfig.autovacuumAnalyzeScaleFactor }}
+            - -c
+            - autovacuum_analyze_scale_factor={{ . }}
+            {{- end }}
+            {{- with .Values.postgresConfig.autovacuumVacuumInsertScaleFactor }}
+            - -c
+            - autovacuum_vacuum_insert_scale_factor={{ . }}
+            {{- end }}
             {{- if .Values.postgresConfig.synchronousCommit }}
             - -c
             - synchronous_commit={{ .Values.postgresConfig.synchronousCommit }}
@@ -80,6 +97,17 @@ spec:
                 name: {{ .Values.credentials.secretName }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+            # Convert Kubernetes' SIGTERM (which reaches the postmaster as a slow
+            # "smart" shutdown that waits for clients) into an immediate fast
+            # shutdown, so a restart during a long refresh still exits cleanly
+            # within the grace period instead of being SIGKILLed into crash recovery.
+            preStop:
+              exec:
+                command:
+                  - sh
+                  - -c
+                  - pg_ctl -D "$PGDATA" -m fast -w -t {{ sub (int .Values.terminationGracePeriodSeconds) 10 }} stop
           volumeMounts:
             - name: data
               mountPath: {{ .Values.storage.mountPath }}

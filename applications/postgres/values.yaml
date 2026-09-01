@@ -28,6 +28,20 @@ postgresConfig:
   superuserReservedConnections: "3"
   # Log every temp-file spill for observability.
   logTempFiles: "0"
+  # Autovacuum tuning. After a bulk write (e.g. a materialized-view refresh or an
+  # import) the visibility map goes stale, forcing heap fetches on index-only scans
+  # and leaving planner stats behind. Tighter thresholds and a shorter naptime keep
+  # the visibility map and stats fresh so simple reads stay fast without heap fetches.
+  autovacuumNaptime: "30s"
+  autovacuumVacuumScaleFactor: "0.1"
+  autovacuumAnalyzeScaleFactor: "0.05"
+  autovacuumVacuumInsertScaleFactor: "0.1"
+
+# Grace period for a clean PostgreSQL shutdown. The preStop hook triggers a fast
+# shutdown (aborts running queries, checkpoints, exits cleanly); this window must be
+# long enough for that checkpoint to finish so the next start skips crash recovery
+# (which would reset cumulative stats and replay WAL).
+terminationGracePeriodSeconds: 120
 
 storage:
   size: 5Gi
