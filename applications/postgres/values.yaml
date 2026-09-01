@@ -21,9 +21,12 @@ postgresConfig:
   # unoptimized materialized-view refresh) aborts cleanly instead of filling the
   # data volume and taking PostgreSQL down.
   tempFileLimit: "2GB"
-  # Terminate sessions left idle inside a transaction so timed-out client
-  # requests do not leave orphaned work holding connections/locks.
-  idleInTransactionSessionTimeout: "60s"
+  # Reap sessions left idle *inside a transaction* so timed-out client requests do
+  # not leave orphaned work holding connections/locks. Set to 10m to match the
+  # liveness window: the app runs one multi-step transaction per market-price update
+  # (a multi-minute CPU read, then Java-side processing, then the MV refreshes), so a
+  # shorter timeout would abort that legitimate workflow before it refreshes the MVs.
+  idleInTransactionSessionTimeout: "600s"
   # Keep slots for probes/admin so PostgreSQL stays reachable under saturation.
   superuserReservedConnections: "3"
   # Log every temp-file spill for observability.
