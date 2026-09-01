@@ -1,5 +1,10 @@
+# NOTE: storage stays at 10Gi. A StatefulSet's volumeClaimTemplates is immutable,
+# so growing it via GitOps would make Argo's apply fail. The temp_file_limit guardrail
+# below caps per-session temp at 4Gi, protecting this 10Gi volume during heavy refreshes.
+# PVC expansion (if ever needed) is a separate manual op: allowVolumeExpansion on the
+# storageClass + kubectl edit pvc, documented in the runbook.
 storage:
-  size: 20Gi
+  size: 10Gi
 
 resources:
   requests:
