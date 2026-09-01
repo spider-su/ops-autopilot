@@ -9,6 +9,12 @@ resources:
     cpu: 1000m
     memory: 2048Mi
 
+# Allow the synchronous all-account projection to remain unresponsive for up
+# to ten minutes before Kubernetes restarts the application.
+probes:
+  liveness:
+    failureThreshold: 30
+
 # Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
 #image:
 #  digest: sha256:8864197c4979001d10735071700d234303f711ea7e27a6a2305e340f9511fca1
