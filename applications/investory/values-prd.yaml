@@ -2,16 +2,26 @@
 # Enabled again after the database-schema fix image was published.
 replicaCount: 1
 
-# The current Spring Boot/Hibernate image is CPU-intensive during startup.
-# Keep the request unchanged while allowing startup to use one vCPU.
+# The Spring Boot/Hibernate image is CPU-intensive during startup and, more
+# importantly, during the synchronous all-account projection rebuild triggered by a
+# market-price update. That rebuild is single-threaded (~1 core); with a 1-core
+# limit it starved the web/probe threads (CFS-throttled), so liveness AND readiness
+# HTTP probes timed out and the pod dropped to NotReady mid-rebuild. A 2-core limit
+# lets the rebuild run on one core while probe/HTTP threads keep the second, so the
+# app stays responsive. The Recreate strategy keeps peak usage at one pod, so this
+# stays within the namespace quota (limits.cpu: 2). Requests stay at the base 500m.
 resources:
   limits:
-    cpu: 1000m
+    cpu: 2000m
     memory: 2048Mi
 
 # Allow the synchronous all-account projection to remain unresponsive for up
-# to ten minutes before Kubernetes restarts the application.
+# to ten minutes before Kubernetes restarts the application. The readiness timeout
+# is widened to 10s so a briefly-busy event loop during the rebuild does not flap
+# the pod out of service.
 probes:
+  readiness:
+    timeoutSeconds: 10
   liveness:
     failureThreshold: 30
 
