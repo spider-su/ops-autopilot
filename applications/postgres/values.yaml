@@ -34,10 +34,12 @@ resourceQuota:
   enabled: true
   hard:
     # Reserve headroom for the monthly backup Job alongside PostgreSQL.
+    # Memory: postgres-0 (512Mi) + backup job (512Mi) = 1Gi, rounded to 2Gi for safety margin.
+    # CPU: postgres-0 (500m) + backup job (250m) = 750m, rounded to 2000m (2 cores) for system pods.
     requests.cpu: "200m"
     requests.memory: "512Mi"
     limits.cpu: "2"
-    limits.memory: "1Gi"
+    limits.memory: "2Gi"
     pods: "5"
 
 networkPolicy:
