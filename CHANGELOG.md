@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-01
+
+- Removed the remaining unregistered SmartApp development Application manifest; development remains
+  managed exclusively from `clusters/dev/workloads`.
+
 ## 2026-08-31
 
 - Removed Argo's destructive `Replace=true` exception from the Argo infrastructure Application while

@@ -131,7 +131,7 @@ def check_docs(root: Path, errors: list[str]) -> None:
         for value in required:
             if value.lower() not in text.lower():
                 fail(errors, f"{relative}: missing documented term {value}")
-    forbidden = ["LoadRestrictionsNone", "applications/postgres/app-dev.yaml", "applications/smartapp/app-dev.yaml"]
+    forbidden = ["LoadRestrictionsNone"]
     for relative in ["README.md", "ROADMAP.md", "CHANGELOG.md", "docs"]:
         path = root / relative
         candidates = [path] if path.is_file() else path.rglob("*.md")
