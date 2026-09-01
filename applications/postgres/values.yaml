@@ -9,13 +9,25 @@ resources:
     memory: 256Mi
   limits:
     cpu: 1000m
-    memory: 512Mi
+    memory: 1Gi
 
 postgresConfig:
   sharedBuffers: "128MB"
   workMem: "8MB"
-  maintenanceWorkMem: "32MB"
+  maintenanceWorkMem: "64MB"
   maxConnections: "50"
+  effectiveCacheSize: "256MB"
+  # Hard per-session cap on temporary file bytes. A runaway sort/hash (e.g. an
+  # unoptimized materialized-view refresh) aborts cleanly instead of filling the
+  # data volume and taking PostgreSQL down.
+  tempFileLimit: "2GB"
+  # Terminate sessions left idle inside a transaction so timed-out client
+  # requests do not leave orphaned work holding connections/locks.
+  idleInTransactionSessionTimeout: "60s"
+  # Keep slots for probes/admin so PostgreSQL stays reachable under saturation.
+  superuserReservedConnections: "3"
+  # Log every temp-file spill for observability.
+  logTempFiles: "0"
 
 storage:
   size: 5Gi

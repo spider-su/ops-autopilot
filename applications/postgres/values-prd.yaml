@@ -1,14 +1,28 @@
 storage:
-  size: 10Gi
+  size: 20Gi
 
 resources:
+  requests:
+    cpu: 1000m
+    memory: 2Gi
   limits:
     cpu: 2000m
-    memory: 1024Mi
+    memory: 2Gi
 
 resourceQuota:
   hard:
-    limits.memory: "2Gi"
+    # Guaranteed postgres-0 (requests == limits: 1000m / 2Gi) plus the monthly
+    # backup Job (requests 50m / 128Mi, limits 250m / 512Mi). Headroom to 3Gi / 3 cores.
+    requests.cpu: "1500m"
+    requests.memory: "3Gi"
+    limits.cpu: "3"
+    limits.memory: "3Gi"
+
+postgresConfig:
+  workMem: "16MB"
+  maintenanceWorkMem: "128MB"
+  effectiveCacheSize: "1GB"
+  tempFileLimit: "4GB"
 
 # Immutable manifest-list digest resolved from the production image registry on 2026-08-30.
 image:

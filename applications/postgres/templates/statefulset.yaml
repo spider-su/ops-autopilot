@@ -49,6 +49,26 @@ spec:
             - maintenance_work_mem={{ .Values.postgresConfig.maintenanceWorkMem }}
             - -c
             - max_connections={{ .Values.postgresConfig.maxConnections }}
+            {{- with .Values.postgresConfig.effectiveCacheSize }}
+            - -c
+            - effective_cache_size={{ . }}
+            {{- end }}
+            {{- with .Values.postgresConfig.tempFileLimit }}
+            - -c
+            - temp_file_limit={{ . }}
+            {{- end }}
+            {{- with .Values.postgresConfig.idleInTransactionSessionTimeout }}
+            - -c
+            - idle_in_transaction_session_timeout={{ . }}
+            {{- end }}
+            {{- with .Values.postgresConfig.superuserReservedConnections }}
+            - -c
+            - superuser_reserved_connections={{ . }}
+            {{- end }}
+            {{- if .Values.postgresConfig.logTempFiles }}
+            - -c
+            - log_temp_files={{ .Values.postgresConfig.logTempFiles }}
+            {{- end }}
             {{- if .Values.postgresConfig.synchronousCommit }}
             - -c
             - synchronous_commit={{ .Values.postgresConfig.synchronousCommit }}
