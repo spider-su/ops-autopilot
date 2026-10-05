@@ -25,17 +25,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out main
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.x'
       - name: Update production digest
         run: python tools/promote_image.py --app "${{ inputs.app }}" --digest "${{ inputs.digest }}"
       - name: Open promotion pull request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main

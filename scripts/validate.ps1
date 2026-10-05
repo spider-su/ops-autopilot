@@ -16,7 +16,7 @@ function Invoke-Step {
 }
 
 Invoke-Step 'Markdown links' {
-    python .\tools\check_markdown_links.py
+    python ./tools/check_markdown_links.py
 }
 
 $chartTargets = @(
@@ -75,11 +75,11 @@ foreach ($target in $chartTargets) {
 }
 
 Invoke-Step 'Pinned upstream chart rendering' {
-    python .\tools\render_upstream_charts.py --output-dir $upstreamRender
+    python ./tools/render_upstream_charts.py --output-dir $upstreamRender
 }
 
 Invoke-Step 'Manifest policy and documentation checks' {
-    python .\tools\check_manifest_policies.py --workload-dir $workloadRender
+    python ./tools/check_manifest_policies.py --workload-dir $workloadRender
 }
 
 Invoke-Step 'Kustomize: production' {
