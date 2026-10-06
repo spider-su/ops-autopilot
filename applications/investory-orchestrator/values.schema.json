@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "additionalProperties": false,
-  "required": ["image", "scheduler", "dashboard", "config", "secrets", "networkPolicy", "resourceQuota"],
+  "required": ["image", "scheduler", "dashboard", "ingress", "config", "secrets", "networkPolicy", "resourceQuota"],
   "properties": {
     "image": {
       "type": "object",
@@ -24,6 +24,18 @@
         "replicas": {"type": "integer", "minimum": 0},
         "resources": {"$ref": "#/definitions/resources"},
         "service": {"type": "object", "additionalProperties": false, "required": ["port"], "properties": {"port": {"type": "integer", "minimum": 1, "maximum": 65535}}}
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "className", "host", "path", "pathType"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "className": {"type": "string", "minLength": 1},
+        "host": {"type": "string"},
+        "path": {"type": "string", "minLength": 1},
+        "pathType": {"type": "string", "enum": ["Prefix", "Exact", "ImplementationSpecific"]}
       }
     },
     "config": {"type": "object", "additionalProperties": {"type": "string"}},

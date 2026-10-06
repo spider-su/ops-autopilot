@@ -26,6 +26,13 @@ dashboard:
       cpu: 500m
       memory: 512Mi
 
+ingress:
+  enabled: false
+  className: nginx
+  host: ""
+  path: /dashboard(/|$)(.*)
+  pathType: ImplementationSpecific
+
 config:
   ORCHESTRATOR_SCHEMA: investory_orchestrator
   GITHUB_REPOSITORY: spider-su/investory
