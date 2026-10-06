@@ -1,5 +1,5 @@
 image:
-  tag: latest
+  tag: sha-c9dacb7b645ac74696b12ad3e970e8b9d3ec009f
   pullPolicy: Always
 
 scheduler:
