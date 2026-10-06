@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["image", "scheduler", "dashboard", "config", "secrets", "networkPolicy", "resourceQuota"],
+  "properties": {
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "tag", "pullPolicy", "pullSecrets"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1},
+        "tag": {"type": "string", "minLength": 1},
+        "pullPolicy": {"type": "string", "enum": ["Always", "IfNotPresent", "Never"]},
+        "pullSecrets": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "scheduler": {"$ref": "#/definitions/workload"},
+    "dashboard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replicas", "resources", "service"],
+      "properties": {
+        "replicas": {"type": "integer", "minimum": 0},
+        "resources": {"$ref": "#/definitions/resources"},
+        "service": {"type": "object", "additionalProperties": false, "required": ["port"], "properties": {"port": {"type": "integer", "minimum": 1, "maximum": 65535}}}
+      }
+    },
+    "config": {"type": "object", "additionalProperties": {"type": "string"}},
+    "secrets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtimeName", "sshName"],
+      "properties": {"runtimeName": {"type": "string", "minLength": 1}, "sshName": {"type": "string", "minLength": 1}}
+    },
+    "networkPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "externalEgressCidrs"],
+      "properties": {"enabled": {"type": "boolean"}, "externalEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}}}
+    },
+    "resourceQuota": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "hard"],
+      "properties": {"enabled": {"type": "boolean"}, "hard": {"type": "object", "additionalProperties": {"$ref": "#/definitions/quantity"}}}
+    }
+  },
+  "definitions": {
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["replicas", "resources"],
+      "properties": {"replicas": {"type": "integer", "minimum": 0}, "resources": {"$ref": "#/definitions/resources"}}
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requests", "limits"],
+      "properties": {"requests": {"$ref": "#/definitions/quantities"}, "limits": {"$ref": "#/definitions/quantities"}}
+    },
+    "quantities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cpu", "memory"],
+      "properties": {"cpu": {"$ref": "#/definitions/quantity"}, "memory": {"$ref": "#/definitions/quantity"}}
+    },
+    "quantity": {"type": ["string", "number"]}
+  }
+}

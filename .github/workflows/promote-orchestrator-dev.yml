@@ -1,0 +1,46 @@
+name: Promote orchestrator development image
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Commit-specific sha- tag from the Docker Build and Publish workflow
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Update development image tag
+        env:
+          IMAGE_TAG: ${{ inputs.tag }}
+        run: python tools/promote_dev_image.py --tag "$IMAGE_TAG"
+
+      - name: Open development deployment pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: automation/promote-orchestrator-dev-${{ inputs.tag }}
+          delete-branch: true
+          commit-message: "ci: deploy orchestrator development image ${{ inputs.tag }}"
+          title: "ci: deploy orchestrator development image ${{ inputs.tag }}"
+          body: |
+            Updates the development POC to a published commit-specific container image.
+
+            Argo CD deploys the image after this pull request is reviewed and merged.

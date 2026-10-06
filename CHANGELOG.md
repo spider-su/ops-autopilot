@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-05
+
+- Added a development-only Argo CD Helm release for the Investory Orchestrator scheduler and dashboard,
+  including PostgreSQL network access, resource quotas, and a documented runtime-secret contract.
+
 ## 2026-09-01
 
 - Removed the remaining unregistered SmartApp development Application manifest; development remains

@@ -26,6 +26,8 @@ repeatable procedures.
   procedure and disposable-target safety boundary.
 - [`operations/application-onboarding.md`](operations/application-onboarding.md): supported workflow and
   acceptance checklist for a new workload.
+- [`operations/investory-orchestrator-poc.md`](operations/investory-orchestrator-poc.md): Argo CD deployment,
+  image, runtime-secret, and first-run requirements for the orchestrator POC.
 - [`operations/monitoring.md`](operations/monitoring.md): monitoring components, collection behavior,
   alerting boundary, persistence, and live verification.
 

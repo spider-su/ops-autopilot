@@ -1,0 +1,7 @@
+apiVersion: v2
+name: investory-orchestrator
+description: k3s scheduler and dashboard for the Investory Orchestrator POC
+kubeVersion: ">=1.25.0-0"
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
