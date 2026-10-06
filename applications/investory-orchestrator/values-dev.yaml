@@ -1,0 +1,15 @@
+image:
+  tag: latest
+  pullPolicy: Always
+
+scheduler:
+  replicas: 1
+
+dashboard:
+  replicas: 1
+
+# The scheduler needs GitHub and the private LAN Mac runner. GitHub API IPs
+# are not stable, so external egress remains broad for this supervised POC.
+networkPolicy:
+  externalEgressCidrs:
+    - 0.0.0.0/0

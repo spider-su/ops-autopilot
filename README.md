@@ -8,7 +8,7 @@ configuration out of the reusable workload templates.
 
 - Argo CD app-of-apps bootstrap for production and development.
 - Homelab platform services: MetalLB, ingress-nginx, Ceph CSI, monitoring, and supporting infrastructure.
-- Shared PostgreSQL and the Investory and SmartApp workloads.
+- Shared PostgreSQL and the Investory, Investory Orchestrator POC, and SmartApp workloads.
 - Namespace creation, resource quotas, network policies, ingress, storage, and pinned platform chart
   versions.
 
@@ -102,6 +102,8 @@ operational improvements are intentionally parked in [`ROADMAP.md`](ROADMAP.md).
 - [`docs/operations/bootstrap.md`](docs/operations/bootstrap.md): bootstrap and secret prerequisites.
 - [`docs/operations/application-onboarding.md`](docs/operations/application-onboarding.md): new-app
   workflow.
+- [`docs/operations/investory-orchestrator-poc.md`](docs/operations/investory-orchestrator-poc.md):
+  development POC deployment and runtime-secret contract.
 - [`docs/operations/monitoring.md`](docs/operations/monitoring.md): monitoring design and current
   constraints.
 - [`ROADMAP.md`](ROADMAP.md): future work only.

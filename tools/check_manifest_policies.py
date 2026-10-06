@@ -10,9 +10,22 @@ from pathlib import Path
 import yaml
 
 WORKLOAD_KINDS = {"Deployment", "StatefulSet", "DaemonSet", "Job", "CronJob"}
-WORKLOAD_FILES = {"investory-prd.yaml", "smartapp-prd.yaml", "postgres-prd.yaml"}
+WORKLOAD_FILES = {
+    "investory-prd.yaml",
+    "investory-orchestrator-dev.yaml",
+    "smartapp-prd.yaml",
+    "postgres-prd.yaml",
+}
 ALLOWED_DESTINATIONS = {
-    "base-app": {"investory-prod", "investory-dev", "smartapp-prod", "smartapp-dev", "postgres", "postgres-dev"},
+    "base-app": {
+        "investory-prod",
+        "investory-dev",
+        "investory-orchestrator",
+        "smartapp-prod",
+        "smartapp-dev",
+        "postgres",
+        "postgres-dev",
+    },
     "platform-app": {
         "argocd",
         "infrastructure",
