@@ -8,6 +8,10 @@ scheduler:
 dashboard:
   replicas: 1
 
+ingress:
+  enabled: true
+  host: orchestrator.home.k3s.com
+
 # The scheduler needs GitHub and the private LAN Mac runner. GitHub API IPs
 # are not stable, so external egress remains broad for this supervised POC.
 networkPolicy:
