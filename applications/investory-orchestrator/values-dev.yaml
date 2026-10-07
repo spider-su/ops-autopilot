@@ -1,5 +1,5 @@
 image:
-  tag: k3s-sha-edaaa081edbf4029ec7553887f9d3ba7a27d9f79
+  tag: k3s-sha-0fe235a89d5f54aa68dc8122d1f59af6bd605ea5
   pullPolicy: Always
 
 scheduler:
