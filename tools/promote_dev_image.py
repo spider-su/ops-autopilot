@@ -11,8 +11,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", required=True)
     args = parser.parse_args()
-    if not re.fullmatch(r"sha-[0-9a-f]{40}", args.tag):
-        raise SystemExit("tag must match sha-<40 lowercase hexadecimal characters>")
+    if not re.fullmatch(r"k3s-sha-[0-9a-f]{40}", args.tag):
+        raise SystemExit("tag must match k3s-sha-<40 lowercase hexadecimal characters>")
 
     path = Path("applications/investory-orchestrator/values-dev.yaml")
     text = path.read_text(encoding="utf-8")

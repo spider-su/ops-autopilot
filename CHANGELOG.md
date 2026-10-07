@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-07
+
+- Switched the Investory Orchestrator k3s chart to the slim `k3s-latest` runtime image; development
+  image promotion now accepts only commit-specific `k3s-sha-*` tags.
+
 ## 2026-10-05
 
 - Added a development-only Argo CD Helm release for the Investory Orchestrator scheduler and dashboard,

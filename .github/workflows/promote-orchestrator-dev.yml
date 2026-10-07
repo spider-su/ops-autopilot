@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Commit-specific sha- tag from the Docker Build and Publish workflow
+        description: Commit-specific k3s-sha- tag from the Docker Build and Publish workflow
         required: true
         type: string
 
