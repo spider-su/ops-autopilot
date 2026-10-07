@@ -1,5 +1,5 @@
 image:
-  tag: latest
+  tag: k3s-latest
   pullPolicy: Always
 
 scheduler:

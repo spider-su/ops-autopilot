@@ -1,6 +1,6 @@
 image:
   repository: aserobaba/orchestrator
-  tag: latest
+  tag: k3s-latest
   pullPolicy: IfNotPresent
   pullSecrets: []
 
