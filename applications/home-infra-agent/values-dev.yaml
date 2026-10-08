@@ -1,5 +1,5 @@
 image:
-  tag: latest
+  tag: sha-ff50cd270c32969c285a9f4ec67a0387702983a0
   pullPolicy: Always
 
 mqtt:
@@ -14,12 +14,17 @@ jobs:
     enabled: true
   investory:
     enabled: true
+  solarman:
+    enabled: true
 
 networkPolicy:
   investoryEgressCidrs:
     - 3.23.186.13/32
     - 3.143.47.40/32
     - 3.131.64.200/32
+  solarmanEgressCidrs:
+    - 47.254.141.143/32
+    - 47.254.132.99/32
 
 ingress:
   enabled: true

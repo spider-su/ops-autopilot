@@ -68,3 +68,9 @@ data:
     databaseUrlEnv: HIA_INVESTORY_DATABASE_URL
     portfolioId: {{ .Values.jobs.investory.portfolioId }}
   {{- end }}
+  {{- if .Values.jobs.solarman.enabled }}
+  solarman-job.yaml: |
+    {{- .Files.Get "files/solarman/job.yaml" | nindent 4 }}
+  solarman-current.yaml: |
+    {{- .Files.Get "files/solarman/current.yaml" | nindent 4 }}
+  {{- end }}
