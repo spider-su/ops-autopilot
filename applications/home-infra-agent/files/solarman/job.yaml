@@ -1,6 +1,8 @@
 name: Solarman Solar and Battery
 schedule:
-  interval: 3600s
+  interval: {{ .Values.jobs.solarman.interval }}
+freshness:
+  maxAge: {{ .Values.jobs.solarman.freshnessMaxAge }}
 timeout: 15s
 mqtt:
   enabled: true

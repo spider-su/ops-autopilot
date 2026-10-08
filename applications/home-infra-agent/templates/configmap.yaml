@@ -20,6 +20,8 @@ data:
     name: {{ .Values.jobs.proxmox.name | quote }}
     schedule:
       interval: {{ .Values.jobs.proxmox.interval | quote }}
+    freshness:
+      maxAge: {{ .Values.jobs.proxmox.freshnessMaxAge | quote }}
     timeout: {{ .Values.jobs.proxmox.timeout | quote }}
     mqtt:
       enabled: true
@@ -37,6 +39,8 @@ data:
     name: {{ .Values.jobs.k3s.name | quote }}
     schedule:
       interval: {{ .Values.jobs.k3s.interval | quote }}
+    freshness:
+      maxAge: {{ .Values.jobs.k3s.freshnessMaxAge | quote }}
     timeout: {{ .Values.jobs.k3s.timeout | quote }}
     mqtt:
       enabled: true
@@ -70,7 +74,7 @@ data:
   {{- end }}
   {{- if .Values.jobs.solarman.enabled }}
   solarman-job.yaml: |
-    {{- .Files.Get "files/solarman/job.yaml" | nindent 4 }}
+    {{- tpl (.Files.Get "files/solarman/job.yaml") . | nindent 4 }}
   solarman-current.yaml: |
     {{- .Files.Get "files/solarman/current.yaml" | nindent 4 }}
   {{- end }}

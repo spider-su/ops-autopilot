@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-09
+
+- Configured freshness limits for the Home Infra Agent Proxmox, K3s, and Solarman jobs based on their polling intervals.
+
 ## 2026-10-08
 
 - Promoted the Home Infra Agent development workload to the published `sha-fa28e0ad53efac128367fc369754116258baf149` image after its build, vulnerability scan, and SBOM workflow completed successfully.
