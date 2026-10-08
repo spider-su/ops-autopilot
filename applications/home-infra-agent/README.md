@@ -1,6 +1,6 @@
 # Home Infra Agent deployment
 
-This chart runs the `aserobaba/home-infra-agent` image as one replica in the development cluster. The dev Application is registered at `clusters/dev/workloads/home-infra-agent.yaml`; it reads this chart from `main` and uses mutable `latest` while iterating. Production is intentionally not registered: production workloads require a registry-resolved SHA-256 digest and reviewed promotion.
+This chart runs the `aserobaba/home-infra-agent` image as one replica in the development cluster. The dev Application is registered at `clusters/dev/workloads/home-infra-agent.yaml` and reads this chart from `main`. The base chart defaults to `latest`; the dev overlay pins an immutable `sha-<commit>` tag with `imagePullPolicy: Always`. Promote a release by updating the dev pin in `values-dev.yaml`. Production is intentionally not registered: production workloads require a registry-resolved SHA-256 digest and reviewed promotion.
 
 The chart mounts its configuration from a ConfigMap at `/etc/home-infra-agent`. It includes the Proxmox ping job for `192.168.1.51` through `.53`. NetworkPolicy permits DNS and egress to `192.168.1.0/24`, so the cluster must have a route to that subnet. Add any MQTT broker CIDR to `networkPolicy.externalEgressCidrs` if it is outside that subnet.
 
