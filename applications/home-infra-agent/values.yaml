@@ -44,6 +44,15 @@ jobs:
     interval: 60s
     timeout: 10s
     mqttTopic: home/k3s
+  investory:
+    enabled: false
+    name: Investory Portfolio
+    cron: "0 9-22 * * 1-5"
+    timezone: Europe/Warsaw
+    timeout: 15s
+    mqttTopic: home/investory/portfolio
+    databaseUrlSecretName: home-infra-agent-investory-db
+    portfolioId: 1
 
 service:
   port: 8080
@@ -60,6 +69,7 @@ networkPolicy:
   kubernetesApiCidr: 10.43.0.1/32
   externalEgressCidrs:
     - 192.168.1.0/24
+  investoryEgressCidrs: []
 
 resourceQuota:
   enabled: true

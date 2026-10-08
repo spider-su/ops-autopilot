@@ -12,6 +12,14 @@ mqtt:
 jobs:
   k3s:
     enabled: true
+  investory:
+    enabled: true
+
+networkPolicy:
+  investoryEgressCidrs:
+    - 3.23.186.13/32
+    - 3.143.47.40/32
+    - 3.131.64.200/32
 
 ingress:
   enabled: true

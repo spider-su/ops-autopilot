@@ -45,6 +45,16 @@ spec:
         - port: 443
           protocol: TCP
     {{- end }}
+    {{- if .Values.jobs.investory.enabled }}
+    {{- range .Values.networkPolicy.investoryEgressCidrs }}
+    - to:
+        - ipBlock:
+            cidr: {{ . | quote }}
+      ports:
+        - port: 5432
+          protocol: TCP
+    {{- end }}
+    {{- end }}
     {{- range .Values.networkPolicy.externalEgressCidrs }}
     - to:
         - ipBlock:
