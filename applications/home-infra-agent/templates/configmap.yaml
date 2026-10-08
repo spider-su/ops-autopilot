@@ -32,3 +32,20 @@ data:
     type: ping
     targets:
       {{- toYaml .Values.jobs.proxmox.targets | nindent 6 }}
+  {{- if .Values.jobs.k3s.enabled }}
+  k3s-job.yaml: |
+    name: {{ .Values.jobs.k3s.name | quote }}
+    schedule:
+      interval: {{ .Values.jobs.k3s.interval | quote }}
+    timeout: {{ .Values.jobs.k3s.timeout | quote }}
+    mqtt:
+      enabled: true
+      topic: {{ .Values.jobs.k3s.mqttTopic | quote }}
+      device:
+        name: {{ .Values.jobs.k3s.name | quote }}
+        manufacturer: Custom
+        model: Kubernetes Cluster
+  k3s-cluster.yaml: |
+    type: kubernetes
+    scope: cluster
+  {{- end }}

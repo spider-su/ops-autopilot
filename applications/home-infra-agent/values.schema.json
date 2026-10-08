@@ -34,7 +34,7 @@
       }
     },
     "jobs": {
-      "type": "object", "additionalProperties": false, "required": ["proxmox"],
+      "type": "object", "additionalProperties": false, "required": ["proxmox", "k3s"],
       "properties": {
         "proxmox": {
           "type": "object", "additionalProperties": false,
@@ -46,6 +46,17 @@
             "timeout": {"type": "string", "minLength": 1},
             "mqttTopic": {"type": "string", "minLength": 1},
             "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}}
+          }
+        },
+        "k3s": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "name", "interval", "timeout", "mqttTopic"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"type": "string", "minLength": 1},
+            "interval": {"type": "string", "minLength": 1},
+            "timeout": {"type": "string", "minLength": 1},
+            "mqttTopic": {"type": "string", "minLength": 1}
           }
         }
       }
@@ -65,8 +76,12 @@
     },
     "networkPolicy": {
       "type": "object", "additionalProperties": false,
-      "required": ["enabled", "externalEgressCidrs"],
-      "properties": {"enabled": {"type": "boolean"}, "externalEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}}}
+      "required": ["enabled", "kubernetesApiCidr", "externalEgressCidrs"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "kubernetesApiCidr": {"type": "string", "minLength": 1},
+        "externalEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
     },
     "resourceQuota": {
       "type": "object", "additionalProperties": false, "required": ["enabled", "hard"],
