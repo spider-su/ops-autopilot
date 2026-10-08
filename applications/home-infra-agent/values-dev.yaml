@@ -2,6 +2,13 @@ image:
   tag: latest
   pullPolicy: Always
 
+mqtt:
+  enabled: true
+  host: 192.168.1.67
+  port: 1883
+  username: home-infra-agent
+  passwordSecretName: home-infra-agent-mqtt
+
 ingress:
   enabled: true
   host: ha-infra.home.k3s.com
