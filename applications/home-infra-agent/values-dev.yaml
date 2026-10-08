@@ -9,6 +9,10 @@ mqtt:
   username: home-infra-agent
   passwordSecretName: home-infra-agent-mqtt
 
+jobs:
+  k3s:
+    enabled: true
+
 ingress:
   enabled: true
   host: ha-infra.home.k3s.com

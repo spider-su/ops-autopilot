@@ -14,7 +14,8 @@ spec:
       labels:
         {{- include "home-infra-agent.selectorLabels" . | nindent 8 }}
     spec:
-      automountServiceAccountToken: false
+      serviceAccountName: {{ include "home-infra-agent.name" . }}
+      automountServiceAccountToken: {{ .Values.jobs.k3s.enabled }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
@@ -33,6 +34,12 @@ spec:
                 path: jobs/proxmox/job.yaml
               - key: proxmox-nodes.yaml
                 path: jobs/proxmox/nodes.yaml
+              {{- end }}
+              {{- if .Values.jobs.k3s.enabled }}
+              - key: k3s-job.yaml
+                path: jobs/k3s/job.yaml
+              - key: k3s-cluster.yaml
+                path: jobs/k3s/cluster.yaml
               {{- end }}
       containers:
         - name: home-infra-agent

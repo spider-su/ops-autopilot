@@ -37,6 +37,14 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+    {{- if .Values.jobs.k3s.enabled }}
+    - to:
+        - ipBlock:
+            cidr: {{ .Values.networkPolicy.kubernetesApiCidr | quote }}
+      ports:
+        - port: 443
+          protocol: TCP
+    {{- end }}
     {{- range .Values.networkPolicy.externalEgressCidrs }}
     - to:
         - ipBlock:
