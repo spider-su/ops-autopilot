@@ -32,6 +32,7 @@ jobs:
     enabled: true
     name: Proxmox Cluster
     interval: 60s
+    freshnessMaxAge: 180s
     timeout: 3s
     mqttTopic: home/proxmox
     targets:
@@ -42,6 +43,7 @@ jobs:
     enabled: false
     name: K3s Cluster
     interval: 60s
+    freshnessMaxAge: 180s
     timeout: 10s
     mqttTopic: home/k3s
   investory:
@@ -55,6 +57,8 @@ jobs:
     portfolioId: 1
   solarman:
     enabled: false
+    interval: 3600s
+    freshnessMaxAge: 7200s
     credentialsSecretName: home-infra-agent-solarman
 
 service:

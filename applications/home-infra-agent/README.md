@@ -4,6 +4,8 @@ This chart runs the `aserobaba/home-infra-agent` image as one replica in the dev
 
 The chart mounts its configuration from a ConfigMap at `/etc/home-infra-agent`. It includes the Proxmox ping job for `192.168.1.51` through `.53`. NetworkPolicy permits DNS and egress to `192.168.1.0/24`, so the cluster must have a route to that subnet. Add any MQTT broker CIDR to `networkPolicy.externalEgressCidrs` if it is outside that subnet.
 
+The Proxmox and K3s jobs run every 60 seconds and become stale after 180 seconds (three missed intervals). Solarman runs every 3,600 seconds and becomes stale after 7,200 seconds (two intervals). Solarman's source-data age limit is configured separately in its source settings.
+
 The dev overlay also enables the Investory portfolio snapshot job. It reads the encrypted
 `home-infra-agent-investory-db` Secret (`url` key) through a fixed, read-only database function and
 publishes the latest portfolio 1 equity/profit snapshot hourly on weekdays from 09:00 through 22:00
