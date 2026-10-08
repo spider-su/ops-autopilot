@@ -13,6 +13,7 @@ WORKLOAD_KINDS = {"Deployment", "StatefulSet", "DaemonSet", "Job", "CronJob"}
 WORKLOAD_FILES = {
     "investory-prd.yaml",
     "investory-orchestrator-dev.yaml",
+    "home-infra-agent-dev.yaml",
     "smartapp-prd.yaml",
     "postgres-prd.yaml",
 }
@@ -21,6 +22,7 @@ ALLOWED_DESTINATIONS = {
         "investory-prod",
         "investory-dev",
         "investory-orchestrator",
+        "home-infra-agent",
         "smartapp-prod",
         "smartapp-dev",
         "postgres",

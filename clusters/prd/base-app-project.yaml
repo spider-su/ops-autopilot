@@ -16,6 +16,8 @@ spec:
     - server: https://kubernetes.default.svc
       namespace: investory-orchestrator
     - server: https://kubernetes.default.svc
+      namespace: home-infra-agent
+    - server: https://kubernetes.default.svc
       namespace: smartapp-prod
     - server: https://kubernetes.default.svc
       namespace: smartapp-dev

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["replicaCount", "image", "containerPort", "resources", "web", "mqtt", "jobs", "service", "ingress", "networkPolicy", "resourceQuota"],
+  "properties": {
+    "replicaCount": {"type": "integer", "minimum": 1},
+    "image": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "tag", "pullPolicy"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1},
+        "tag": {"type": "string", "minLength": 1},
+        "pullPolicy": {"type": "string", "enum": ["Always", "IfNotPresent", "Never"]}
+      }
+    },
+    "containerPort": {"type": "integer", "minimum": 1, "maximum": 65535},
+    "resources": {"$ref": "#/definitions/resources"},
+    "web": {
+      "type": "object", "additionalProperties": false,
+      "required": ["host", "port"],
+      "properties": {"host": {"type": "string", "minLength": 1}, "port": {"type": "integer", "minimum": 1, "maximum": 65535}}
+    },
+    "mqtt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["enabled", "host", "port", "username", "passwordSecretName", "discoveryPrefix"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "host": {"type": "string"},
+        "port": {"type": "integer", "minimum": 1, "maximum": 65535},
+        "username": {"type": "string"},
+        "passwordSecretName": {"type": "string"},
+        "discoveryPrefix": {"type": "string", "minLength": 1}
+      }
+    },
+    "jobs": {
+      "type": "object", "additionalProperties": false, "required": ["proxmox"],
+      "properties": {
+        "proxmox": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "name", "interval", "timeout", "mqttTopic", "targets"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"type": "string", "minLength": 1},
+            "interval": {"type": "string", "minLength": 1},
+            "timeout": {"type": "string", "minLength": 1},
+            "mqttTopic": {"type": "string", "minLength": 1},
+            "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}}
+          }
+        }
+      }
+    },
+    "service": {
+      "type": "object", "additionalProperties": false, "required": ["port"],
+      "properties": {"port": {"type": "integer", "minimum": 1, "maximum": 65535}}
+    },
+    "ingress": {
+      "type": "object", "additionalProperties": false,
+      "required": ["enabled", "className", "host", "path", "pathType"],
+      "properties": {
+        "enabled": {"type": "boolean"}, "className": {"type": "string", "minLength": 1},
+        "host": {"type": "string"}, "path": {"type": "string", "minLength": 1},
+        "pathType": {"type": "string", "enum": ["Prefix", "Exact", "ImplementationSpecific"]}
+      }
+    },
+    "networkPolicy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["enabled", "externalEgressCidrs"],
+      "properties": {"enabled": {"type": "boolean"}, "externalEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}}}
+    },
+    "resourceQuota": {
+      "type": "object", "additionalProperties": false, "required": ["enabled", "hard"],
+      "properties": {"enabled": {"type": "boolean"}, "hard": {"type": "object", "additionalProperties": {"$ref": "#/definitions/quantity"}}}
+    }
+  },
+  "definitions": {
+    "quantity": {"type": ["string", "number"]},
+    "quantities": {
+      "type": "object", "additionalProperties": false, "required": ["cpu", "memory"],
+      "properties": {"cpu": {"$ref": "#/definitions/quantity"}, "memory": {"$ref": "#/definitions/quantity"}}
+    },
+    "resources": {
+      "type": "object", "additionalProperties": false, "required": ["requests", "limits"],
+      "properties": {"requests": {"$ref": "#/definitions/quantities"}, "limits": {"$ref": "#/definitions/quantities"}}
+    }
+  }
+}

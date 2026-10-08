@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - workloads/investory.yaml
   - workloads/investory-orchestrator.yaml
+  - workloads/home-infra-agent.yaml
   - workloads/smartapp.yaml
   # Add more workload Application manifests under workloads/ while actively developing them

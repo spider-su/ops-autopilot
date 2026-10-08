@@ -23,6 +23,7 @@ $chartTargets = @(
     @('investory', 'prd'),
     @('investory', 'dev'),
     @('investory-orchestrator', 'dev'),
+    @('home-infra-agent', 'dev'),
     @('smartapp', 'prd'),
     @('smartapp', 'dev'),
     @('postgres', 'prd')
@@ -39,7 +40,7 @@ foreach ($target in $chartTargets) {
 }
 
 Invoke-Step 'Chart policy checks' {
-    $chartNames = @('investory', 'investory-orchestrator', 'smartapp', 'postgres')
+    $chartNames = @('investory', 'investory-orchestrator', 'home-infra-agent', 'smartapp', 'postgres')
     foreach ($chartName in $chartNames) {
         $schemaPath = "applications/$chartName/values.schema.json"
         if (-not (Test-Path -LiteralPath $schemaPath)) {
