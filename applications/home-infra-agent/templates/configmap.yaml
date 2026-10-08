@@ -49,3 +49,22 @@ data:
     type: kubernetes
     scope: cluster
   {{- end }}
+  {{- if .Values.jobs.investory.enabled }}
+  investory-job.yaml: |
+    name: {{ .Values.jobs.investory.name | quote }}
+    schedule:
+      cron: {{ .Values.jobs.investory.cron | quote }}
+      timezone: {{ .Values.jobs.investory.timezone | quote }}
+    timeout: {{ .Values.jobs.investory.timeout | quote }}
+    mqtt:
+      enabled: true
+      topic: {{ .Values.jobs.investory.mqttTopic | quote }}
+      device:
+        name: {{ .Values.jobs.investory.name | quote }}
+        manufacturer: Investory
+        model: Portfolio Performance
+  investory-performance.yaml: |
+    type: investory_postgres
+    databaseUrlEnv: HIA_INVESTORY_DATABASE_URL
+    portfolioId: {{ .Values.jobs.investory.portfolioId }}
+  {{- end }}

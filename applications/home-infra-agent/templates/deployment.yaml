@@ -41,6 +41,12 @@ spec:
               - key: k3s-cluster.yaml
                 path: jobs/k3s/cluster.yaml
               {{- end }}
+              {{- if .Values.jobs.investory.enabled }}
+              - key: investory-job.yaml
+                path: jobs/investory/job.yaml
+              - key: investory-performance.yaml
+                path: jobs/investory/performance.yaml
+              {{- end }}
       containers:
         - name: home-infra-agent
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -61,6 +67,13 @@ spec:
                   name: {{ .Values.mqtt.passwordSecretName | quote }}
                   key: password
                   optional: true
+            {{- end }}
+            {{- if .Values.jobs.investory.enabled }}
+            - name: HIA_INVESTORY_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jobs.investory.databaseUrlSecretName | quote }}
+                  key: url
             {{- end }}
           ports:
             - name: http
