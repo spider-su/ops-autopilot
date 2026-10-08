@@ -1,3 +1,9 @@
 image:
   tag: latest
   pullPolicy: Always
+
+ingress:
+  enabled: true
+  host: ha-infra.home.k3s.com
+  path: /dashboard(/|$)(.*)
+  pathType: ImplementationSpecific
