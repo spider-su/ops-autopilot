@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         {{- include "home-infra-agent.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ include "home-infra-agent.name" . }}
       automountServiceAccountToken: {{ .Values.jobs.k3s.enabled }}
@@ -47,6 +49,12 @@ spec:
               - key: investory-performance.yaml
                 path: jobs/investory/performance.yaml
               {{- end }}
+              {{- if .Values.jobs.solarman.enabled }}
+              - key: solarman-job.yaml
+                path: jobs/solarman/job.yaml
+              - key: solarman-current.yaml
+                path: jobs/solarman/current.yaml
+              {{- end }}
       containers:
         - name: home-infra-agent
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -74,6 +82,38 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.jobs.investory.databaseUrlSecretName | quote }}
                   key: url
+            {{- end }}
+            {{- if .Values.jobs.solarman.enabled }}
+            - name: SOLARMAN_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jobs.solarman.credentialsSecretName | quote }}
+                  key: app-id
+                  optional: true
+            - name: SOLARMAN_APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jobs.solarman.credentialsSecretName | quote }}
+                  key: app-secret
+                  optional: true
+            - name: SOLARMAN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jobs.solarman.credentialsSecretName | quote }}
+                  key: email
+                  optional: true
+            - name: SOLARMAN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jobs.solarman.credentialsSecretName | quote }}
+                  key: password
+                  optional: true
+            - name: SOLARMAN_DEVICE_SERIAL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jobs.solarman.credentialsSecretName | quote }}
+                  key: device-serial
+                  optional: true
             {{- end }}
           ports:
             - name: http

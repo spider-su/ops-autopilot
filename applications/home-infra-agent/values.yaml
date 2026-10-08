@@ -53,6 +53,9 @@ jobs:
     mqttTopic: home/investory/portfolio
     databaseUrlSecretName: home-infra-agent-investory-db
     portfolioId: 1
+  solarman:
+    enabled: false
+    credentialsSecretName: home-infra-agent-solarman
 
 service:
   port: 8080
@@ -70,6 +73,7 @@ networkPolicy:
   externalEgressCidrs:
     - 192.168.1.0/24
   investoryEgressCidrs: []
+  solarmanEgressCidrs: []
 
 resourceQuota:
   enabled: true

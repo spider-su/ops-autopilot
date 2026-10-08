@@ -55,6 +55,16 @@ spec:
           protocol: TCP
     {{- end }}
     {{- end }}
+    {{- if .Values.jobs.solarman.enabled }}
+    {{- range .Values.networkPolicy.solarmanEgressCidrs }}
+    - to:
+        - ipBlock:
+            cidr: {{ . | quote }}
+      ports:
+        - port: 443
+          protocol: TCP
+    {{- end }}
+    {{- end }}
     {{- range .Values.networkPolicy.externalEgressCidrs }}
     - to:
         - ipBlock:

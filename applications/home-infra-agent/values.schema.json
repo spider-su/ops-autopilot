@@ -34,7 +34,7 @@
       }
     },
     "jobs": {
-      "type": "object", "additionalProperties": false, "required": ["proxmox", "k3s", "investory"],
+      "type": "object", "additionalProperties": false, "required": ["proxmox", "k3s", "investory", "solarman"],
       "properties": {
         "proxmox": {
           "type": "object", "additionalProperties": false,
@@ -72,6 +72,14 @@
             "databaseUrlSecretName": {"type": "string", "minLength": 1},
             "portfolioId": {"type": "integer", "minimum": 1}
           }
+        },
+        "solarman": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "credentialsSecretName"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "credentialsSecretName": {"type": "string", "minLength": 1}
+          }
         }
       }
     },
@@ -90,12 +98,13 @@
     },
     "networkPolicy": {
       "type": "object", "additionalProperties": false,
-      "required": ["enabled", "kubernetesApiCidr", "externalEgressCidrs", "investoryEgressCidrs"],
+      "required": ["enabled", "kubernetesApiCidr", "externalEgressCidrs", "investoryEgressCidrs", "solarmanEgressCidrs"],
       "properties": {
         "enabled": {"type": "boolean"},
         "kubernetesApiCidr": {"type": "string", "minLength": 1},
         "externalEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}},
-        "investoryEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        "investoryEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "solarmanEgressCidrs": {"type": "array", "items": {"type": "string", "minLength": 1}}
       }
     },
     "resourceQuota": {
