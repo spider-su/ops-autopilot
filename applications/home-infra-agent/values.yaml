@@ -1,0 +1,64 @@
+replicaCount: 1
+
+image:
+  repository: aserobaba/home-infra-agent
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 8080
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 96Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+web:
+  host: 0.0.0.0
+  port: 8080
+
+mqtt:
+  enabled: false
+  host: ""
+  port: 1883
+  username: ""
+  passwordSecretName: ""
+  discoveryPrefix: homeassistant
+
+jobs:
+  proxmox:
+    enabled: true
+    name: Proxmox Cluster
+    interval: 60s
+    timeout: 3s
+    mqttTopic: home/proxmox
+    targets:
+      home-lab-0: 192.168.1.51
+      home-lab-1: 192.168.1.52
+      home-lab-2: 192.168.1.53
+
+service:
+  port: 8080
+
+ingress:
+  enabled: false
+  className: nginx
+  host: ""
+  path: /
+  pathType: Prefix
+
+networkPolicy:
+  enabled: true
+  externalEgressCidrs:
+    - 192.168.1.0/24
+
+resourceQuota:
+  enabled: true
+  hard:
+    requests.cpu: 250m
+    requests.memory: 256Mi
+    limits.cpu: 500m
+    limits.memory: 512Mi
+    pods: "2"
