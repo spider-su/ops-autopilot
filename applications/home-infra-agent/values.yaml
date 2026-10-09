@@ -65,9 +65,10 @@ jobs:
   investory:
     enabled: false
     name: Investory Portfolio
-    cron: "0 9-22 * * 1-5"
+    cron: "0 9-21 * * 1-5"
     timezone: Europe/Warsaw
     timeout: 15s
+    freshnessMaxAge: 72h
     mqttTopic: home/investory/portfolio
     databaseUrlSecretName: home-infra-agent-investory-db
     portfolioId: 1

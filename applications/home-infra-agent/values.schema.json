@@ -87,13 +87,14 @@
         },
         "investory": {
           "type": "object", "additionalProperties": false,
-          "required": ["enabled", "name", "cron", "timezone", "timeout", "mqttTopic", "databaseUrlSecretName", "portfolioId"],
+          "required": ["enabled", "name", "cron", "timezone", "timeout", "freshnessMaxAge", "mqttTopic", "databaseUrlSecretName", "portfolioId"],
           "properties": {
             "enabled": {"type": "boolean"},
             "name": {"type": "string", "minLength": 1},
             "cron": {"type": "string", "minLength": 1},
             "timezone": {"type": "string", "minLength": 1},
             "timeout": {"type": "string", "minLength": 1},
+            "freshnessMaxAge": {"type": "string", "minLength": 1},
             "mqttTopic": {"type": "string", "minLength": 1},
             "databaseUrlSecretName": {"type": "string", "minLength": 1},
             "portfolioId": {"type": "integer", "minimum": 1}
