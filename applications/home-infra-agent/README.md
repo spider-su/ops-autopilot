@@ -8,9 +8,11 @@ The Proxmox and K3s jobs run every 60 seconds and become stale after 180 seconds
 
 The dev overlay also enables the Investory portfolio snapshot job. It reads the encrypted
 `home-infra-agent-investory-db` Secret (`url` key) through a fixed, read-only database function and
-publishes the latest portfolio 1 equity/profit snapshot hourly on weekdays from 09:00 through 22:00
-Warsaw time. `networkPolicy.investoryEgressCidrs` contains the current resolved Neon endpoint IPs and
-permits TCP 5432 only; update those `/32` entries if the Neon DNS answers change. The SOPS secret is
+publishes the latest portfolio 1 equity/profit snapshot hourly on weekdays from 09:00 through 21:00
+Warsaw time. Its 72-hour freshness limit spans the expected Friday-to-Monday scheduled gap and allows
+12 hours for Monday's first successful update before data becomes stale. `networkPolicy.investoryEgressCidrs`
+contains the current resolved Neon endpoint IPs and permits TCP 5432 only; update those `/32` entries if
+the Neon DNS answers change. The SOPS secret is
 deployed by `secrets-home-infra-agent-dev` before the workload Application.
 
 The dev overlay enables the hourly Solarman current-data job and permits HTTPS egress to the

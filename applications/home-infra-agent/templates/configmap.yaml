@@ -106,6 +106,8 @@ data:
     schedule:
       cron: {{ .Values.jobs.investory.cron | quote }}
       timezone: {{ .Values.jobs.investory.timezone | quote }}
+    freshness:
+      maxAge: {{ .Values.jobs.investory.freshnessMaxAge | quote }}
     timeout: {{ .Values.jobs.investory.timeout | quote }}
     mqtt:
       enabled: true
