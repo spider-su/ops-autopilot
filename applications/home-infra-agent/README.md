@@ -28,3 +28,5 @@ MQTT starts disabled until the broker is configured. Set `mqtt.enabled` and `mqt
 The dev values expose the read-only UI at `https://ha-infra.home.k3s.com/dashboard`. The `/dashboard` path is rewritten to the app root; `/api` and `/health` are routed separately because the page calls those absolute paths. Pi-hole resolves the hostname to the Traefik host, which forwards HTTP to ingress-nginx at `192.168.1.221`. The external Traefik dynamic config is managed on `home-lab-pihole`, outside this GitOps repository.
 
 The chart uses low resource requests/limits, a read-only root filesystem, non-root UID 10001, HTTP health probes, and a namespace ResourceQuota. Validate changes with `helm lint applications/home-infra-agent -f applications/home-infra-agent/values.yaml -f applications/home-infra-agent/values-dev.yaml`, then run the full repository validator.
+
+The development overlay also enables Network Reachability (gateway and external ICMP every ten minutes) and Internet Speedtest (08:00 and 20:00 Europe/Warsaw). Speedtest requires Internet egress because its selected server is dynamic; this is why the development NetworkPolicy includes `0.0.0.0/0` egress.

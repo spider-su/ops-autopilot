@@ -37,6 +37,18 @@ spec:
               - key: proxmox-nodes.yaml
                 path: jobs/proxmox/nodes.yaml
               {{- end }}
+              {{- if .Values.jobs.network.enabled }}
+              - key: network-job.yaml
+                path: jobs/network/job.yaml
+              - key: network-reachability.yaml
+                path: jobs/network/reachability.yaml
+              {{- end }}
+              {{- if .Values.jobs.speedtest.enabled }}
+              - key: speedtest-job.yaml
+                path: jobs/speedtest/job.yaml
+              - key: speedtest-measure.yaml
+                path: jobs/speedtest/measure.yaml
+              {{- end }}
               {{- if .Values.jobs.k3s.enabled }}
               - key: k3s-job.yaml
                 path: jobs/k3s/job.yaml

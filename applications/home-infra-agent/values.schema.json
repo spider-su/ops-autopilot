@@ -49,6 +49,30 @@
             "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}}
           }
         },
+        "network": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "name", "interval", "timeout", "mqttTopic", "targets"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"type": "string", "minLength": 1},
+            "interval": {"type": "string", "minLength": 1},
+            "timeout": {"type": "string", "minLength": 1},
+            "mqttTopic": {"type": "string", "minLength": 1},
+            "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}}
+          }
+        },
+        "speedtest": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "name", "cron", "timezone", "timeout", "mqttTopic"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"type": "string", "minLength": 1},
+            "cron": {"type": "string", "minLength": 1},
+            "timezone": {"type": "string", "minLength": 1},
+            "timeout": {"type": "string", "minLength": 1},
+            "mqttTopic": {"type": "string", "minLength": 1}
+          }
+        },
         "k3s": {
           "type": "object", "additionalProperties": false,
           "required": ["enabled", "name", "interval", "freshnessMaxAge", "timeout", "mqttTopic"],

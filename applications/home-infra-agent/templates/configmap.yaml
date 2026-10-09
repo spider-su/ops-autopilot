@@ -34,6 +34,45 @@ data:
     type: ping
     targets:
       {{- toYaml .Values.jobs.proxmox.targets | nindent 6 }}
+  {{- if .Values.jobs.network.enabled }}
+  network-job.yaml: |
+    name: {{ .Values.jobs.network.name | quote }}
+    schedule:
+      interval: {{ .Values.jobs.network.interval | quote }}
+    timeout: {{ .Values.jobs.network.timeout | quote }}
+    freshness:
+      maxAge: 30m
+    mqtt:
+      enabled: true
+      topic: {{ .Values.jobs.network.mqttTopic | quote }}
+      device:
+        name: {{ .Values.jobs.network.name | quote }}
+        manufacturer: Custom
+        model: Home Infra Agent
+  network-reachability.yaml: |
+    type: ping
+    targets:
+      {{- toYaml .Values.jobs.network.targets | nindent 6 }}
+  {{- end }}
+  {{- if .Values.jobs.speedtest.enabled }}
+  speedtest-job.yaml: |
+    name: {{ .Values.jobs.speedtest.name | quote }}
+    schedule:
+      cron: {{ .Values.jobs.speedtest.cron | quote }}
+      timezone: {{ .Values.jobs.speedtest.timezone | quote }}
+    timeout: {{ .Values.jobs.speedtest.timeout | quote }}
+    freshness:
+      maxAge: 14h
+    mqtt:
+      enabled: true
+      topic: {{ .Values.jobs.speedtest.mqttTopic | quote }}
+      device:
+        name: {{ .Values.jobs.speedtest.name | quote }}
+        manufacturer: Custom
+        model: Home Infra Agent
+  speedtest-measure.yaml: |
+    type: speedtest
+  {{- end }}
   {{- if .Values.jobs.k3s.enabled }}
   k3s-job.yaml: |
     name: {{ .Values.jobs.k3s.name | quote }}

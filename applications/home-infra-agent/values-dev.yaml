@@ -18,6 +18,9 @@ jobs:
     enabled: true
 
 networkPolicy:
+  externalEgressCidrs:
+    - 192.168.1.0/24
+    - 0.0.0.0/0
   investoryEgressCidrs:
     - 3.23.186.13/32
     - 3.143.47.40/32

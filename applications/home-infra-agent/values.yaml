@@ -39,6 +39,22 @@ jobs:
       home-lab-0: 192.168.1.51
       home-lab-1: 192.168.1.52
       home-lab-2: 192.168.1.53
+  network:
+    enabled: false
+    name: Network Reachability
+    interval: 10m
+    timeout: 3s
+    mqttTopic: home/network
+    targets:
+      gateway: 192.168.1.1
+      internet: 8.8.8.8
+  speedtest:
+    enabled: false
+    name: Internet Speedtest
+    cron: "0 8,20 * * *"
+    timezone: Europe/Warsaw
+    timeout: 120s
+    mqttTopic: home/network/speedtest
   k3s:
     enabled: false
     name: K3s Cluster
