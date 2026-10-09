@@ -1,5 +1,5 @@
 image:
-  tag: sha-8b871113d5bd412c0fc46f22a722736036fcc4ac
+  tag: sha-84ad55b7
   pullPolicy: Always
 
 mqtt:
@@ -13,6 +13,8 @@ jobs:
   network:
     enabled: true
   speedtest:
+    enabled: true
+  presence:
     enabled: true
   k3s:
     enabled: true

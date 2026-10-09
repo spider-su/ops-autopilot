@@ -55,6 +55,18 @@ jobs:
     timezone: Europe/Warsaw
     timeout: 120s
     mqttTopic: home/network/speedtest
+  presence:
+    enabled: false
+    name: Family Presence
+    interval: 5m
+    freshnessMaxAge: 15m
+    timeout: 3s
+    awayAfter: 3
+    mqttTopic: home/family/presence
+    targets:
+      alex: 192.168.1.40
+      maria: 192.168.1.49
+      olga: 192.168.1.37
   k3s:
     enabled: false
     name: K3s Cluster

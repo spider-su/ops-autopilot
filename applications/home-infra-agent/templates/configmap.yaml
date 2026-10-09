@@ -54,6 +54,35 @@ data:
     targets:
       {{- toYaml .Values.jobs.network.targets | nindent 6 }}
   {{- end }}
+  {{- if .Values.jobs.presence.enabled }}
+  presence-job.yaml: |
+    name: {{ .Values.jobs.presence.name | quote }}
+    schedule:
+      interval: {{ .Values.jobs.presence.interval | quote }}
+    timeout: {{ .Values.jobs.presence.timeout | quote }}
+    freshness:
+      maxAge: {{ .Values.jobs.presence.freshnessMaxAge | quote }}
+    mqtt:
+      enabled: true
+      topic: {{ .Values.jobs.presence.mqttTopic | quote }}
+      device:
+        name: {{ .Values.jobs.presence.name | quote }}
+        manufacturer: Custom
+        model: Home Infra Agent
+      entities:
+        alex: {name: Alex, component: binary_sensor, payload_on: HOME, payload_off: AWAY, device_class: presence}
+        maria: {name: Maria, component: binary_sensor, payload_on: HOME, payload_off: AWAY, device_class: presence}
+        olga: {name: Olga, component: binary_sensor, payload_on: HOME, payload_off: AWAY, device_class: presence}
+        family_home: {name: Family home, component: binary_sensor, payload_on: HOME, payload_off: AWAY, device_class: presence}
+        home_count: {name: People home, unit_of_measurement: people, state_class: measurement}
+        total: {name: Known people, unit_of_measurement: people, state_class: measurement}
+        probe_online: {name: Presence probes online, unit_of_measurement: devices, state_class: measurement}
+  presence-people.yaml: |
+    type: presence
+    awayAfter: {{ .Values.jobs.presence.awayAfter }}
+    targets:
+      {{- toYaml .Values.jobs.presence.targets | nindent 6 }}
+  {{- end }}
   {{- if .Values.jobs.speedtest.enabled }}
   speedtest-job.yaml: |
     name: {{ .Values.jobs.speedtest.name | quote }}

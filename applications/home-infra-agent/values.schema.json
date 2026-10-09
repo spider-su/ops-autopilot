@@ -34,7 +34,7 @@
       }
     },
     "jobs": {
-      "type": "object", "additionalProperties": false, "required": ["proxmox", "k3s", "investory", "solarman"],
+      "type": "object", "additionalProperties": false, "required": ["proxmox", "network", "speedtest", "presence", "k3s", "investory", "solarman"],
       "properties": {
         "proxmox": {
           "type": "object", "additionalProperties": false,
@@ -57,6 +57,20 @@
             "name": {"type": "string", "minLength": 1},
             "interval": {"type": "string", "minLength": 1},
             "timeout": {"type": "string", "minLength": 1},
+            "mqttTopic": {"type": "string", "minLength": 1},
+            "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}}
+          }
+        },
+        "presence": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "name", "interval", "freshnessMaxAge", "timeout", "awayAfter", "mqttTopic", "targets"],
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"type": "string", "minLength": 1},
+            "interval": {"type": "string", "minLength": 1},
+            "freshnessMaxAge": {"type": "string", "minLength": 1},
+            "timeout": {"type": "string", "minLength": 1},
+            "awayAfter": {"type": "integer", "minimum": 1, "maximum": 20},
             "mqttTopic": {"type": "string", "minLength": 1},
             "targets": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}}
           }
