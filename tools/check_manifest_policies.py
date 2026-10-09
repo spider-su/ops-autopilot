@@ -36,6 +36,7 @@ ALLOWED_DESTINATIONS = {
         "monitoring",
         "ceph-csi-rbd",
         "default",
+        "external-monitor",
         # kube-prometheus-stack creates discovery Services for the k3s
         # control-plane components in kube-system.
         "kube-system",
