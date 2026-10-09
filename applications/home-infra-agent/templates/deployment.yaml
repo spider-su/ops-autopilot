@@ -43,6 +43,12 @@ spec:
               - key: network-reachability.yaml
                 path: jobs/network/reachability.yaml
               {{- end }}
+              {{- if .Values.jobs.presence.enabled }}
+              - key: presence-job.yaml
+                path: jobs/presence/job.yaml
+              - key: presence-people.yaml
+                path: jobs/presence/people.yaml
+              {{- end }}
               {{- if .Values.jobs.speedtest.enabled }}
               - key: speedtest-job.yaml
                 path: jobs/speedtest/job.yaml
