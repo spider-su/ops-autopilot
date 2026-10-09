@@ -1,5 +1,5 @@
 image:
-  tag: sha-fa28e0ad53efac128367fc369754116258baf149
+  tag: sha-8b871113d5bd412c0fc46f22a722736036fcc4ac
   pullPolicy: Always
 
 mqtt:
@@ -10,6 +10,10 @@ mqtt:
   passwordSecretName: home-infra-agent-mqtt
 
 jobs:
+  network:
+    enabled: true
+  speedtest:
+    enabled: true
   k3s:
     enabled: true
   investory:
