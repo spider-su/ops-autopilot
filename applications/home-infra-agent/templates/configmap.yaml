@@ -70,6 +70,14 @@ data:
         name: {{ .Values.jobs.speedtest.name | quote }}
         manufacturer: Custom
         model: Home Infra Agent
+      entities:
+        ping_ms: {name: Speedtest latency, unit_of_measurement: ms, device_class: duration, state_class: measurement}
+        download_mbps: {name: Speedtest download, unit_of_measurement: Mbit/s, device_class: data_rate, state_class: measurement}
+        upload_mbps: {name: Speedtest upload, unit_of_measurement: Mbit/s, device_class: data_rate, state_class: measurement}
+        server_name: {name: Speedtest server}
+        server_country: {name: Speedtest country}
+        server_id: {name: Speedtest server ID}
+        tested_at: {name: Speedtest source timestamp, device_class: timestamp}
   speedtest-measure.yaml: |
     type: speedtest
   {{- end }}
