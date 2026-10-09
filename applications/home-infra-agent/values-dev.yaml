@@ -1,5 +1,5 @@
 image:
-  tag: sha-84ad55b7
+  tag: sha-84ad55b7cf7050eade3ef77996259003fbed38bd
   pullPolicy: Always
 
 mqtt:
