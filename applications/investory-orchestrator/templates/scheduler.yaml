@@ -71,16 +71,18 @@ spec:
             exec:
               command: ["python", "-c", "import os; os.kill(1, 0)"]
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 10
             failureThreshold: 12
           readinessProbe:
             exec:
               command: ["python", "-c", "import os; os.kill(1, 0)"]
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 10
             failureThreshold: 3
           livenessProbe:
             exec:
               command: ["python", "-c", "import os; os.kill(1, 0)"]
             initialDelaySeconds: 15
             periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 6
