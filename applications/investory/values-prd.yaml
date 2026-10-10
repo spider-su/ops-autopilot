@@ -25,9 +25,9 @@ probes:
   liveness:
     failureThreshold: 30
 
-# Restore previous production image until the separate production database history is reconciled.
+# K3S ACC: latest published Investory image, commit 91224302; scan passed on 2026-10-10.
 image:
-  digest: sha256:9c238bb2096ec5b9d45b55f25bc2ecf8c82191385579e9a799e9cc80f188655d
+  digest: sha256:95cdd5a845b6a1d1609369c291fe1d3c00efb2eafd487f885bdf2fbc79d0b31d
   pullPolicy: IfNotPresent
 
 ingress:
