@@ -25,9 +25,9 @@ probes:
   liveness:
     failureThreshold: 30
 
-# Immutable image digest verified from the running production pod on 2026-10-05.
+# Immutable image built from Investory c83923f1; release scan passed on 2026-10-10.
 image:
-  digest: sha256:9c238bb2096ec5b9d45b55f25bc2ecf8c82191385579e9a799e9cc80f188655d
+  digest: sha256:17d53494bb1ab49321b50607f192724367e3c3c1265c03da6b8262b60b0a3bcf
   pullPolicy: IfNotPresent
 
 ingress:
